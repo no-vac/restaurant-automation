@@ -7,7 +7,7 @@ module.exports = router => {
   });
 
   router.post("/api/w", waiterController.create);
-  router.get("/api/w/test", waterController.test);
+  router.get("/api/w/test", waiterController.test);
 
   router.get("*", (req, res) => {
     res.sendFile(path.join(__dirname, "/client/dist", "index.html"));
