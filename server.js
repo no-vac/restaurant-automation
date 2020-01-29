@@ -3,6 +3,7 @@ const bodyParser = require("body-parser");
 const passport = require("passport");
 const cors = require("cors");
 const morgan = require("morgan");
+const path = require("path");
 
 //pull in envs
 require("dotenv").config();
@@ -26,6 +27,8 @@ async function init() {
   app.use(bodyParser.json());
   app.use(cors());
   app.use(morgan("tiny"));
+
+  app.use(express.static(path.join(__dirname, "/client/dist")));
 
   //init passport
   // app.use(passport.initialize());
