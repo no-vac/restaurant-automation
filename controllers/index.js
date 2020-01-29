@@ -1,6 +1,5 @@
-const waiter = require('./waiter');
+const waiter = require("./waiter");
 
 module.exports = {
-    waiter,
+  waiter
 };
-
