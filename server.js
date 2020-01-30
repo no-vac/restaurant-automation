@@ -17,6 +17,13 @@ function startServer(server) {
   server.listen(PORT || 5000, () => {
     console.log(`Server is live on port ${PORT}`);
   });
+
+  //handle unhandled rejections
+  process.on("unhandledRejection", (err, promise) => {
+    console.log(`Error: ${err.message}`);
+    //close server and exit process
+    server.close(() => process.exit(1));
+  });
 }
 
 async function init() {
@@ -39,13 +46,6 @@ async function init() {
 
   router(app);
   startServer(app);
-
-  //handle unhandled rejections
-  process.on("unhandledRejection", (err, promise) => {
-    console.log(`Error: ${err.message}`);
-    //close server and exit process
-    server.close(() => process.exit(1));
-  });
 }
 
 init();
