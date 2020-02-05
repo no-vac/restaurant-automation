@@ -1,4 +1,5 @@
 const Waiter = require("../models").Waiter;
+const wrap = require("../middleware/asyncWrapper");
 
 module.exports = {
   test: async (req, res) => {
@@ -19,5 +20,5 @@ module.exports = {
     } catch (err) {
       return res.status(400).send(err, { message: "something went wrong" });
     }
-  }
+  })
 };
