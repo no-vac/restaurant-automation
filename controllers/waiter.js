@@ -20,5 +20,5 @@ module.exports = {
     } catch (err) {
       return res.status(400).send(err, { message: "something went wrong" });
     }
-  })
+  }
 };
