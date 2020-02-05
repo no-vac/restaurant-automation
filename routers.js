@@ -1,7 +1,6 @@
 const waiterController = require("./controllers").waiter;
 const wrap = require("./middleware/asyncWrapper");
 const path = require("path");
-const wrap = require("./middleware/handleAsync");
 
 module.exports = router => {
   router.get(

@@ -1,4 +1,4 @@
-const Waiter = require("../models").Waiter;
+const Waiter = require("../models").Waiters;
 const wrap = require("../middleware/asyncWrapper");
 
 module.exports = {
@@ -7,6 +7,7 @@ module.exports = {
   },
   create: async (req, res) => {
     try {
+      console.log("this place reached");
       const waiter = await Waiter.create({
         FName: req.body.FName,
         LName: req.body.LName,
