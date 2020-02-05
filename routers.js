@@ -8,6 +8,7 @@ module.exports = router => {
 
   router.post("/api/w", waiterController.create);
   router.get("/api/w/test", waiterController.test);
+  router.delete("/api/w/:waiterId", waiterController.destroy);
 
   router.get("*", (req, res) => {
     res.sendFile(path.join(__dirname, "/client/dist", "index.html"));

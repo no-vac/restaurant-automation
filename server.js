@@ -41,11 +41,11 @@ async function init() {
   startServer(app);
 
   //handle unhandled rejections
-  process.on("unhandledRejection", (err, promise) => {
-    console.log(`Error: ${err.message}`);
-    //close server and exit process
-    server.close(() => process.exit(1));
-  });
+  // process.on("unhandledRejection", (err, promise) => {
+  //   console.log(`Error: ${err.message}`);
+  //   //close server and exit process
+  //   server.close(() => process.exit(1));
+  // });
 }
 
 init();
