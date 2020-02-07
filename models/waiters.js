@@ -1,12 +1,30 @@
 'use strict';
 module.exports = (sequelize, DataTypes) => {
   const Waiters = sequelize.define('Waiters', {
-    FName: DataTypes.STRING,
-    LName: DataTypes.STRING,
-    tableNumber: DataTypes.INTEGER,
-    pin: DataTypes.STRING,
-    clockInTime: DataTypes.DATE,
-    clockOutTime: DataTypes.DATE
+    FName: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
+    LName: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
+    tableNumber: {
+      type: DataTypes.INTEGER,
+      allowNull: true
+    },
+    pin: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
+    clockInTime: {
+      type: DataTypes.DATE,
+      allowNull: false
+    },
+    clockOutTime: {
+      type: DataTypes.DATE,
+      allowNull: false
+    },
   }, {});
   Waiters.associate = function(models) {
     // associations can be defined here

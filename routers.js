@@ -6,9 +6,9 @@ module.exports = router => {
     res.status(200).json("API ROUTE");
   });
 
-  router.post("/api/w", waiterController.create);
   router.get("/api/w/test", waiterController.test);
-  router.delete("/api/w/:waiterId", waiterController.destroy);
+  router.post("/api/w", waiterController.create);
+  router.delete("/api/w/:id", waiterController.destroy);
 
   router.get("*", (req, res) => {
     res.sendFile(path.join(__dirname, "/client/dist", "index.html"));
