@@ -13,10 +13,6 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull: false
     },
-    tableNumber: {
-      type: DataTypes.INTEGER,
-      allowNull: true
-    },
     pin: {
       type: DataTypes.STRING,
       allowNull: false
@@ -31,7 +27,10 @@ module.exports = (sequelize, DataTypes) => {
     },
   }, {});
   Waiters.associate = function(models) {
-    // associations can be defined here
+    Waiters.hasMany(models.Table, {
+      foreignKey: 'TableNumber',
+      as: 'Table'
+    })
   };
   return Waiters;
 };
