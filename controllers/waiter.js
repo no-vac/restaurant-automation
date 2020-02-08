@@ -1,23 +1,50 @@
-const Waiter = require("../models").Waiter;
+const Waiter = require("../models").Waiters;
+const Table = require("../models").Table;
 
 module.exports = {
-  async test(req, res) {
-    return await res.status(200).json({ message: "waiter route test" });
-  },
-  async create(req, res) {
-    try {
-      const waiter = await Waiter.create({
-        FName: req.body.FName,
-        LName: req.body.LName,
-        tableNumber: req.body.tableNumber,
-        pin: req.body.pin,
-        clockInTime: req.body.clockInTime,
-        clockOutTime: req.body.clockOutTime
-      });
-
-      res.status(200).json(waiter);
-    } catch (err) {
-      res.status(400).send(err, { message: "something went wrong" });
-    }
-  }
+    test(req, res) {
+        return res.status(200).json({message: "waiter route test"});
+    },
+    create(req, res) {
+        return Waiter
+            .create({
+                FName: req.body.FName,
+                LName: req.body.LName,
+                pin: req.body.pin,
+                clockInTime: req.body.clockInTime,
+                clockOutTime: req.body.clockOutTime,
+                Username: req.body.Username
+            })
+            .then(waiter => res.status(200).json(waiter))
+            .catch(e => res.status(400).json(e));
+    },
+    list(req, res) {
+        return Waiter
+            .findAll({
+                include: [{
+                    model: Table,
+                    as: 'tableId'
+                }]
+            })
+            .then(waiters => res.status(200).json(waiters))
+            .catch(e => res.status(400).json(e))
+    },
+    destroy(req, res) {
+        return Waiter
+            .findOne({
+                Where: {
+                    Username: req.body.Username
+                }
+            })
+            .then(waiter => {
+                if (!waiter) {
+                    return res.status(404).json({message: `waiter with the id ${waiter.FName} does not exist`});
+                }
+                return waiter
+                    .destroy()
+                    .then(() => res.status(200).json({message: `Deleted successfully`}))
+                    .catch(e => res.status(400).json(e));
+            })
+            .catch(e => res.status(400).json(e));
+    },
 };

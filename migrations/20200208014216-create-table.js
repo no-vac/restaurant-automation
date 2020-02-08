@@ -1,30 +1,33 @@
 'use strict';
 module.exports = {
     up: (queryInterface, Sequelize) => {
-        return queryInterface.createTable('Waiters', {
+        return queryInterface.createTable('Tables', {
             id: {
                 allowNull: false,
                 autoIncrement: true,
                 primaryKey: true,
                 type: Sequelize.INTEGER
             },
-            FName: {
-                type: Sequelize.STRING
+            waiterId: {
+                type: Sequelize.INTEGER,
+                references: {
+                    model: {
+                        tableName: 'Waiters',
+                        schema: 'schema'
+                    },
+                    key: 'id'
+                },
+                allowNull: false
             },
-            LName: {
-                type: Sequelize.STRING
-            },
-            tableNumber: {
+            TableNumber: {
                 type: Sequelize.INTEGER
             },
-            pin: {
-                type: Sequelize.STRING
+            Orders: {
+                type: Sequelize.ENUM,
+                values: ['test'],
             },
-            clockInTime: {
-                type: Sequelize.DATE
-            },
-            clockOutTime: {
-                type: Sequelize.DATE
+            Total: {
+                type: Sequelize.INTEGER
             },
             createdAt: {
                 allowNull: false,
@@ -37,6 +40,6 @@ module.exports = {
         });
     },
     down: (queryInterface, Sequelize) => {
-        return queryInterface.dropTable('Waiters');
+        return queryInterface.dropTable('Tables');
     }
 };
