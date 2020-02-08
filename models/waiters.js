@@ -29,8 +29,8 @@ module.exports = (sequelize, DataTypes) => {
   Waiters.associate = function(models) {
     Waiters.hasMany(models.Table, {
       foreignKey: 'TableNumber',
-      as: 'Table'
-    })
+      as: 'tableId'
+    });
   };
   return Waiters;
 };

@@ -1,15 +1,22 @@
 'use strict';
 module.exports = (sequelize, DataTypes) => {
   const Table = sequelize.define('Table', {
-    TableNumber: DataTypes.INTEGER,
+    TableNumber: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
     Orders: {
       type: DataTypes.ENUM,
       values: ['test'],
+      allowNull: true
     },
-    Total: DataTypes.INTEGER
-  }, {});
+    Total: {
+      type: DataTypes.STRING,
+      allowNull: false
+    }
+  });
   Table.associate = function(models) {
-    Table.belongsTo(models.waiter, {
+    Table.belongsTo(models.Waiters, {
       foreignKey: 'waiterId',
       onDelete: 'CASCADE'
     })
