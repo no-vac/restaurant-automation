@@ -13,7 +13,7 @@ module.exports = {
                 references: {
                     model: {
                         tableName: 'Waiters',
-                        schema: 'schema'
+                        schema: 'public'
                     },
                     key: 'id'
                 },
