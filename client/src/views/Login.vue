@@ -36,7 +36,9 @@
          },
          login(){
             if(this.waiter.pin != ''){
-                if(this.waiter.pin == this.$parent.mockAccount)
+                if(this.waiter.pin == this.$parent.waiter.pin ){
+                    return;
+                }
             }
          }
      },

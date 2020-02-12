@@ -20,7 +20,7 @@ module.exports = {
                     .then(waiter => {
                         return waiter
                             .update({
-                                tableId: req.body.TableNumber || waiter.TableNumber,
+                                tableId: newTable.TableNumber,
                             })
                             .then(() => res.status(200).json(newTable))
                             .catch(e => res.status(400).json(e))
