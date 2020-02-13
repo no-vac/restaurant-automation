@@ -10,22 +10,20 @@ module.exports = {
                 Total: req.body.Total,
                 waiterId: req.params.waiterId
             })
-            .then(newTable => {
-                Waiter
-                    .findOne({
-                        where: {
-                            id: req.params.waiterId
-                        }
-                    })
+            .then(async newTable => {
+                return await Waiter
+                    .findByPk(newTable.waiterId)
                     .then(waiter => {
-                        return waiter
+                        if (!waiter) res.status(404).json({message: 'no waiter found'})
+                        waiter
                             .update({
-                                tableId: newTable.TableNumber,
+                                tableId: newTable.id,
                             })
                             .then(() => res.status(200).json(newTable))
                             .catch(e => res.status(400).json(e))
                     })
                     .catch(e => res.status(400).json(e));
+
             })
             .catch(e => res.status(400).json(e));
     },

@@ -5,11 +5,6 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull: false
     },
-    Orders: {
-      type: DataTypes.ENUM,
-      values: ['test'],
-      allowNull: true
-    },
     Total: {
       type: DataTypes.STRING,
       allowNull: false
@@ -17,9 +12,12 @@ module.exports = (sequelize, DataTypes) => {
   });
   Table.associate = function(models) {
     Table.belongsTo(models.Waiters, {
-      foreignKey: 'waiterId',
-      onDelete: 'CASCADE'
-    })
+      foreignKey: 'waiterId'
+    });
+
+    Table.hasMany(models.Orders, {
+      as:'orders'
+    });
   };
   return Table;
 };
