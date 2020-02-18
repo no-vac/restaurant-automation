@@ -20,12 +20,7 @@ module.exports = {
     },
     list(req, res) {
         return Waiter
-            .findAll({
-                include: [{
-                    model: Table,
-                    as: 'tableId'
-                }]
-            })
+            .findAll()
             .then(waiters => res.status(200).json(waiters))
             .catch(e => res.status(400).json(e))
     },

@@ -5,16 +5,19 @@ module.exports = {
     create(req, res) {
         return Table
             .create({
-                TableNumber: req.body.TableNumber,
-                Orders: req.body.Orders,
                 Total: req.body.Total,
                 waiterId: req.params.waiterId
             })
-            .then(async newTable => {
-                return await Waiter
-                    .findByPk(newTable.waiterId)
+            .then(newTable => {
+                return Waiter
+                    .findOne({
+                        where: {
+                            id: newTable.waiterId,
+                        }
+                    })
                     .then(waiter => {
                         if (!waiter) res.status(404).json({message: 'no waiter found'})
+
                         waiter
                             .update({
                                 tableId: newTable.id,
@@ -23,7 +26,6 @@ module.exports = {
                             .catch(e => res.status(400).json(e))
                     })
                     .catch(e => res.status(400).json(e));
-
             })
             .catch(e => res.status(400).json(e));
     },
@@ -52,4 +54,4 @@ module.exports = {
             })
             .catch(e => res.status(400).json(e))
     },
-}
+};

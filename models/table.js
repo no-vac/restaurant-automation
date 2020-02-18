@@ -1,10 +1,6 @@
 'use strict';
 module.exports = (sequelize, DataTypes) => {
   const Table = sequelize.define('Table', {
-    TableNumber: {
-      type: DataTypes.STRING,
-      allowNull: false
-    },
     Total: {
       type: DataTypes.STRING,
       allowNull: false
@@ -15,9 +11,9 @@ module.exports = (sequelize, DataTypes) => {
       foreignKey: 'waiterId'
     });
 
-    Table.hasMany(models.Orders, {
-      as:'orders'
-    });
+    // Table.hasMany(models.Orders, {
+    //   as:'orders'
+    // });
   };
   return Table;
 };

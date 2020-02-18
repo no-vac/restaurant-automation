@@ -15,10 +15,10 @@ module.exports = (sequelize, DataTypes) => {
     }
   }, {});
   orders.associate = function(models) {
-    orders.belongsTo(models.Table, {
-      foreignKey: 'tableId',
-      as: "tableOrder"
-    })
+    // orders.belongsTo(models.Table, {
+    //   foreignKey: 'tableId',
+    //   as: "tableOrder"
+    // })
   };
   return orders;
 };
