@@ -12,8 +12,9 @@ module.exports = router => {
   // route handling for waiter
   router.get("/api/w/test", waiterController.test);
   router.post("/api/w", waiterController.create);
-  router.delete("/api/deleteWaiter/", waiterController.destroy);
-  router.get("/api/w", waiterController.list);
+  router.delete("/api/w/:waiterId", waiterController.destroy);
+  router.get("/api/w/", waiterController.list);
+  router.put("/api/w/:waiterId", waiterController.update);
 
   // route handling for table
   router.post("/api/t/:waiterId/t", tableController.create);

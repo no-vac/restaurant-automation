@@ -11,4 +11,4 @@ module.exports = {
             .then(order => res.status(200).json(order))
             .catch(e => res.status(400).json(e));
     }
-}
+};
