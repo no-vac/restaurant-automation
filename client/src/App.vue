@@ -1,5 +1,10 @@
 <template>
     <div id="app" class="container">
+        <nav>
+            <router-link :to="{name: 'home'}">Home</router-link>
+            <router-link :to="{name: 'login'}">Login</router-link>
+        </nav>
+        <router-view />
         <h1>Waiters</h1>
         <br/>
 
