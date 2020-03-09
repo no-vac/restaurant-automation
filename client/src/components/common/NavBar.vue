@@ -1,5 +1,5 @@
 <template>
-    <nav v-if="loggedIn" >
+    <nav>
         <router-link :to="{name: 'home'}">Home</router-link>
         <router-link :to="{name: 'login'}">Login</router-link>
         <router-link :to="{name: 'addWaiter'}">add</router-link>

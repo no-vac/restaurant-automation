@@ -51,7 +51,7 @@
                         headers: {'Content-type': 'application/json; charset=UTF-8'}
                     });
                     const data = await response.json();
-                    this.admin = [...this.admin, data]
+                    this.admin = data;
                 } catch (e) {
                     console.log(e);
                 }
