@@ -7,28 +7,27 @@
             <h6 class="card-subtitle mb-2 text-muted my-1">
                 Admin login
             </h6>
-            <form @submit.prevent="Login">
+            <form v-on:submit="login">
                 <div class="row">
                     <div class="col-12">
                         <label>Username</label>
                         <input
                                 ref="first"
-                                v-model="admin.Username"
+                                name="Username"
                                 type="text"
                                 class="form-control"
                         />
 
                         <label>Password</label>
                         <input
-                                ref="first"
-                                v-model="admin.Password"
+                                name="Password"
                                 type="text"
                                 class="form-control"
                         />
 
                     </div>
                 </div>
-                <button class="btn btn-outline-primary my-3" type="submit">Login</button>
+                <input class="btn btn-outline-primary my-3" type="submit" value="Login" />
             </form>
 
         </div>
@@ -36,32 +35,33 @@
 </template>
 
 <script>
+    import router from '../routes';
+    import axios from "axios";
+
     export default {
         name: 'Login',
-        data() {
-            return {
-                submitting: false,
-                error: false,
-                success: false,
-                admin: {
-                    Username: '',
-                    Password: ''
-                }
-            }
-        },
         methods: {
-            async Login(admin){
-                try{
-                    const res = await fetch('http://localhost:500/api/u', {
-                        method: 'GET',
-                        body: JSON.stringify(admin),
-                        headers: {'Content-type': 'application/json; charset=UTF-8'}
-                    });
-                    const data = await res.data();
-                    this.admin = data;
-                }catch (e) {
-                    console.log(e);
-                }
+            login: (e) => {
+                e.preventDefault();
+                let Username = e.target.elements.Username.value;
+                let Password = e.target.elements.Password.value;
+                let login = () => {
+                    let data = {
+                        Username: Username,
+                        Password: Password
+                    };
+
+                    axios
+                        .post("localhost:5000/api/u/login", data)
+                        .then((response) => {
+                            console.log("Logged In" + response);
+                            router.push("/addWaiter");
+                        })
+                        .catch((e) => {
+                            console.log("Cannot Login " + e);
+                        })
+                };
+                login();
             }
         },
         computed: {

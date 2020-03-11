@@ -1,4 +1,3 @@
-const waiterController = require("./controllers").waiter;
 const tableController = require("./controllers").table;
 const orderController = require("./controllers").order;
 const userController = require("./controllers").users;
@@ -10,13 +9,6 @@ module.exports = router => {
     res.status(200).json("API ROUTE");
   });
 
-  // route handling for waiter
-  router.get("/api/w/test", waiterController.test);
-  router.post("/api/w", waiterController.create);
-  router.delete("/api/w/:waiterId", waiterController.destroy);
-  router.get("/api/w/", waiterController.list);
-  router.put("/api/w/:waiterId", waiterController.update);
-
   // route handling for table
   router.post("/api/t/:waiterId/t", tableController.create);
   router.get("/api/t/", tableController.list);
@@ -27,7 +19,11 @@ module.exports = router => {
 
   // route handling for user
   router.post("/api/u", userController.create);
-  router.get("/api/u", userController.login);
+  router.delete("/api/u/:userId", userController.destroy);
+  router.get("/api/u/", userController.list);
+  router.put("/api/u/:userId", userController.update);
+  router.post("/api/u/perRole", userController.perRole);
+  router.post("/api/u/login", userController.login);
 
   // router.get("*", (req, res) => {
   //   res.sendFile(path.join(__dirname, "/client/dist", "index.html"));

@@ -1,5 +1,6 @@
+// Moved all of this to the user controller, Waiter is now a role
+
 const Waiter = require("../models").Waiters;
-const Table = require("../models").Table;
 
 module.exports = {
     test(req, res) {
