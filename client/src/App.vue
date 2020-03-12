@@ -1,17 +1,25 @@
 <template>
-    <div id="app" class="container">
+    <div v-if="loggedIn">
         <nav-bar/>
-        <router-view/>
+        <div id="app" class="container-fluid">
+            <router-view/>
+        </div>
+    </div>
+    <div v-else>
+        <login-page />
     </div>
 </template>
 
 <script>
     import NavBar from "./components/common/NavBar";
+    import LoginPage from "./pages/Login";
+    import axios from 'axios'
 
     export default {
         name: 'app',
         components: {
-            NavBar
+            NavBar,
+            LoginPage
         },
         data() {
             return {
@@ -24,26 +32,33 @@
             }
         },
         mounted() {
-            this.checkLoggedIn();
+            //this.checkLoggedIn();
         },
         methods: {
+            checkLoggedIn: function() {
+
+            }
+
             /* addEmployee(employee){
               const lastId = this.employees.length > 0 ? this.employees[this.employees.length - 1].id : 0;
               const id = lastId + 1;
               const newEmployee = {...employee, id};
               this.employees =[ ...this.employees, newEmployee];
             },
+
              deleteEmployee(id){
               this.employees = this.employees.filter(
                       employee => employee.id !== id
               )
             },
+
             editEmployee(id, updatedEmployee){
               this.employees = this.employees.map(
                       employee => employee.id === id ?updatedEmployee : employee
               )
             }, */
-            async checkLoggedIn(admin) {
+
+            /*async checkLoggedIn(admin) {
                 try {
                     const response = await fetch('', {
                         method: 'GET',
@@ -55,7 +70,7 @@
                 } catch (e) {
                     console.log(e);
                 }
-            },
+            },*/
         }
     }
 </script>

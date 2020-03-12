@@ -66,6 +66,7 @@ module.exports = {
                         Email: Email || user.Email
                     })
             })
+            .catch(e => res.status(400).json(e))
     },
     perRole(req, res){
       return User

@@ -11,20 +11,9 @@
                 <div class="row">
                     <div class="col-12">
                         <label>Username</label>
-                        <input
-                                ref="first"
-                                name="Username"
-                                type="text"
-                                class="form-control"
-                        />
-
+                        <input ref="first"  name="Username" type="text" class="form-control" />
                         <label>Password</label>
-                        <input
-                                name="Password"
-                                type="text"
-                                class="form-control"
-                        />
-
+                        <input name="Password" type="text" class="form-control" />
                     </div>
                 </div>
                 <input class="btn btn-outline-primary my-3" type="submit" value="Login" />
@@ -52,7 +41,7 @@
                     };
 
                     axios
-                        .post("localhost:5000/api/u/login", data)
+                        .post("/api/u/login", data)
                         .then((response) => {
                             console.log("Logged In" + response);
                             router.push("/addWaiter");

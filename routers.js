@@ -25,7 +25,7 @@ module.exports = router => {
   router.post("/api/u/perRole", userController.perRole);
   router.post("/api/u/login", userController.login);
 
-  // router.get("*", (req, res) => {
-  //   res.sendFile(path.join(__dirname, "/client/dist", "index.html"));
-  // });
+  router.get("*", (req, res) => {
+    res.sendFile(path.join(__dirname, "/client/dist", "index.html"));
+  });
 };
