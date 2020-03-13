@@ -20,7 +20,7 @@ module.exports = (sequelize, DataTypes) => {
     }
   }, {});
   orders.associate = function(models) {
-    orders.belongsTo(models.table)
+
   };
   return orders;
 };

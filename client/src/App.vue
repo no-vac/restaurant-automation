@@ -13,7 +13,6 @@
 <script>
     import NavBar from "./components/common/NavBar";
     import LoginPage from "./pages/Login";
-    import axios from 'axios'
 
     export default {
         name: 'app',

@@ -20,7 +20,6 @@ module.exports = (sequelize, DataTypes) => {
     }
   }, {});
   tables.associate = function(models) {
-    tables.hasMany(models.order);
 
   };
   return tables;

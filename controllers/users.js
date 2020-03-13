@@ -4,6 +4,7 @@ const { Op } = require('sequelize');
 const User = require('../models').users;
 
 module.exports = {
+
     create(req, res) {
         const {Username, Password, Role, PhoneNumber, Email} = req.body;
         const hash = bcrypt.hashSync(Password, 10);

@@ -16,6 +16,11 @@ module.exports = router => {
 
   // route handling for order
   router.post("/api/o", orderController.create);
+  router.get("/api/o", orderController.list);
+  router.get("/api/o/:orderId", orderController.listPerId);
+  router.get("/api/o/t/:tableId", orderController.listPerTableId);
+  router.delete("/api/o/:orderId", orderController.destroy);
+  router.put("/api/o/:orderId", orderController.update);
 
   // route handling for user
   router.post("/api/u", userController.create);
