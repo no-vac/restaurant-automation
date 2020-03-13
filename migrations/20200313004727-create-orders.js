@@ -1,4 +1,5 @@
 'use strict';
+
 module.exports = {
   up: (queryInterface, Sequelize) => {
     return queryInterface.createTable('orders', {
@@ -15,7 +16,10 @@ module.exports = {
         type: Sequelize.STRING
       },
       price: {
-        type: Sequelize.INTEGER
+        type: Sequelize.DECIMAL
+      },
+      tableId: {
+        type: Sequelize.UUID,
       },
       createdAt: {
         allowNull: false,

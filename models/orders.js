@@ -1,24 +1,26 @@
 'use strict';
+const Table = require('../models').tables;
 module.exports = (sequelize, DataTypes) => {
   const orders = sequelize.define('orders', {
     item: {
-      type: DataTypes.STRING,
-      allowNull: false
+     type: DataTypes.STRING,
+     allowNull: true
     },
     comments: {
       type: DataTypes.STRING,
-      allowNull: false
+      allowNull: true
     },
     price: {
-      type: DataTypes.INTEGER,
-      allowNull: false
+     type: DataTypes.DECIMAL,
+      allowNull: true
+    },
+    tableId: {
+     type: DataTypes.UUID,
+     allowNull: true
     }
   }, {});
   orders.associate = function(models) {
-    // orders.belongsTo(models.Table, {
-    //   foreignKey: 'tableId',
-    //   as: "tableOrder"
-    // })
+    orders.belongsTo(models.table)
   };
   return orders;
 };

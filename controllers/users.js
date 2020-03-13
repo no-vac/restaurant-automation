@@ -65,6 +65,10 @@ module.exports = {
                         PhoneNumber: PhoneNumber || user.PhoneNumber,
                         Email: Email || user.Email
                     })
+                    .then(updatedUser => {
+                        return res.status(200).json(updatedUser)
+                    })
+                    .catch(e => res.status(400).json(e))
             })
             .catch(e => res.status(400).json(e))
     },

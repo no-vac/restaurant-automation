@@ -9,18 +9,28 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      Total: {
-        type: Sequelize.INTEGER
+      total: {
+        type: Sequelize.DECIMAL
       },
       waiterId: {
-        type: Sequelize.INTEGER
+        type: Sequelize.UUID
       },
-      OrderId: {
-        type: Sequelize.INTEGER
+      orderId: {
+        type: Sequelize.UUID,
+      },
+      status: {
+        type: Sequelize.STRING
+      },
+      createdAt: {
+        allowNull: false,
+        type: Sequelize.DATE
+      },
+      updatedAt: {
+        allowNull: false,
+        type: Sequelize.DATE
       }
-    })
+    });
   },
-
   down: (queryInterface, Sequelize) => {
     return queryInterface.dropTable('tables');
   }
