@@ -1,76 +1,76 @@
 <template>
-    <div id="addingWaiter">
-        <waiter-form
-                @add:employee="addEmployee"
+    <div id="addingUser">
+        <user-form
+                @add:user="addUser"
         />
-        <waiter-table
-                :employees="employees"
-                @delete:employee="deleteEmployee"
-                @edit:employee="editEmployee"
+        <user-table
+                :users="users"
+                @delete:user="deleteUser"
+                @edit:user="editUser"
         />
     </div>
 </template>
 
 <script>
-    import WaiterTable from './WaiterTable';
-    import WaiterForm from "./WaiterForm";
+    import UserTable from './UserTables';
+    import UserForm from "./UserForm";
 
     export default {
         name: 'add waiter',
         components: {
-            WaiterForm,
-            WaiterTable
+            UserForm,
+            UserTable
         },
         data() {
             return {
-                employees: []
+                users: []
             }
         },
         mounted() {
-            this.getEmployees()
+            this.getUser()
         },
         methods: {
-            async getEmployees() {
+            async getUser() {
                 try {
-                    const response = await fetch('http://127.0.0.1:5000/api/w');
+                    const response = await fetch('http://127.0.0.1:5000/api/u');
                     const data = await response.json();
-                    this.employees = data
+                    this.users = data
                 } catch (error) {
                     console.log(error)
                 }
             },
-            async addEmployee(employee) {
+            async addUser(user) {
                 try {
-                    const response = await fetch('http://127.0.0.1:5000/api/w', {
+                    const response = await fetch('http://127.0.0.1:5000/api/u', {
                         method: 'POST',
-                        body: JSON.stringify(employee),
+                        body: JSON.stringify(user),
                         headers: {'Content-type': 'application/json; chartset=UTF-8'}
                     });
                     const data = await response.json();
-                    this.employees = [...this.employees, data]
+                    this.users = [...this.users, data]
                 } catch (error) {
                     console.log(error)
                 }
             },
-            async editEmployee(id, updatedEmployee) {
+            async editUser(id, updatedUser) {
                 try {
-                    const response = await fetch(`http://127.0.0.1:5000/api/${id}`, {
+                    const response = await fetch(`http://127.0.0.1:5000/api/u/${id}`, {
                         method: 'PUT',
-                        body: JSON.stringify(updatedEmployee),
+                        body: JSON.stringify(updatedUser),
                         headers: {'Content-type': 'application/json; chartset=UTF-8'}
                     });
                     const data = await response.json();
-                    this.employees = this.employees.map(employee => (employee.id === id ? data : employee))
+                    this.users = this.users.map(user => (user.id === id ? data : user))
                 } catch (error) {
                     console.log(error)
                 }
             },
-            async deleteEmployee(id) {
+            async deleteUser(id) {
                 try {
-                    await fetch(`http://127.0.0.1:5000/api/w/${id}`, {
+                    await fetch(`http://127.0.0.1:5000/api/u/${id}`, {
                         method: 'DELETE'
                     });
-                    this.employees = this.employees.filter(employee => employee.id !== id);
+                    this.users = this.users.filter(user => user.id !== id);
                 } catch (e) {
                     console.log(e)
                 }

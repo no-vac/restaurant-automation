@@ -1,13 +1,13 @@
 <template>
-    <div id="employee-form">
+    <div id="user-form">
         <form @submit.prevent="handleSubmit">
             <div class="row">
                 <div class="col-md-6">
-                    <label>Waiter First Name</label>
+                    <label>Username: </label>
                     <input
                             ref="first"
-                            :class="{ 'has-error': submitting && invalidFirstName  }"
-                            v-model="employee.FName"
+                            :class="{ 'has-error': submitting && invalidUsername  }"
+                            v-model="user.Username"
                             type="text"
                             class="form-control"
                             @focus="clearStatus"
@@ -15,30 +15,40 @@
                     />
                 </div>
                 <div class="col-md-6">
-                    <label>Waiter Last Name</label>
+                    <label>Password: </label>
                     <input
-                            :class="{ 'has-error': submitting && invalidLastName }"
-                            v-model="employee.LName"
+                            :class="{ 'has-error': submitting && invalidPassword }"
+                            v-model="user.Password"
                             class="form-control"
                             type="text"
                             @focus="clearStatus"
                     />
                 </div>
                 <div class="col-md-6">
-                    <label>Waiter Username</label>
+                    <label>Role: </label>
                     <input
-                            :class="{ 'has-error': submitting && invalidUsername }"
-                            v-model="employee.Username"
+                            :class="{ 'has-error': submitting && invalidRole }"
+                            v-model="user.Role"
                             class="form-control"
                             type="text"
                             @focus="clearStatus"
                     />
                 </div>
                 <div class="col-md-6">
-                    <label>Waiter Pin</label>
+                    <label>Phone Number: </label>
                     <input
-                            :class="{ 'has-error': submitting && invalidPin }"
-                            v-model="employee.pin"
+                            :class="{ 'has-error': submitting && invalidPhoneNumber }"
+                            v-model="user.PhoneNumber"
+                            class="form-control"
+                            type="text"
+                            @focus="clearStatus"
+                    />
+                </div>
+                <div class="col-md-6">
+                    <label>Email Address: </label>
+                    <input
+                            :class="{ 'has-error': submitting && invalidEmail }"
+                            v-model="user.Email"
                             class="form-control"
                             type="text"
                             @focus="clearStatus"
@@ -67,13 +77,12 @@
                 submitting: false,
                 error: false,
                 success: false,
-                employee: {
-                    FName: '',
-                    LName: '',
+                user: {
                     Username: '',
-                    pin: '',
-                    clockInTime: '2020-01-01T20:15:00.000Z',
-                    clockOutTime: '2020-01-02T01:00:00.000Z'
+                    Password: '',
+                    Role: '',
+                    PhoneNumber: '',
+                    Email: ''
                 },
             }
         },
@@ -83,47 +92,53 @@
                 this.clearStatus();
 
                 if (
-                    this.invalidFirstName ||
-                    this.invalidLastName ||
                     this.invalidUsername ||
-                    this.invalidPin
+                    this.invalidPassword ||
+                    this.invalidRole ||
+                    this.invalidPhoneNumber ||
+                    this.invalidEmail
                 ) {
                     this.error = true;
                     return
                 }
 
-                this.$emit('add:employee', this.employee);
+                this.$emit('add:user', this.user);
                 this.$refs.first.focus();
-                this.employee = {
-                    FName: '',
-                    LName: '',
+                this.user = {
                     Username: '',
-                    Pin: ''
+                    Password: '',
+                    Role: '',
+                    PhoneNumber: '',
+                    Email: ''
                 };
                 this.error = false;
                 this.success = true;
                 this.submitting = false;
             },
             clearStatus() {
-                this.success = false,
-                    this.error = false
+                this.success = false;
+                this.error = false;
             },
         },
         computed: {
-            invalidFirstName() {
-                return this.employee.FName == '';
-            },
-
-            invalidLastName() {
-                return this.employee.LName == '';
-            },
-
             invalidUsername() {
-                return this.employee.Username == '';
+                return this.user.Username == '';
             },
 
-            invalidPin() {
-                return this.employee.pin == '';
+            invalidPassword() {
+                return this.user.Password == '';
+            },
+
+            invalidRole() {
+                return this.user.Role == '';
+            },
+
+            invalidPhoneNumber() {
+                return this.user.PhoneNumber == '';
+            },
+
+            invalidEmail() {
+                return this.user.Email == '';
             }
         }
     }

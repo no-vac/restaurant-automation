@@ -1,13 +1,13 @@
 import Home from './pages/Home';
-import Login from './pages/Login';
+import Login from './pages/Login/Login';
 import Error from './pages/404';
-import WaiterAdd from './pages/addWaiter/Index';
+import AddUser from './pages/addWaiter/Index';
 
 const routes = [
     {path: '/', component: Home, name: 'home'},
     {path: '/login', component: Login, name: 'login'},
     {path: '/404', component: Error, name: '404'},
-    {path: '/addWaiter', component: WaiterAdd, name: 'addWaiter'}
+    {path: '/addUser', component: AddUser, name: 'addUser'}
 ];
 
 

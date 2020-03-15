@@ -4,8 +4,6 @@ const passport = require("passport");
 const cors = require("cors");
 const morgan = require("morgan");
 const path = require("path");
-const LocalStrategy = require('passport-local').Strategy;
-const users = require('./models').users;
 
 //pull in envs
 require("dotenv").config();
@@ -17,6 +15,7 @@ function startServer(server) {
   const { PORT } = process.env;
 
   server.listen(PORT || 5000, () => {
+
     console.log(`Server is live on port ${PORT}`);
   });
 }
@@ -30,38 +29,6 @@ async function init() {
   app.use(bodyParser.urlencoded({
     extended: true
   }));
-  app.use(passport.initialize());
-  app.use(passport.session());
-  passport.use(
-      new LocalStrategy(
-      {
-        usernameField: 'Username',
-        passwordField: 'Password'
-      },
-      (username, password, done) => {
-        let user = users.find((user) => {
-          return user.Username === username && user.Password === password;
-        });
-
-        if(user){
-          done(null, user);
-        }else{
-          done(null, false, { message: 'Wrong password' });
-        }
-      }
-  ));
-
-  passport.serializeUser((user, done) => {
-    done(null, user.id)
-  });
-
-  passport.deserializeUser((id, done) => {
-    let user = users.find((user) => {
-      return user.id === id
-    });
-
-    done(null, user)
-  });
 
   app.use(cors());
   app.use(function(req, res, next){

@@ -6,19 +6,20 @@
         </div>
     </div>
     <div v-else>
-        <login-page />
+        <add-user />
     </div>
 </template>
 
 <script>
     import NavBar from "./components/common/NavBar";
-    import LoginPage from "./pages/Login";
+    //import LoginPage from "./pages/Login/Login";
+    import addUser from './pages/addWaiter/Index';
 
     export default {
         name: 'app',
         components: {
             NavBar,
-            LoginPage
+            addUser,
         },
         data() {
             return {
