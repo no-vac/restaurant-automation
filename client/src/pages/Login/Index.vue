@@ -6,7 +6,8 @@
 
 <script>
     import LoginForm from './Login';
-    import router from '../../routes';
+    //import router from '../../routes';
+    import axios from 'axios';
     export default {
         name: 'Login',
         components: {
@@ -22,23 +23,19 @@
         },
         methods: {
             async LoginUser(user) {
-                try{
-                    const response = await fetch('http://127.0.0.1:5000/api/u/login', {
-                        method: 'POST',
-                        body: JSON.stringify(user),
-                        headers: {'Content-type': 'application/json; chartset=UTF-8'}
+                axios
+                    .post('http://127.0.0.1:5000/api/u/login', user)
+                    .then((response) => {
+                        console.log(response);
+                        if(response !== null){
+                            this.$router.push('addUser');
+                        }
+                    })
+                    .catch((e) => {
+                        console.log('Yikes ' + e)
                     });
-
-                    const data = await response.json();
-                    this.users = [...this.users, data];
-
-                    if(data != null || data == []){
-                        router.push('/addUser');
-                    }
-                } catch (e) {
-                    console.log(e)
-                }
             }
+
         }
     }
 </script>

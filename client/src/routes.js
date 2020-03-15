@@ -1,5 +1,5 @@
 import Home from './pages/Home';
-import Login from './pages/Login/Login';
+import Login from './pages/Login/Index';
 import Error from './pages/404';
 import AddUser from './pages/addWaiter/Index';
 

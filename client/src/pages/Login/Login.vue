@@ -40,7 +40,7 @@
                         </div>
                     </div>
                 </div>
-                <button class="btn btn-outline-success my-3">Add Waiter</button>
+                <button class="btn btn-outline-success my-3">Login</button>
             </form>
         </div>
     </div>

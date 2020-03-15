@@ -1,16 +1,17 @@
 <template>
     <div id="employee-table">
         <p v-if="users.length < 1" class="empty-table">
-            No Waiters
+            No Users
         </p>
 
         <table class="table" v-else>
             <thead>
             <tr style="text-align: center;">
-                <th>Waiter First Name</th>
-                <th>Waiter Last Name</th>
-                <th>Waiter Username</th>
-                <th>Waiter Pin</th>
+                <th>Username</th>
+                <th>Password (encrypted)</th>
+                <th>Roles</th>
+                <th>Phone Number</th>
+                <th>Email</th>
                 <th></th>
             </tr>
             </thead>

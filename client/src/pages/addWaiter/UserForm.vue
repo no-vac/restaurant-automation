@@ -25,14 +25,13 @@
                     />
                 </div>
                 <div class="col-md-6">
-                    <label>Role: </label>
-                    <input
-                            :class="{ 'has-error': submitting && invalidRole }"
-                            v-model="user.Role"
-                            class="form-control"
-                            type="text"
-                            @focus="clearStatus"
-                    />
+                    <label for="role">Role: </label>
+                    <select id="role" name="roles" v-model="user.Role" @focus="clearStatus" class="form-control">
+                        <option value="Admin">Admin</option>
+                        <option value="Waiter">Waiter</option>
+                        <option value="Kitchen">Kitchen</option>
+
+                    </select>
                 </div>
                 <div class="col-md-6">
                     <label>Phone Number: </label>
@@ -56,15 +55,18 @@
                 </div>
             </div>
 
+            <div class="col-md-12 centerSpaced">
+                <p v-if="error && submitting" class="error-message">
+                    ! Please fill out all required fields
+                </p>
 
-            <p v-if="error && submitting" class="error-message">
-                ! Please fill out all required fields
-            </p>
+                <p v-if="success" class="success-message">
+                    ✅ User successfully added
+                </p>
 
-            <p v-if="success" class="success-message">
-                ✅ Waiter successfully added
-            </p>
-            <button class="btn btn-outline-success my-3">Add Waiter</button>
+                <button class="btn btn-outline-success my-3">Add User</button>
+            </div>
+
         </form>
     </div>
 </template>
@@ -159,5 +161,10 @@
 
     .success-message {
         color: #32a95d;
+    }
+
+    .centerSpaced{
+        text-align: center;
+        margin-top: 3em;
     }
 </style>

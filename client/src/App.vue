@@ -1,25 +1,19 @@
 <template>
-    <div v-if="loggedIn">
+    <div>
         <nav-bar/>
         <div id="app" class="container-fluid">
             <router-view/>
         </div>
     </div>
-    <div v-else>
-        <add-user />
-    </div>
 </template>
 
 <script>
     import NavBar from "./components/common/NavBar";
-    //import LoginPage from "./pages/Login/Login";
-    import addUser from './pages/addWaiter/Index';
 
     export default {
         name: 'app',
         components: {
             NavBar,
-            addUser,
         },
         data() {
             return {
@@ -28,7 +22,6 @@
                     Password: ''
                 },
                 res: [],
-                loggedIn: false,
             }
         },
         mounted() {
@@ -74,3 +67,9 @@
         }
     }
 </script>
+
+<style scoped>
+    .space{
+        margin-top: 1em;
+    }
+</style>
