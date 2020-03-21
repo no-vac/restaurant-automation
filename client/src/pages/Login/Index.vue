@@ -8,6 +8,7 @@
     import LoginForm from './Login';
     //import router from '../../routes';
     import axios from 'axios';
+    import { globalStore } from '../../main';
     export default {
         name: 'Login',
         components: {
@@ -15,7 +16,8 @@
         },
         data() {
             return {
-                users: []
+                users: [],
+                isLoggedOn: globalStore.isLoggedOn,
             }
         },
         mounted() {
@@ -28,7 +30,8 @@
                     .then((response) => {
                         console.log(response);
                         if(response !== null){
-                            this.$router.push('addUser');
+                            this.$router.push('dashboard');
+                            this.isLoggedOn = true;
                         }
                     })
                     .catch((e) => {

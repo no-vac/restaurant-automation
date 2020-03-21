@@ -9,6 +9,8 @@
 
 <script>
     import NavBar from "./components/common/NavBar";
+    //import axios from 'axios';
+    import {globalStore} from "./main";
 
     export default {
         name: 'app',
@@ -17,53 +19,20 @@
         },
         data() {
             return {
-                admin: {
+                user: {
                     Username: '',
                     Password: ''
                 },
-                res: [],
+                isLoggedOn: globalStore.isLoggedOn,
             }
         },
         mounted() {
-            //this.checkLoggedIn();
+            this.checkLoggedIn();
         },
         methods: {
-            checkLoggedIn: function() {
-
+            async checkLoggedIn(){
+                console.log(this.isLoggedOn);
             }
-
-            /* addEmployee(employee){
-              const lastId = this.employees.length > 0 ? this.employees[this.employees.length - 1].id : 0;
-              const id = lastId + 1;
-              const newEmployee = {...employee, id};
-              this.employees =[ ...this.employees, newEmployee];
-            },
-
-             deleteEmployee(id){
-              this.employees = this.employees.filter(
-                      employee => employee.id !== id
-              )
-            },
-
-            editEmployee(id, updatedEmployee){
-              this.employees = this.employees.map(
-                      employee => employee.id === id ?updatedEmployee : employee
-              )
-            }, */
-
-            /*async checkLoggedIn(admin) {
-                try {
-                    const response = await fetch('', {
-                        method: 'GET',
-                        body: JSON.stringify(admin),
-                        headers: {'Content-type': 'application/json; charset=UTF-8'}
-                    });
-                    const data = await response.json();
-                    this.admin = data;
-                } catch (e) {
-                    console.log(e);
-                }
-            },*/
         }
     }
 </script>

@@ -1,5 +1,6 @@
 <template>
     <div id="addingUser">
+        <h1 style="margin-top: .5em; margin-bottom: .5em;">Add New Users: </h1>
         <user-form
                 @add:user="addUser"
         />

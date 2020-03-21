@@ -8,7 +8,7 @@
             <thead>
             <tr style="text-align: center;">
                 <th>Username</th>
-                <th>Password (encrypted)</th>
+                <!--<th>Password (encrypted)</th>-->
                 <th>Roles</th>
                 <th>Phone Number</th>
                 <th>Email</th>
@@ -22,10 +22,10 @@
                 </td>
                 <td v-else>{{ users.Username }}</td>
 
-                <td v-if="editing === users.id">
-                    <input type="text"  v-model="users.Password" class="form-control" />
-                </td>
-                <td v-else>{{ users.Password }}</td>
+<!--                <td v-if="editing === users.id">-->
+<!--                    <input type="text"  v-model="users.Password" class="form-control" />-->
+<!--                </td>-->
+<!--                <td v-else>{{ users.Password }}</td>-->
 
                 <td v-if="editing === users.id">
                     <input type="text" v-model="users.Role" class="form-control" />

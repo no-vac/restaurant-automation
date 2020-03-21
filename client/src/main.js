@@ -12,6 +12,12 @@ Vue.use(BootstrapVue);
 Vue.use(IconsPlugin);
 Vue.use(VueRouter);
 
+export const globalStore = new Vue({
+  data: {
+    isLoggedOn: false,
+  },
+});
+
 const router = new VueRouter({mode: 'history', routes});
 
 new Vue({

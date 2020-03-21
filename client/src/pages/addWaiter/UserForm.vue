@@ -30,7 +30,6 @@
                         <option value="Admin">Admin</option>
                         <option value="Waiter">Waiter</option>
                         <option value="Kitchen">Kitchen</option>
-
                     </select>
                 </div>
                 <div class="col-md-6">

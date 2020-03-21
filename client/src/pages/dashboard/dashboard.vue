@@ -1,9 +1,9 @@
 <template>
-    <div id="Home">
-        <h2>Home</h2>
+    <div id="dashboard">
+        <h2>Dashboard</h2>
         <div class="row">
             <div class="col-12">
-                <label>Home</label>
+                <label>Dashboard</label>
             </div>
         </div>
     </div>
@@ -11,7 +11,7 @@
 
 <script>
     export default {
-        name: 'Home',
+        name: 'dashboard',
     }
 </script>
 
