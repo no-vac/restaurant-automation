@@ -1,6 +1,6 @@
 # restaurant-automation PLEASE READ BEFORE STARTING
 
-When cloning the project make sure you are on staging and not MASTER this is very important, we dont want to break MASTER since it is the most stable version we have of the project.  
+When cloning the project make sure you are on staging and not MASTER this is very important, we dont want to break MASTER since it is the most stable version we have of the project. The same thing goes to pushing code into GitHub, we dont want to break MASTER, make sure when you are pushing code that you are pushing it to your branch. After pushing to your branch make a pull request to merge it into staging. Once we test eveything on staging and all the test cases pass we can merge into master.
 
 If this is your first time cloning this project
 
