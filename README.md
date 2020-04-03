@@ -1,4 +1,4 @@
-# restaurant-automation
+# restaurant-automation PLEASE READ ME BEFORE STARTING
 
 If this is your first time cloning this project
 
