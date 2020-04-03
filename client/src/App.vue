@@ -1,28 +1,44 @@
 <template>
-  <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
-  </div>
+    <div>
+        <nav-bar/>
+        <div id="app" class="container-fluid">
+            <router-view/>
+        </div>
+    </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+    import NavBar from "./components/common/NavBar";
+    //import axios from 'axios';
+    import {globalStore} from "./main";
 
-export default {
-  name: 'app',
-  components: {
-    HelloWorld
-  }
-}
+    export default {
+        name: 'app',
+        components: {
+            NavBar,
+        },
+        data() {
+            return {
+                user: {
+                    Username: '',
+                    Password: ''
+                },
+                isLoggedOn: globalStore.isLoggedOn,
+            }
+        },
+        mounted() {
+            this.checkLoggedIn();
+        },
+        methods: {
+            async checkLoggedIn(){
+                console.log(this.isLoggedOn);
+            }
+        }
+    }
 </script>
 
-<style>
-#app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
+<style scoped>
+    .space{
+        margin-top: 1em;
+    }
 </style>

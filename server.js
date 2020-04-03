@@ -15,6 +15,7 @@ function startServer(server) {
   const { PORT } = process.env;
 
   server.listen(PORT || 5000, () => {
+
     console.log(`Server is live on port ${PORT}`);
   });
 }
@@ -25,7 +26,16 @@ async function init() {
   const app = express();
 
   app.use(bodyParser.json());
+  app.use(bodyParser.urlencoded({
+    extended: true
+  }));
+
   app.use(cors());
+  app.use(function(req, res, next){
+    res.header("Access-Control-Allow-Origin", "*"); // update to match the domain you will make the request from
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    next();
+  });
   app.use(morgan("tiny"));
 
   app.use(express.static(path.join(__dirname, "/client/dist")));
@@ -41,11 +51,11 @@ async function init() {
   startServer(app);
 
   //handle unhandled rejections
-  process.on("unhandledRejection", (err, promise) => {
-    console.log(`Error: ${err.message}`);
-    //close server and exit process
-    server.close(() => process.exit(1));
-  });
+  // process.on("unhandledRejection", (err, promise) => {
+  //   console.log(`Error: ${err.message}`);
+  //   //close server and exit process
+  //   server.close(() => process.exit(1));
+  // });
 }
 
 init();

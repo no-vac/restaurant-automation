@@ -1,30 +1,25 @@
 'use strict';
+
 module.exports = {
   up: (queryInterface, Sequelize) => {
-    return queryInterface.createTable('Waiters', {
+    return queryInterface.createTable('orders', {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      FName: {
+      item: {
         type: Sequelize.STRING
       },
-      LName: {
+      comments: {
         type: Sequelize.STRING
       },
-      tableNumber: {
-        type: Sequelize.INTEGER
+      price: {
+        type: Sequelize.DECIMAL
       },
-      pin: {
-        type: Sequelize.STRING
-      },
-      clockInTime: {
-        type: Sequelize.DATE
-      },
-      clockOutTime: {
-        type: Sequelize.DATE
+      tableId: {
+        type: Sequelize.UUID,
       },
       createdAt: {
         allowNull: false,
@@ -37,6 +32,6 @@ module.exports = {
     });
   },
   down: (queryInterface, Sequelize) => {
-    return queryInterface.dropTable('Waiters');
+    return queryInterface.dropTable('orders');
   }
 };
