@@ -1,5 +1,7 @@
 # restaurant-automation PLEASE READ BEFORE STARTING
 
+When cloning the project make sure you are on staging and not MASTER this is very important, we dont want to break MASTER since it is the most stable version we have of the project.  
+
 If this is your first time cloning this project
 
   1. Before starting the project make sure you have Postgresql installed from here `https://www.postgresql.org/download/`
