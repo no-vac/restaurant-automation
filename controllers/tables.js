@@ -1,32 +1,13 @@
 const Table = require("../models").Table;
-const Waiter = require("../models").Waiters;
 
 module.exports = {
     create(req, res) {
         return Table
             .create({
-                TableNumber: req.body.TableNumber,
-                Orders: req.body.Orders,
                 Total: req.body.Total,
                 waiterId: req.params.waiterId
             })
-            .then(newTable => {
-                Waiter
-                    .findOne({
-                        where: {
-                            id: req.params.waiterId
-                        }
-                    })
-                    .then(waiter => {
-                        return waiter
-                            .update({
-                                tableId: req.body.TableNumber || waiter.TableNumber,
-                            })
-                            .then(() => res.status(200).json(newTable))
-                            .catch(e => res.status(400).json(e))
-                    })
-                    .catch(e => res.status(400).json(e));
-            })
+            .then(newTable =>  res.status(200).json(newTable))
             .catch(e => res.status(400).json(e));
     },
     list(req, res) {
@@ -34,6 +15,31 @@ module.exports = {
             .findAll()
             .then(tables => res.status(200).json(tables))
             .catch(e => res.status(400).json(e));
+    },
+    update(req, res){
+      return Table
+          .findOne({
+              Where: {
+                  id: req.params.id
+              }
+          })
+          .then(table => {
+              if(!table) {
+                  return res.status(404).json({ msg: 'no table found' })
+              }
+
+              const { Total } = req.body;
+
+              return Table
+                  .update({
+                      Total: Total || table.Total
+                  })
+                  .then(updatedTable => {
+                      return res.status(200).json(updatedTable);
+                  })
+                  .catch(e => res.status(400).json(e))
+          })
+          .catch(e => res.status(400).json(e))
     },
     destroy(req, res) {
         return Table
@@ -54,4 +60,4 @@ module.exports = {
             })
             .catch(e => res.status(400).json(e))
     },
-}
+};

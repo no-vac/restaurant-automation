@@ -1,5 +1,6 @@
+// Moved all of this to the user controller, Waiter is now a role
+
 const Waiter = require("../models").Waiters;
-const Table = require("../models").Table;
 
 module.exports = {
     test(req, res) {
@@ -20,12 +21,7 @@ module.exports = {
     },
     list(req, res) {
         return Waiter
-            .findAll({
-                include: [{
-                    model: Table,
-                    as: 'tableId'
-                }]
-            })
+            .findAll()
             .then(waiters => res.status(200).json(waiters))
             .catch(e => res.status(400).json(e))
     },
@@ -33,7 +29,7 @@ module.exports = {
         return Waiter
             .findOne({
                 Where: {
-                    Username: req.body.Username
+                    id: req.params.id
                 }
             })
             .then(waiter => {
@@ -47,4 +43,24 @@ module.exports = {
             })
             .catch(e => res.status(400).json(e));
     },
+    update(req, res) {
+        return Waiter
+            .findByPk(req.params.id)
+            .then(updatedWaiter => {
+                if (!updatedWaiter) {
+                    return res.status(404).json({msg: 'no waiter found'})
+                }
+
+                return updatedWaiter
+                    .update({
+                        FName: req.body.FName || updatedWaiter.FName,
+                        LName: req.body.LName || updatedWaiter.LName,
+                        Username: req.body.Username || updatedWaiter.Username,
+                        pin: req.body.pin || updatedWaiter.pin,
+                    })
+                    .then(() => res.status(200).json(updatedWaiter))
+                    .catch((error) => res.status(400).json(error));
+            })
+            .catch((error) => res.status(400).json(error));
+    }
 };
