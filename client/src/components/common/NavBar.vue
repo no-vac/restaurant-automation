@@ -44,14 +44,6 @@
             </b-collapse>
         </b-navbar>
     </div>
-
-
-
-   <!-- <nav>
-
-
-
-    </nav>-->
 </template>
 
 <script>

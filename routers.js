@@ -27,9 +27,12 @@ module.exports = router => {
   router.post("/api/u", userController.create);
   router.delete("/api/u/:userId", userController.destroy);
   router.get("/api/u/", userController.list);
-  router.put("/api/u/:userId", userController.update);
+  router.get("/api/u/user", userController.getUser);
+  router.put("/api/u/", userController.updateUser);
   router.post("/api/u/perRole", userController.perRole);
   router.post("/api/u/login", userController.login);
+  router.post("/api/u/logout", userController.logout);
+
 
   // route handling for payroll
   router.post("/api/p", userController.create);

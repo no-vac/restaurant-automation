@@ -1,112 +1,101 @@
-const bcrypt = require('bcryptjs');
-const { Op } = require('sequelize');
-
+const userServices = require('../services/user/userServices');
+const auth = require('../auth');
+const session = require('express-session');
 const User = require('../models').users;
 
 module.exports = {
     create(req, res) {
-        const {Username, Password, Role, PhoneNumber, Email} = req.body;
-        const hash = bcrypt.hashSync(Password, 10);
-
-        return User
-            .create({
-                Username: Username,
-                Password: hash,
-                Role: Role,
-                PhoneNumber: PhoneNumber,
-                Email: Email
-            })
-            .then(user => res.status(200).json(user))
-            .catch(e => res.status(400).json(e));
-    },
-    list(req, res) {
-        return User
-            .findAll()
-            .then(users => res.status(200).json(users))
-            .catch(e => res.status(400).json(e));
-    },
-    destroy(req, res) {
-        return User
-            .findOne({
-                Where: {
-                    id: req.params.id,
-                }
-            })
+        const { username, password, role, phoneNumber, email } = req.body;
+        return userServices
+            .createUser(username, password, role, phoneNumber, email)
             .then(user => {
-                if (!user) {
-                    return res.status(404).json({msg: 'Something went wrong'});
-                }
 
-                return user
-                    .destroy()
-                    .then(() => res.status(200).json({msg: 'Deleted '}))
-                    .catch(e => res.status(400).json(e));
+                console.log(data);
+                return res.status(200).json({
+                    Token: data,
+                    user
+                });
             })
-            .catch(e => res.status(400).json(e));
+            .catch(e => res.status(400).json({ msg: 'you fucked up', e }))
     },
-    update(req, res) {
-        return User
-            .findOne({
-                Where: {
-                    id: req.params.id
-                }
-            })
-            .then(user => {
-                if (!user) {
-                    return res.status(404).json({msg: 'no user found'})
-                }
-                const {Username, Password, Role, PhoneNumber, Email} = req.body;
+    getUser(req, res) {
+        const { username } = req.body;
 
-                return user
-                    .update({
-                        Username: Username || user.Username,
-                        Password: Password || user.Password,
-                        Role: Role || user.Role,
-                        PhoneNumber: PhoneNumber || user.PhoneNumber,
-                        Email: Email || user.Email
-                    })
-                    .then(updatedUser => {
-                        return res.status(200).json(updatedUser)
-                    })
-                    .catch(e => res.status(400).json(e))
+        return userServices
+            .getUser(username)
+            .then(user => {
+                return res.status(200).json(user)
             })
             .catch(e => res.status(400).json(e))
     },
-    perRole(req, res){
-      return User
-          .findAll({
-             where: {
-                 Role: req.body.Role
-             }
-          })
-          .then(waiters => res.status(200).json(waiters))
-          .catch(e => res.status(200).json(e));
-
+    list(req, res) {
+        return userServices
+            .getAllUsers()
+            .then(users => {
+                return res.status(200).json(users)
+            })
+            .catch(e => res.status(400).json(e))
     },
-    login(req, res, next) {
-        console.log('you hit this')
-        const {Password} = req.body;
-
-        return User
-            .findOne({
-                where: {
-                    Username: req.body.Username,
-                },
+    updateUser(req, res){
+        const { id, username, password, email, role, phoneNumber } = req.body;
+        return userServices
+            .updateUser(id, username, password, email, role, phoneNumber)
+            .then(updatedUser => {
+                return res.status(200).json({
+                    msg: 'user updated',
+                    updatedUser
+                })
             })
+            .catch(e => res.status(400).json({
+                msg: 'you dont fucked up dawg',
+                e
+            }))
+    },
+    perRole(req, res){
+        // get user per role
+    },
+    login(req, res) {
+        const { username, password } = req.body;
+
+        return userServices
+            .loginUser(username, password)
             .then(user => {
-                if (!user) {
-                    res.status(404).json({
-                        msg: 'User not found'
-                    });
-                }
-
-                if (bcrypt.compareSync(Password, user.Password) === true) {
-                    res.status(200).json(user);
-                } else {
-                    res.status(400).json({msg: "wrong password"});
-                }
+                const data = auth.createJWT(user.id);
+                req.session.AuthToken = data;
+                return res.status(200).json({
+                    Token: data,
+                    user
+                })
             })
-            .catch(e => res.status(200).json(e))
+            .catch(e => res.status(400).json({
+                msg: 'you done fucked up',
+                e
+            }))
+    },
+    logout(req, res) {
+        const { id, username } = req.body;
 
-    }
+        return userServices
+            .logoutUser(id, username)
+            .then(user => {
+                return res.status(200).json({msg: 'logged out', user})
+            })
+            .catch(e => res.status(400).json(e))
+    },
+    destroy(req, res) {
+        // delete user
+    },
+
+
+    
+    // genToken(){
+    //     let token = '';
+    //     const possibleCharacters = 'BCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    //     for(var i = 0; i < 15; i++){
+    //         token += possibleCharacters.charAt(
+    //             Math.floor(Math.random() * possibleCharacters.length)
+    //         );
+    //     }
+    //     return token;
+    // }
 };
