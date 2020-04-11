@@ -9,10 +9,8 @@ module.exports = {
         return userServices
             .createUser(username, password, role, phoneNumber, email)
             .then(user => {
-
-                console.log(data);
+                console.log(user + ' ' + 'from here');
                 return res.status(200).json({
-                    Token: data,
                     user
                 });
             })

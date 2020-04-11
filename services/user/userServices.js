@@ -15,15 +15,16 @@ const db = knex({
 
 module.exports = {
     createUser: ( Username, Password, Role, Email, PhoneNumber ) => new Promise((resolve, reject) => {
-        //const hash = bcrypt.hashSync(Password, 10);
-        db.transaction(trx => {
-            trx.insert({
-                Username,
-                Password,
-                Role,
-                Email,
-                PhoneNumber
-            }).into('users').returning('*').then(data => resolve(data[0])).then(trx.commit).catch(trx.rollback)
+        const hash = bcrypt.hashSync(Password, 10);
+        db.insert({
+            Username,
+            Password: hash,
+            Role,
+            Email,
+            PhoneNumber
+        }).returning('*').into('users').then(data => {
+            console.log(data[0]);
+            return resolve(data[0])
         }).catch(e => reject(e))
     }),
     getUser: (username) => new Promise((resolve, reject) => {
