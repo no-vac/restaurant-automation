@@ -117,5 +117,23 @@ module.exports = {
             .where('Role', '=', role)
             .then(users => { return resolve(users) })
             .catch(e => reject(e))
+    }),
+    deleteUser: (id, username) => new Promise((resolve, reject) => {
+        db.select('id', 'Username')
+            .from('users')
+            .where('id', '=', id).andWhere('Username', '=', username)
+            .then(data => {
+                console.log(data[0] === undefined);
+                if(data[0] !== undefined) {
+                    return db.select('id', 'Username')
+                        .from('users')
+                        .where('id', '=', id).andWhere('Username', '=', username)
+                        .del()
+                        .then(user => resolve({user, msg: 'user deleted'}))
+                        .catch(e => reject(e))
+                }
+                return reject({ msg: 'user does not exist' })
+            })
+            .catch(e => reject(e))
     })
 };

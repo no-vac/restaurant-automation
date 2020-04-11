@@ -90,19 +90,13 @@ module.exports = {
             .catch(e => res.status(400).json(e))
     },
     destroy(req, res) {
-        // delete user
+        const { id, username } = req.body;
+
+        return userServices
+            .deleteUser(id, username)
+            .then(user => {
+                return res.status(200).json({user, msg: 'user deleted'})
+            })
+            .catch(e => res.status(400).json(e))
     },
-
-
-
-    // genToken(){
-    //     let token = '';
-    //     const possibleCharacters = 'BCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-    //     for(var i = 0; i < 15; i++){
-    //         token += possibleCharacters.charAt(
-    //             Math.floor(Math.random() * possibleCharacters.length)
-    //         );
-    //     }
-    //     return token;
-    // }
 };

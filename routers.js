@@ -25,7 +25,7 @@ module.exports = router => {
 
   // route handling for user
   router.post("/api/u", userController.create);
-  router.delete("/api/u/:userId", userController.destroy);
+  router.delete("/api/u", userController.destroy);
   router.get("/api/u/", userController.list);
   router.get("/api/u/user", userController.getUser);
   router.put("/api/u/", userController.updateUser);
