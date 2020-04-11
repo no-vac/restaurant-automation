@@ -52,7 +52,14 @@ module.exports = {
             }))
     },
     perRole(req, res){
-        // get user per role
+        const { role } = req.body;
+
+        return userServices
+            .getUserPerRole(role)
+            .then(users => {
+                return res.status(200).json(users)
+            })
+            .catch(e => res.status(500).json(e))
     },
     login(req, res) {
         const { username, password } = req.body;
@@ -87,7 +94,7 @@ module.exports = {
     },
 
 
-    
+
     // genToken(){
     //     let token = '';
     //     const possibleCharacters = 'BCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';

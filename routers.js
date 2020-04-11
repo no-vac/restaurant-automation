@@ -29,7 +29,7 @@ module.exports = router => {
   router.get("/api/u/", userController.list);
   router.get("/api/u/user", userController.getUser);
   router.put("/api/u/", userController.updateUser);
-  router.post("/api/u/perRole", userController.perRole);
+  router.get("/api/u/perRole", userController.perRole);
   router.post("/api/u/login", userController.login);
   router.post("/api/u/logout", userController.logout);
 

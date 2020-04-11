@@ -110,5 +110,12 @@ module.exports = {
                 return reject({msg: 'user not logged in'})
             })
             .catch(e => reject(e));
+    }),
+    getUserPerRole: (role) => new Promise((resolve, reject) => {
+        db.select('Username', 'Email', 'PhoneNumber')
+            .from('users')
+            .where('Role', '=', role)
+            .then(users => { return resolve(users) })
+            .catch(e => reject(e))
     })
 };
