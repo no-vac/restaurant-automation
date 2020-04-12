@@ -32,9 +32,27 @@ module.exports = {
             })
     },
     update(req, res){
-        // update the table information
+        const {id, waiterId, orderId, status, total} = req.body;
+
+        return tableServices
+            .updateTable(id, waiterId, orderId, status, total)
+            .then(table => {
+                return res.status(200).json({ table, msg: 'table updated' });
+            })
+            .catch(e => {
+                return res.status(400).json(e);
+            })
     },
     destroy(req, res) {
-        // delete the tables information
+        const { id } = req.body;
+
+        return tableServices
+            .deleteTable(id)
+            .then(table => {
+                return res.status(200).json({ table, msg: 'table deleted' })
+            })
+            .catch(e => {
+                return res.status(400).json(e);
+            })
     },
 };

@@ -39,6 +39,33 @@ module.exports = {
             .catch(e => reject(e))
     }),
     updateTable: (id, waiterId, orderId, status, total) => new Promise((resolve, reject) => {
-
+        db.select('*')
+            .from('tables')
+            .where('id', '=', id)
+            .update({
+                waiterId,
+                orderId,
+                status,
+                total
+            })
+            .then(result => resolve(result))
+            .catch(e => reject(e))
+    }),
+    deleteTable: (id) => new Promise((resolve, reject) => {
+        db.select('*')
+            .from('tables')
+            .where('id', '=', id)
+            .then(data => {
+                if(data[0] !== undefined || data[0] !== null) {
+                    return db.select('id')
+                        .from('tables')
+                        .where('id', '=', id)
+                        .del()
+                        .then(table => resolve({ table, msg: 'table deleted' }))
+                        .catch(e => reject(e))
+                }
+                return reject({ msg: 'something went wrong' });
+            })
+            .catch(e => reject(e))
     })
 };

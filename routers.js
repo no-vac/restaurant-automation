@@ -13,8 +13,9 @@ module.exports = router => {
   // route handling for table
   router.post("/api/t/", tableController.create);
   router.get("/api/t/", tableController.list);
+  router.put("/api/t/", tableController.update);
   router.get("/api/t/perTable", tableController.table);
-  router.delete("/api/t/deleteTable", tableController.destroy);
+  router.delete("/api/t/", tableController.destroy);
 
   // route handling for order
   router.post("/api/o", orderController.create);
