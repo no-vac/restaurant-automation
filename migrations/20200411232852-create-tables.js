@@ -1,5 +1,4 @@
 'use strict';
-
 module.exports = {
   up: (queryInterface, Sequelize) => {
     return queryInterface.createTable('tables', {
@@ -13,10 +12,10 @@ module.exports = {
         type: Sequelize.DECIMAL
       },
       waiterId: {
-        type: Sequelize.UUID
+        type: Sequelize.INTEGER
       },
       orderId: {
-        type: Sequelize.UUID,
+        type: Sequelize.INTEGER
       },
       status: {
         type: Sequelize.STRING

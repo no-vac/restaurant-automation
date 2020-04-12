@@ -1,7 +1,5 @@
 const userServices = require('../services/user/userServices');
 const auth = require('../auth');
-const session = require('express-session');
-const User = require('../models').users;
 
 module.exports = {
     create(req, res) {
@@ -14,7 +12,7 @@ module.exports = {
                     user
                 });
             })
-            .catch(e => res.status(400).json({ msg: 'you fucked up', e }))
+            .catch(e => res.status(400).json({ msg: e }))
     },
     getUser(req, res) {
         const { username } = req.body;

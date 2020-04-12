@@ -11,8 +11,9 @@ module.exports = router => {
   });
 
   // route handling for table
-  router.post("/api/t/:waiterId/t", tableController.create);
+  router.post("/api/t/", tableController.create);
   router.get("/api/t/", tableController.list);
+  router.get("/api/t/perTable", tableController.table);
   router.delete("/api/t/deleteTable", tableController.destroy);
 
   // route handling for order
