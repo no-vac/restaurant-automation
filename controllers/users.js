@@ -5,7 +5,7 @@ const User = require('../models').users;
 
 module.exports = {
     create(req, res) {
-        const {Username, Password, Role, PhoneNumber, Email} = req.body;
+        const { Username, Password, Role, PhoneNumber, Email } = req.body;
         const hash = bcrypt.hashSync(Password, 10);
 
         return User
@@ -29,17 +29,17 @@ module.exports = {
         return User
             .findOne({
                 Where: {
-                    id: req.params.id,
+                    id: req.body.id,
                 }
             })
             .then(user => {
                 if (!user) {
-                    return res.status(404).json({msg: 'Something went wrong'});
+                    return res.status(404).json({ msg: 'Something went wrong' });
                 }
 
                 return user
                     .destroy()
-                    .then(() => res.status(200).json({msg: 'Deleted '}))
+                    .then(() => res.status(200).json({ msg: 'Deleted ' }))
                     .catch(e => res.status(400).json(e));
             })
             .catch(e => res.status(400).json(e));
@@ -48,14 +48,14 @@ module.exports = {
         return User
             .findOne({
                 Where: {
-                    id: req.params.id
+                    id: req.body.id
                 }
             })
             .then(user => {
                 if (!user) {
-                    return res.status(404).json({msg: 'no user found'})
+                    return res.status(404).json({ msg: 'no user found' })
                 }
-                const {Username, Password, Role, PhoneNumber, Email} = req.body;
+                const { Username, Password, Role, PhoneNumber, Email } = req.body;
 
                 return user
                     .update({
@@ -72,20 +72,20 @@ module.exports = {
             })
             .catch(e => res.status(400).json(e))
     },
-    perRole(req, res){
-      return User
-          .findAll({
-             where: {
-                 Role: req.body.Role
-             }
-          })
-          .then(waiters => res.status(200).json(waiters))
-          .catch(e => res.status(200).json(e));
+    perRole(req, res) {
+        return User
+            .findAll({
+                where: {
+                    Role: req.body.Role
+                }
+            })
+            .then(waiters => res.status(200).json(waiters))
+            .catch(e => res.status(200).json(e));
 
     },
     login(req, res, next) {
         console.log('you hit this')
-        const {Password} = req.body;
+        const { Password } = req.body;
 
         return User
             .findOne({
@@ -103,7 +103,7 @@ module.exports = {
                 if (bcrypt.compareSync(Password, user.Password) === true) {
                     res.status(200).json(user);
                 } else {
-                    res.status(400).json({msg: "wrong password"});
+                    res.status(400).json({ msg: "wrong password" });
                 }
             })
             .catch(e => res.status(200).json(e))

@@ -5,9 +5,9 @@ module.exports = {
         return Table
             .create({
                 Total: req.body.Total,
-                waiterId: req.params.waiterId
+                waiterId: req.body.waiterId
             })
-            .then(newTable =>  res.status(200).json(newTable))
+            .then(newTable => res.status(200).json(newTable))
             .catch(e => res.status(400).json(e));
     },
     list(req, res) {
@@ -16,30 +16,30 @@ module.exports = {
             .then(tables => res.status(200).json(tables))
             .catch(e => res.status(400).json(e));
     },
-    update(req, res){
-      return Table
-          .findOne({
-              Where: {
-                  id: req.params.id
-              }
-          })
-          .then(table => {
-              if(!table) {
-                  return res.status(404).json({ msg: 'no table found' })
-              }
+    update(req, res) {
+        return Table
+            .findOne({
+                Where: {
+                    id: req.params.id
+                }
+            })
+            .then(table => {
+                if (!table) {
+                    return res.status(404).json({ msg: 'no table found' })
+                }
 
-              const { Total } = req.body;
+                const { Total } = req.body;
 
-              return Table
-                  .update({
-                      Total: Total || table.Total
-                  })
-                  .then(updatedTable => {
-                      return res.status(200).json(updatedTable);
-                  })
-                  .catch(e => res.status(400).json(e))
-          })
-          .catch(e => res.status(400).json(e))
+                return Table
+                    .update({
+                        Total: Total || table.Total
+                    })
+                    .then(updatedTable => {
+                        return res.status(200).json(updatedTable);
+                    })
+                    .catch(e => res.status(400).json(e))
+            })
+            .catch(e => res.status(400).json(e))
     },
     destroy(req, res) {
         return Table
@@ -55,7 +55,7 @@ module.exports = {
                 }
                 return table
                     .destroy()
-                    .then(() => res.status(200).json({message: 'Deleted successfully'}))
+                    .then(() => res.status(200).json({ message: 'Deleted successfully' }))
                     .catch(e => res.status(400).json(e))
             })
             .catch(e => res.status(400).json(e))

@@ -14,23 +14,28 @@ module.exports = router => {
   );
 
   // route handling for table
-  router.post("/api/t/:waiterId/t", tableController.create);
-  router.get("/api/t/", tableController.list);
-  router.delete("/api/t/deleteTable", tableController.destroy);
+  router.route("/api/t")
+    .post(tableController.create)
+    .get(tableController.list)
+    .delete(tableController.destroy);
 
   // route handling for order
-  router.post("/api/o", orderController.create);
-  router.get("/api/o", orderController.list);
-  router.get("/api/o/:orderId", orderController.listPerId);
+  router.route("/api/o")
+    .post(orderController.create)
+    .get(orderController.list);
+
+  router.route("/api/o/:orderId")
+    .get(orderController.listPerId)
+    .delete(orderController.destroy)
+    .put(orderController.update);
+
   router.get("/api/o/t/:tableId", orderController.listPerTableId);
-  router.delete("/api/o/:orderId", orderController.destroy);
-  router.put("/api/o/:orderId", orderController.update);
 
   // route handling for user
-  router.post("/api/u", userController.create);
-  router.delete("/api/u/:userId", userController.destroy);
-  router.get("/api/u/", userController.list);
-  router.put("/api/u/:userId", userController.update);
+  router.route("/api/u")
+    .post(userController.create)
+    .get(userController.list).delete(userController.destroy)
+    .put(userController.update);
   router.post("/api/u/perRole", userController.perRole);
   router.post("/api/u/login", userController.login);
 
