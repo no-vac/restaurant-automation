@@ -79,7 +79,6 @@
             editUser(user){
                 if(
                     user.Username === ''   ||
-                    user.Password === ''   ||
                     user.Role ==='' ||
                     user.PhoneNumber === '' ||
                     user.Email

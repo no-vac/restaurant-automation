@@ -7,17 +7,6 @@
             <h6 class="card-subtitle mb-2 text-muted my-1">
                 Admin login
             </h6>
-<!--            <form v-on:submit="login">-->
-<!--                <div class="row">-->
-<!--                    <div class="col-12">-->
-<!--                        <label>Username</label>-->
-<!--                        <input ref="first"  name="Username" type="text" class="form-control" />-->
-<!--                        <label>Password</label>-->
-<!--                        <input name="Password" type="text" class="form-control" />-->
-<!--                    </div>-->
-<!--                </div>-->
-<!--                <input class="btn btn-outline-primary my-3" type="submit" value="Login" />-->
-<!--            </form>-->
             <form @submit.prevent="handleSubmit">
                 <div>
                     <div class="row">
@@ -82,11 +71,11 @@
         },
         computed: {
             invalidUsername() {
-                return this.admin.Username == '';
+                return this.user.Username == '';
             },
 
             invalidPassword() {
-                return this.admin.Password == '';
+                return this.user.Password == '';
             }
 
         }

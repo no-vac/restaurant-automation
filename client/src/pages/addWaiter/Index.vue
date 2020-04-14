@@ -1,6 +1,6 @@
 <template>
     <div id="addingUser">
-        <h1 style="margin-top: .5em; margin-bottom: .5em;">Add New Users: </h1>
+        <h1 style="margin-top: .5em; margin-bottom: .5em;">Add New User: </h1>
         <user-form
                 @add:user="addUser"
         />
@@ -17,7 +17,7 @@
     import UserForm from "./UserForm";
 
     export default {
-        name: 'add waiter',
+        name: 'Index',
         components: {
             UserForm,
             UserTable

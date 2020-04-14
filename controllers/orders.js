@@ -1,91 +1,70 @@
-const Order = require('../models').orders;
+const orderServices = require('../services/order/orderServices');
 
 module.exports = {
-     create(req, res) {
-         const { item, comments, price } = req.body;
+    create(req, res) {
+        const { item, comments, price, status, tableId } = req.body;
 
-        return Order
-            .create({
-                item: item,
-                comments: comments,
-                price: price
+        return orderServices
+            .createOrder(item, comments, price, status, tableId)
+            .then(order => {
+                return res.status(200).json(order)
             })
-            .then(order => res.status(200).json(order))
-            .catch(e => res.status(400).json(e));
+            .catch(e => {
+                return res.status(400).json(e)
+            })
     },
     list(req, res){
-         return Order
-             .findAll()
-             .then(table => res.status(200).json(table))
-             .catch(e => res.status(400).json(e))
+        return orderServices
+            .listOrders()
+            .then(order => {
+                return res.status(200).json(order)
+            })
+            .catch(e => {
+                return res.status(400).json(e)
+            })
     },
     listPerId(req, res){
-      return Order
-          .findOne({
-              Where: {
-                  id: req.params.id
-              }
-          })
-          .then(order => {
-              if(!order){
-                  return res.status(404).json({msg: 'no order found'});
-              }
+        const {id, tableId} = req.body;
 
-              return res.status(200).json(order);
-          })
-          .catch(e => res.status(400).json(200));
-    },
-    listPerTableId(req, res){
-         return Order
-             .findAll({
-                 Where:{
-                     tableId: req.params.tableId
-                 }
-             })
-             .then(order => res.status(200).json(order))
-             .catch(e => res.status(400).json(e));
+        return orderServices
+            .listOrdersWithTable(id, tableId)
+            .then(order => {
+                return res.status(200).json(order);
+            })
+            .catch(e => {
+                return res.status(400).json(e);
+            })
     },
     destroy(req, res){
-         return Order
-             .findOne({
-                 Where: {
-                     id: req.params.id
-                 }
-             })
-             .then(order =>{
-                 if(!order){
-                     return res.status(404).json({msg: 'no order found'})
-                 }
+        const { id } = req.body;
 
-                 return order
-                     .destroy()
-                     .then(() => res.status(200).json({msg: 'order removed'}))
-                     .catch(e => res.status(400).json(e))
-             })
-             .catch(e => res.status(400).json(e))
+       return orderServices
+           .deleteOrder(id)
+           .then(() => {
+               return res.status(200).json({
+                   msg: 'order deleted'
+               })
+           })
+           .catch(e => {
+               return res.status(400).json({
+                   msg: 'you done fucked up',
+                   e
+               })
+           })
     },
     update(req, res){
-         return Order
-             .findOne({
-                 Where: {
-                     id: req.params.id
-                 }
-             })
-             .then(order => {
-                 if(!order){
-                     return res.status(404).json({msg: 'there is no order with this ID'})
-                 }
-                 const { item, comments, price } = req.body;
+       const { id, tem, comments, price, status } = req.body;
 
-                 return order
-                     .update({
-                         item: item || order.item,
-                         comments: comments || order.comments,
-                         price: price || order.price
-                     })
-                     .then(updatedOrder => res.status(200).json(updatedOrder))
-                     .catch(e => res.status(400).json(e))
-             })
-             .catch(e => res.status(400).json(e));
+       return orderServices
+           .updateOrder(id, tem, comments, price, status)
+           .then( () => {
+               return res.status(200).json({ msg: 'order updated'})
+           })
+           .catch(e => {
+               return res.status(400).json({
+                   msg: 'something went wrong',
+                   e
+               })
+           })
     }
 };

@@ -1,6 +1,8 @@
 <template>
     <div id="loginUser">
-        <login-form @add:user="LoginUser" />
+        <login-form
+                @add:user="LoginUser"
+        />
     </div>
 </template>
 
@@ -17,7 +19,7 @@
         data() {
             return {
                 users: [],
-                isLoggedOn: globalStore.isLoggedOn,
+                isLoggedOn: false,
             }
         },
         mounted() {
@@ -31,14 +33,15 @@
                         console.log(response);
                         if(response !== null){
                             this.$router.push('dashboard');
+                            this.$session.start();
+                            this.$session.set('userId', response.body.)
                             this.isLoggedOn = true;
                         }
                     })
                     .catch((e) => {
                         console.log('Yikes ' + e)
                     });
-            }
-
+            },
         }
     }
 </script>
