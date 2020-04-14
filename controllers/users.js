@@ -1,5 +1,6 @@
 const userServices = require('../services/user/userServices');
 const auth = require('../auth');
+const bcrypt = require("bcryptjs");
 
 module.exports = {
     create(req, res) {
@@ -32,7 +33,7 @@ module.exports = {
             })
             .catch(e => res.status(400).json(e))
     },
-    updateUser(req, res){
+    updateUser(req, res) {
         const { id, username, password, email, role, phoneNumber } = req.body;
         return userServices
             .updateUser(id, username, password, email, role, phoneNumber)
@@ -47,7 +48,7 @@ module.exports = {
                 e
             }))
     },
-    perRole(req, res){
+    perRole(req, res) {
         const { role } = req.body;
 
         return userServices
@@ -60,30 +61,33 @@ module.exports = {
     login(req, res) {
         const { username, password } = req.body;
 
-        return userServices
-            .loginUser(username, password)
+        userServices
+            .getUser(username)
             .then(user => {
-                const data = auth.createJWT(user.id);
-                req.session.AuthToken = data;
-                return res.status(200).json({
-                    Token: data,
-                    user
+                // return res.send(user);
+                //compare password
+                if (bcrypt.compareSync(password, user.password)) {
+                    const data = auth.createJWT(user.id);
+                    return res.status(200).json({
+                        Token: data,
+                        user: {
+                            username: user.username,
+                            role: user.role,
+                            email: user.email,
+                            phoneNumber: user.phoneNumber
+                        }
+                    })
+                } else {
+                    return res.status(400).json("wrong password");
+                }
+            })
+            .catch(e => {
+                console.log(e);
+                res.status(400).json({
+                    msg: 'you done fucked up',
+                    e
                 })
             })
-            .catch(e => res.status(400).json({
-                msg: 'you done fucked up',
-                e
-            }))
-    },
-    logout(req, res) {
-        const { id, username } = req.body;
-
-        return userServices
-            .logoutUser(id, username)
-            .then(user => {
-                return res.status(200).json({msg: 'logged out', user})
-            })
-            .catch(e => res.status(400).json(e))
     },
     destroy(req, res) {
         const { id, username } = req.body;
@@ -91,7 +95,7 @@ module.exports = {
         return userServices
             .deleteUser(id, username)
             .then(user => {
-                return res.status(200).json({user, msg: 'user deleted'})
+                return res.status(200).json({ user, msg: 'user deleted' })
             })
             .catch(e => res.status(400).json(e))
     },
