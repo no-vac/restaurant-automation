@@ -14,6 +14,16 @@ module.exports = {
             })
     },
     list(req, res){
+        return orderServices
+            .listOrders()
+            .then(order => {
+                return res.status(200).json(order)
+            })
+            .catch(e => {
+                return res.status(400).json(e)
+            })
+    },
+    listPerId(req, res){
         const {id, tableId} = req.body;
 
         return orderServices
@@ -24,12 +34,6 @@ module.exports = {
             .catch(e => {
                 return res.status(400).json(e);
             })
-    },
-    listPerId(req, res){
-        // list order per Id
-    },
-    listPerTableId(req, res){
-       // show orders per table
     },
     destroy(req, res){
        // delete order

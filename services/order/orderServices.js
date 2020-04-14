@@ -23,6 +23,17 @@ module.exports = {
             return resolve(data[0])
         }).catch(e => reject(e))
     }),
+    listOrders: () => new Promise((resolve, reject) => {
+        db.table('orders')
+            .innerJoin('tables', 'tableId', '=','tables.id')
+            .then(data => {
+                console.log(data);
+                return resolve(data);
+            })
+            .catch(e => {
+                return reject(e);
+            })
+    }),
     listOrdersWithTable: (id, tableId) => new Promise((resolve, reject) => {
         db.table('orders')
             .innerJoin('tables', tableId, '=','tables.id')
