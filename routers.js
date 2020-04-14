@@ -21,7 +21,6 @@ module.exports = router => {
   router.post("/api/o", orderController.create);
   router.get("/api/o", orderController.list);
   router.get("/api/o/getOrder", orderController.listPerId);
-  router.get("/api/o/t/:tableId", orderController.listPerTableId);
   router.delete("/api/o/:orderId", orderController.destroy);
   router.put("/api/o/:orderId", orderController.update);
 

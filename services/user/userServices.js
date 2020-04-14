@@ -68,6 +68,7 @@ module.exports = {
             .from('users')
             .where('Username', '=', username)
             .then((data) => {
+                console.log(data[0]);
                 const token = auth.createJWT(data[0].id);
                 const validPassword = bcrypt.compareSync(password, data[0].Password);
                 console.log(data[0].AuthToken);
