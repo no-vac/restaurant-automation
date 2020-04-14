@@ -1,15 +1,4 @@
-const knex = require('knex');
-
-const db = knex({
-    client: 'pg',
-    connection: {
-        host: '127.0.0.1',
-        user: 'postgres',
-        port: '3000',
-        password: 'admin',
-        database: 'Restaurant'
-    }
-});
+const db = require("../../config/db");
 
 module.exports = {
     createOrder: (item, comments, price, status, tableId) => new Promise((resolve, reject) => {
@@ -25,7 +14,7 @@ module.exports = {
     }),
     listOrders: () => new Promise((resolve, reject) => {
         db.table('orders')
-            .innerJoin('tables', 'tableId', '=','tables.id')
+            .innerJoin('tables', 'tableId', '=', 'tables.id')
             .then(data => {
                 console.log(data);
                 return resolve(data);
@@ -36,7 +25,7 @@ module.exports = {
     }),
     listOrdersWithTable: (id, tableId) => new Promise((resolve, reject) => {
         db.table('orders')
-            .innerJoin('tables', tableId, '=','tables.id')
+            .innerJoin('tables', tableId, '=', 'tables.id')
             .then(data => {
                 return resolve(data);
             })
@@ -60,7 +49,21 @@ module.exports = {
                 return reject({msg: 'something went wrong'});
             })
     }),
-    // updateOrder: (id, tableId, item, comments, price, status) => new Promise((resolve, reject) => {
-    //
-    // })
+    updateOrder: (id, item, comments, price, status) => new Promise((resolve, reject) => {
+        db.select('*')
+            .from('orders')
+            .where('id', '=', id)
+            .update({
+                item,
+                comments,
+                price,
+                status
+            })
+            .then((data) => {
+                return resolve(data);
+            })
+            .catch(e => {
+                reject(e);
+            })
+    })
 };

@@ -36,9 +36,35 @@ module.exports = {
             })
     },
     destroy(req, res){
-       // delete order
+        const { id } = req.body;
+
+       return orderServices
+           .deleteOrder(id)
+           .then(() => {
+               return res.status(200).json({
+                   msg: 'order deleted'
+               })
+           })
+           .catch(e => {
+               return res.status(400).json({
+                   msg: 'you done fucked up',
+                   e
+               })
+           })
     },
     update(req, res){
-       // update order
+       const { id, tem, comments, price, status } = req.body;
+
+       return orderServices
+           .updateOrder(id, tem, comments, price, status)
+           .then( () => {
+               return res.status(200).json({ msg: 'order updated'})
+           })
+           .catch(e => {
+               return res.status(400).json({
+                   msg: 'something went wrong',
+                   e
+               })
+           })
     }
 };

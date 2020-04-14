@@ -1,15 +1,4 @@
-const knex = require('knex');
-
-const db = knex({
-    client: 'pg',
-    connection: {
-        host: '127.0.0.1',
-        user: 'postgres',
-        port: '3000',
-        password: 'admin',
-        database: 'Restaurant'
-    }
-});
+const db = require("../../config/db");
 
 module.exports = {
     createTable: (waiterId, orderId, status, total) => new Promise((resolve, reject) => {
@@ -56,7 +45,7 @@ module.exports = {
             .from('tables')
             .where('id', '=', id)
             .then(data => {
-                if(data[0] !== undefined || data[0] !== null) {
+                if (data[0] !== undefined || data[0] !== null) {
                     return db.select('id')
                         .from('tables')
                         .where('id', '=', id)
