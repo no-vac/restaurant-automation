@@ -15,8 +15,8 @@ module.exports = {
             })
             .catch(e => res.status(400).json({ msg: e }))
     },
-    getUser(req, res) {
-        const { username } = req.body;
+    getUserById(req, res) {
+        const { username } = req.params;
 
         return userServices
             .getUser(username)
@@ -48,7 +48,7 @@ module.exports = {
             }))
     },
     perRole(req, res) {
-        const { role } = req.body;
+        const { role } = req.params;
 
         return userServices
             .getUserPerRole(role)
