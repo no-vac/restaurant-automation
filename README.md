@@ -23,3 +23,18 @@ If you want to add a new table and model with to the project
       
   2. This will create a migration and a model file
   3. In terminal run `sequelize db:migrate` --> this will create your table in the database server
+
+
+This is how `.env` should look like:
+
+`
+PORT=5000
+SECURE_KEY_JWT=secretCat
+DBhost=127.0.0.1
+DBusername=postgres
+DBport=3000
+DBpassword=admin
+DBdatabase=Restaurant
+DBdialect=postgres
+
+`
