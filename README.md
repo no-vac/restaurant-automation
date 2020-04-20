@@ -27,7 +27,7 @@ If you want to add a new table and model with to the project
 
 This is how `.env` should look like:
 
-`
+```
 PORT=5000
 SECURE_KEY_JWT=secretCat
 DBhost=127.0.0.1
@@ -37,4 +37,4 @@ DBpassword=admin
 DBdatabase=Restaurant
 DBdialect=postgres
 
-`
+```
