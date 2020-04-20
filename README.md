@@ -36,5 +36,4 @@ DBport=3000
 DBpassword=admin
 DBdatabase=Restaurant
 DBdialect=postgres
-
 ```
