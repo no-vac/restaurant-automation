@@ -1,6 +1,8 @@
 const userServices = require('../services/user/userServices');
 const auth = require('../auth');
 const bcrypt = require("bcryptjs");
+const { SECURE_KEY_JWT }  = process.env;
+let jwt = require('jsonwebtoken');
 
 module.exports = {
     create(req, res) {
@@ -66,9 +68,9 @@ module.exports = {
                 // return res.send(user);
                 //compare password
                 if (bcrypt.compareSync(password, user.password)) {
-                    const data = auth.createJWT(user.id);
+                    const data = auth.createJWT(user.id, user.username, user.email, user.role);
                     return res.status(200).json({
-                        Token: data,
+                        Token: 'Bearer ' + data,
                         user: {
                             username: user.username,
                             role: user.role,
@@ -87,6 +89,31 @@ module.exports = {
                     e
                 })
             })
+    },
+    checkAuth(req, res) {
+        let { token } = req.body;
+
+        if(token.startsWith('Bearer ')) {
+            token = token.slice(7, token.length);
+        }
+
+        if(token) {
+            jwt.verify(token, SECURE_KEY_JWT, (err, decoded) => {
+                if (err || Date.now() >= decoded.exp * 1000) {
+                    return res.status(400).json({
+                        success: false,
+                        message: 'Token is not valid'
+                    });
+                } else {
+                    return res.status(200).json(decoded);
+                }
+            })
+        } else {
+            return res.json({
+                success: false,
+                message: 'Auth token is not supplied'
+            });
+        }
     },
     destroy(req, res) {
         const { id, username } = req.body;

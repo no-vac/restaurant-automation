@@ -35,6 +35,7 @@ module.exports = router => {
   router.get("/api/u/user", userController.getUser);
   router.get("/api/u/perRole", userController.perRole);
   router.post("/api/u/login", userController.login);
+  router.post("/api/u/checkToken", userController.checkAuth);
 
   // route handling for payroll
   router.post("/api/p", userController.create);
