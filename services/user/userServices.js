@@ -19,7 +19,7 @@ module.exports = {
     }),
     getUser: (userInfo) => new Promise((resolve, reject) => {
         const { username, email } = userInfo;
-        if(username && !email){
+        if (username && !email) {
             console.log('only username');
             return db.select('*')
                 .from('users')
@@ -50,25 +50,28 @@ module.exports = {
             .catch(e => reject(e))
     }),
     updateUser: (userinfo) => new Promise((resolve, reject) => {
+        console.log("service info", userinfo);
         const { id, username, password, email, role, phoneNumber } = userinfo;
-        const hash = bcrypt.hashSync(password, 10);
+        if (password) {
+            const hash = bcrypt.hashSync(password, 10);
+        }
+        const payload = {};
+        if (username) payload.username = username;
+        if (password) payload.password = password;
+        if (email) payload.email = email;
+        if (role) payload.role = role;
+        if (phoneNumber) payload.phoneNumber = phoneNumber;
+        console.log("payload", payload);
+
+
         db.select('*')
-                .from('users')
-                .where('id', '=', id)
-                .then(user => {
-                    return console.log(id);
-                })
+            .from('users')
+            .where('username', '=', username)
+            .update(payload)
+            .then(result => resolve(result))
+            .catch(e => reject({ msg: 'from services', e }))
 
 
-                // .update({
-                //     username,
-                //     password: hash,
-                //     email,
-                //     role,
-                //     phoneNumber
-                // })
-                // .then(result => resolve(result))
-                // .catch(e => reject({ msg: 'from services', e }))
     }),
     getUserPerRole: (role) => new Promise((resolve, reject) => {
         db.select('username', 'email', 'phoneNumber')

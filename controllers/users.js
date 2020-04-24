@@ -20,7 +20,7 @@ module.exports = {
             .catch(e => res.status(400).json({ msg: e }))
     },
     getUser(req, res) {
-        const userinfo = { username } = req.body;
+        const userinfo = { username } = req.params;
 
         return userServices
             .getUser(userinfo)
@@ -39,6 +39,7 @@ module.exports = {
     },
     updateUser(req, res) {
         const userinfo = { id, username, password, email, role, phoneNumber } = req.body;
+        console.log("controller info", userinfo);
         return userServices
             .updateUser(userinfo)
             .then(() => {
@@ -48,9 +49,10 @@ module.exports = {
             })
             .catch(e => {
                 return res.status(400).json({
-                msg: 'you dont fucked up dawg',
-                e
-            })})
+                    msg: 'you dont fucked up dawg',
+                    e
+                })
+            })
     },
     perRole(req, res) {
         const { role } = req.body;
