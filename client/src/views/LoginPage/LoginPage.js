@@ -78,7 +78,9 @@ class SignInSide extends React.Component{
                 'Content-Type': 'application/json'
             }
         }).then(response => response.json()).then(result => {
-              console.log(result.user)
+              if(result.user !== null) {
+                  window.location.reload();
+              }
         }).catch(err => { console.log(err); })
     };
 

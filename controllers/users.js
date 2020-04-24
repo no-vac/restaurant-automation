@@ -7,7 +7,8 @@ let jwt = require('jsonwebtoken');
 module.exports = {
     create(req, res) {
         const userinfo = { username, password, role, phoneNumber, email } = req.body;
-        console.log(userinfo);
+        //console.log(userinfo);
+
         return userServices
             .createUser(userinfo)
             .then(user => {
@@ -19,10 +20,10 @@ module.exports = {
             .catch(e => res.status(400).json({ msg: e }))
     },
     getUser(req, res) {
-        const { username } = req.body;
+        const userinfo = { username } = req.body;
 
         return userServices
-            .getUser(username)
+            .getUser(userinfo)
             .then(user => {
                 return res.status(200).json(user)
             })
@@ -45,10 +46,11 @@ module.exports = {
                     msg: 'user updated',
                 })
             })
-            .catch(e => res.status(400).json({
+            .catch(e => {
+                return res.status(400).json({
                 msg: 'you dont fucked up dawg',
                 e
-            }))
+            })})
     },
     perRole(req, res) {
         const { role } = req.body;
