@@ -3,7 +3,8 @@ const auth = require('../../auth');
 const db = require("../../config/db");
 
 module.exports = {
-    createUser: (username, password, role, email, phoneNumber) => new Promise((resolve, reject) => {
+    createUser: (userinfo) => new Promise((resolve, reject) => {
+        const { username, password, role, email, phoneNumber } = userinfo;
         const hash = bcrypt.hashSync(password, 10);
         db.insert({
             username,

@@ -1,14 +1,15 @@
 const userServices = require('../services/user/userServices');
 const auth = require('../auth');
 const bcrypt = require("bcryptjs");
-const { SECURE_KEY_JWT }  = process.env;
+const { SECURE_KEY_JWT } = process.env;
 let jwt = require('jsonwebtoken');
 
 module.exports = {
     create(req, res) {
-        const { username, password, role, phoneNumber, email } = req.body;
+        const userinfo = { username, password, role, phoneNumber, email } = req.body;
+        console.log(userinfo);
         return userServices
-            .createUser(username, password, role, phoneNumber, email)
+            .createUser(userinfo)
             .then(user => {
                 console.log(user + ' ' + 'from here');
                 return res.status(200).json({
@@ -93,11 +94,11 @@ module.exports = {
     checkAuth(req, res) {
         let { token } = req.body;
 
-        if(token.startsWith('Bearer ')) {
+        if (token.startsWith('Bearer ')) {
             token = token.slice(7, token.length);
         }
 
-        if(token) {
+        if (token) {
             jwt.verify(token, SECURE_KEY_JWT, (err, decoded) => {
                 if (err || Date.now() >= decoded.exp * 1000) {
                     return res.status(400).json({
