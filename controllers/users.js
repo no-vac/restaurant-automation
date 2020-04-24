@@ -6,9 +6,10 @@ let jwt = require('jsonwebtoken');
 
 module.exports = {
     create(req, res) {
-        const { username, password, role, email, phoneNumber } = req.body;
+        const userinfo = { username, password, role, phoneNumber, email } = req.body;
+        console.log(userinfo);
         return userServices
-            .createUser(username, password, role, email, phoneNumber)
+            .createUser(userinfo)
             .then(user => {
                 console.log(user + ' ' + 'from here');
                 return res.status(200).json({
@@ -36,9 +37,9 @@ module.exports = {
             .catch(e => res.status(400).json(e))
     },
     updateUser(req, res) {
-        const { id, username, password, email, role, phoneNumber } = req.body;
+        const userinfo = { id, username, password, email, role, phoneNumber } = req.body;
         return userServices
-            .updateUser(id, username, password, email, role, phoneNumber)
+            .updateUser(userinfo)
             .then(() => {
                 return res.status(200).json({
                     msg: 'user updated',
@@ -93,11 +94,11 @@ module.exports = {
     checkAuth(req, res) {
         let { token } = req.body;
 
-        if(token.startsWith('Bearer ')) {
+        if (token.startsWith('Bearer ')) {
             token = token.slice(7, token.length);
         }
 
-        if(token) {
+        if (token) {
             jwt.verify(token, SECURE_KEY_JWT, (err, decoded) => {
                 if (err || Date.now() >= decoded.exp * 1000) {
                     return res.status(400).json({

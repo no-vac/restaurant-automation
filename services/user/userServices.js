@@ -2,7 +2,8 @@ const bcrypt = require('bcryptjs');
 const db = require("../../config/db");
 
 module.exports = {
-    createUser: (username, password, role, phoneNumber, email) => new Promise((resolve, reject) => {
+    createUser: (userinfo) => new Promise((resolve, reject) => {
+        const { username, password, role, email, phoneNumber } = userinfo;
         const hash = bcrypt.hashSync(password, 10);
         db.insert({
             username,
@@ -29,7 +30,8 @@ module.exports = {
             .then(users => resolve(users))
             .catch(e => reject(e))
     }),
-    updateUser: (id, username, password, email, role, phoneNumber) => new Promise((resolve, reject) => {
+    updateUser: (userinfo) => new Promise((resolve, reject) => {
+        const { username, password, email, role, phoneNumber } = userinfo;
         const hash = bcrypt.hashSync(password, 10);
         db.select('*')
             .from('users')
