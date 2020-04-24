@@ -2,28 +2,47 @@ import React, { Component } from "react";
 import TextField from "@material-ui/core/TextField";
 import Link from "@material-ui/core/Link";
 import Box from "@material-ui/core/Box";
-import FormControlLabel from '@material-ui/core/FormControlLabel';
 import { withRouter} from 'react-router-dom';
-import Checkbox from '@material-ui/core/Checkbox';
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
-import { Button, InputLabel, Input, FormControl, FormHelperText } from '@material-ui/core';
-import Validator from 'validator';
+import { Button, FormControl, FormHelperText } from '@material-ui/core';
+import Avatar from "@material-ui/core/Avatar";
+import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
+import Copyright from "../../components/copyRight";
+import { withStyles } from "@material-ui/core/Styles";
+import {connect} from "react-redux";
+import propTypes from "prop-types";
 
-
-
-
-function Copyright() {
-    return(
-        <Typography variant="body2" color="textSecondary" align="center">
-            {' Copyright © '}
-            <Link color="inherit" href="#">
-                our restaurant name
-            </Link>{ ' ' }
-            {new Date().getFullYear() }
-        </Typography>
-    );
-}
+const useStyles = (theme) => ({
+    root: {
+        height: '100vh',
+    },
+    image: {
+        backgroundImage: 'url(https://source.unsplash.com/random)',
+        backgroundRepeat: 'no-repeat',
+        backgroundColor:
+            theme.palette.type === 'light' ? theme.palette.grey[50] : theme.palette.grey[900],
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+    },
+    paper: {
+        margin: theme.spacing(8, 4),
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+    },
+    avatar: {
+        margin: theme.spacing(1),
+        backgroundColor: theme.palette.secondary.main,
+    },
+    form: {
+        width: '100%', // Fix IE 11 issue.
+        marginTop: theme.spacing(1),
+    },
+    submit: {
+        margin: theme.spacing(3, 0, 2),
+    },
+});
 
 class LoginForm extends Component{
     constructor(props) {
@@ -32,7 +51,7 @@ class LoginForm extends Component{
         this.state = {
             username: "",
             password: "",
-            errors: {}
+            errors: {},
         }
     }
 
@@ -61,8 +80,16 @@ class LoginForm extends Component{
     };
 
     render() {
+        const { classes } = this.props;
+
         return (
             <>
+                <Avatar className={classes.avatar}>
+                    <LockOutlinedIcon />
+                </Avatar>
+                <Typography component="h1" variant="h5">
+                    Sign in
+                </Typography>
                 <form style={{width: '100', marginTop: '1em'}} noValidate onSubmit={e => this.onSubmit(e)}>
                     <FormControl fullWidth error={!!this.state.errors.username} required>
                         {this.state.errors.username ?
@@ -135,11 +162,6 @@ class LoginForm extends Component{
                             />
                         }
                     </FormControl>
-
-                    <FormControlLabel
-                        control={<Checkbox value="remember" color="primary" /> }
-                        label="Remember me"
-                    />
                     <Button
                         type="submit"
                         fullWidth
@@ -151,12 +173,12 @@ class LoginForm extends Component{
                     </Button>
                     <Grid container>
                         <Grid item xs>
-                            <Link href="#" variant="body2">
+                            <Link href="#" variant="body2" >
                                 Forgot password?
                             </Link>
                         </Grid>
                         <Grid item >
-                            <Link href="#" variant="body2">
+                            <Link onClick={this.props.register} variant="body2" >
                                 {"Dont have an account? Sign up"}
                             </Link>
                         </Grid>
@@ -171,4 +193,8 @@ class LoginForm extends Component{
     }
 }
 
-export default withRouter(LoginForm)
+LoginForm.propTypes = {
+    classes: propTypes.object.isRequired,
+};
+
+export default withRouter(connect()(withStyles(useStyles)(LoginForm)))

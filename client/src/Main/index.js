@@ -2,6 +2,11 @@ import React, { Component } from "react";
 import { Switch, Route, BrowserRouter as Router, withRouter } from 'react-router-dom';
 import LoginPage from "../views/LoginPage/LoginPage";
 import Dashboard from "../views/AdminDashboard/Dashboard";
+import { Provider } from "react-redux";
+import configureMockStore from "redux-mock-store";
+
+const mockStore = configureMockStore();
+const store = mockStore({});
 
 
 class Main extends Component{
@@ -34,12 +39,14 @@ class Main extends Component{
     render() {
         return (
             <div>
-                <Router>
-                    <Switch>
-                        <Route exact path="/" component={Dashboard} />
-                        <Route exact path="/login" component={LoginPage} />
-                    </Switch>
-                </Router>
+                <Provider store={store}>
+                    <Router>
+                        <Switch>
+                            <Route exact path="/" component={Dashboard} />
+                            <Route exact path="/login" component={LoginPage} />
+                        </Switch>
+                    </Router>
+                </Provider>
             </div>
         );
     }
