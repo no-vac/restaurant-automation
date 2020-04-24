@@ -37,9 +37,9 @@ module.exports = {
             .catch(e => res.status(400).json(e))
     },
     updateUser(req, res) {
-        const { id, username, password, email, role, phoneNumber } = req.body;
+        const userinfo = { id, username, password, email, role, phoneNumber } = req.body;
         return userServices
-            .updateUser(id, username, password, email, role, phoneNumber)
+            .updateUser(userinfo)
             .then(() => {
                 return res.status(200).json({
                     msg: 'user updated',
