@@ -1,14 +1,14 @@
 const userServices = require('../services/user/userServices');
 const auth = require('../auth');
 const bcrypt = require("bcryptjs");
-const { SECURE_KEY_JWT }  = process.env;
+const { SECURE_KEY_JWT } = process.env;
 let jwt = require('jsonwebtoken');
 
 module.exports = {
     create(req, res) {
-        const { username, password, role, phoneNumber, email } = req.body;
+        const { username, password, role, email, phoneNumber } = req.body;
         return userServices
-            .createUser(username, password, role, phoneNumber, email)
+            .createUser(username, password, role, email, phoneNumber)
             .then(user => {
                 console.log(user + ' ' + 'from here');
                 return res.status(200).json({

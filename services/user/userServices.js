@@ -1,15 +1,14 @@
 const bcrypt = require('bcryptjs');
-const auth = require('../../auth');
 const db = require("../../config/db");
 
 module.exports = {
-    createUser: (username, password, role, email, phoneNumber) => new Promise((resolve, reject) => {
+    createUser: (username, password, role, phoneNumber, email) => new Promise((resolve, reject) => {
         const hash = bcrypt.hashSync(password, 10);
         db.insert({
             username,
             password: hash,
-            role,
             email,
+            role,
             phoneNumber
         }).returning('*').into('users').then(data => {
             console.log(data[0]);
