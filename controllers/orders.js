@@ -13,7 +13,7 @@ module.exports = {
                 return res.status(400).json(e)
             })
     },
-    list(req, res){
+    list(req, res) {
         return orderServices
             .listOrders()
             .then(order => {
@@ -23,11 +23,11 @@ module.exports = {
                 return res.status(400).json(e)
             })
     },
-    listPerId(req, res){
-        const {id, tableId} = req.body;
+    listPerId(req, res) {
+        const { id } = req.params;
 
         return orderServices
-            .listOrdersWithTable(id, tableId)
+            .listOrdersWithTable(id)
             .then(order => {
                 return res.status(200).json(order);
             })
@@ -35,36 +35,36 @@ module.exports = {
                 return res.status(400).json(e);
             })
     },
-    destroy(req, res){
+    destroy(req, res) {
         const { id } = req.body;
 
-       return orderServices
-           .deleteOrder(id)
-           .then(() => {
-               return res.status(200).json({
-                   msg: 'order deleted'
-               })
-           })
-           .catch(e => {
-               return res.status(400).json({
-                   msg: 'you done fucked up',
-                   e
-               })
-           })
+        return orderServices
+            .deleteOrder(id)
+            .then(() => {
+                return res.status(200).json({
+                    msg: 'order deleted'
+                })
+            })
+            .catch(e => {
+                return res.status(400).json({
+                    msg: 'you done fucked up',
+                    e
+                })
+            })
     },
-    update(req, res){
-       const { id, tem, comments, price, status } = req.body;
+    update(req, res) {
+        const { id, tem, comments, price, status } = req.body;
 
-       return orderServices
-           .updateOrder(id, tem, comments, price, status)
-           .then( () => {
-               return res.status(200).json({ msg: 'order updated'})
-           })
-           .catch(e => {
-               return res.status(400).json({
-                   msg: 'something went wrong',
-                   e
-               })
-           })
+        return orderServices
+            .updateOrder(id, tem, comments, price, status)
+            .then(() => {
+                return res.status(200).json({ msg: 'order updated' })
+            })
+            .catch(e => {
+                return res.status(400).json({
+                    msg: 'something went wrong',
+                    e
+                })
+            })
     }
 };
