@@ -91,7 +91,6 @@ class SignUp extends React.Component{
                                     {this.state.errors.username ?
                                         <>
                                             <TextField
-                                                error
                                                 variant="outlined"
                                                 required
                                                 fullWidth
@@ -153,18 +152,39 @@ class SignUp extends React.Component{
                                 </FormControl>
                             </Grid>
                             <Grid item xs={12}>
-                                <TextField
-                                    variant="outlined"
-                                    required
-                                    fullWidth
-                                    name="password"
-                                    label="Password"
-                                    type="password"
-                                    id="password"
-                                    autoComplete="current-password"
-                                    value={this.state.password}
-                                    onChange={this.handleInputChange}
-                                />
+                                <FormControl fullWidth error={!!this.state.errors.password} required>
+                                    {this.state.errors.password ?
+                                        <>
+                                            <TextField
+                                                error
+                                                variant="outlined"
+                                                required
+                                                fullWidth
+                                                name="password"
+                                                label="Password"
+                                                type="password"
+                                                id="password"
+                                                autoComplete="current-password"
+                                                value={this.state.password}
+                                                onChange={this.handleInputChange}
+                                            />
+                                            <FormHelperText>{this.state.errors.password}</FormHelperText>
+                                        </>
+                                        :
+                                        <TextField
+                                            variant="outlined"
+                                            required
+                                            fullWidth
+                                            name="password"
+                                            label="Password"
+                                            type="password"
+                                            id="password"
+                                            autoComplete="current-password"
+                                            value={this.state.password}
+                                            onChange={this.handleInputChange}
+                                        />
+                                    }
+                                </FormControl>
                             </Grid>
                         </Grid>
                         <Button
