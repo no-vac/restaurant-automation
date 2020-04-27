@@ -1,26 +1,14 @@
 'use strict';
-const Table = require('../models').tables;
 module.exports = (sequelize, DataTypes) => {
   const orders = sequelize.define('orders', {
-    item: {
-     type: DataTypes.STRING,
-     allowNull: true
-    },
-    comments: {
-      type: DataTypes.STRING,
-      allowNull: true
-    },
-    price: {
-     type: DataTypes.DECIMAL,
-      allowNull: true
-    },
-    tableId: {
-     type: DataTypes.UUID,
-     allowNull: true
-    }
+    item: DataTypes.STRING,
+    comments: DataTypes.STRING,
+    price: DataTypes.DECIMAL,
+    status: DataTypes.STRING,
+    tableId: DataTypes.INTEGER
   }, {});
   orders.associate = function(models) {
-
+    // associations can be defined here
   };
   return orders;
 };

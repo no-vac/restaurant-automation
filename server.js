@@ -1,5 +1,7 @@
 const express = require("express");
 const bodyParser = require("body-parser");
+const passport = require("passport");
+const session = require("express-session");
 const cors = require("cors");
 const morgan = require("morgan");
 const path = require("path");
@@ -32,12 +34,11 @@ async function init() {
   const app = express();
 
   app.use(bodyParser.json());
-  app.use(bodyParser.urlencoded({
-    extended: true
-  }));
-
+  app.use(session({ secret: 'wadupseesion', resave: true, saveUninitialized: true }));
+  app.use(passport.initialize());
+  app.use(passport.session());
   app.use(cors());
-  app.use(function(req, res, next){
+  app.use(function (req, res, next) {
     res.header("Access-Control-Allow-Origin", "*"); // update to match the domain you will make the request from
     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
     next();
