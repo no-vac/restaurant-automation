@@ -79,13 +79,15 @@ class SignInSide extends React.Component{
             }
         }).then(response => {
             if(response.status === 400){
-                window.location.reload();
+                //window.location.reload();
+                console.log(response.body);
             }
             response.json()
         }).then(result => {
               if(result !== null) {
-                  window.location.reload();
+                  //window.location.reload();
               }
+              console.log(result);
         }).catch(err => { console.log(err); })
     };
 
