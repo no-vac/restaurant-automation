@@ -46,7 +46,7 @@ class SignInSide extends React.Component{
     constructor(props) {
         super(props);
         this.state = {
-            form: 'Login'
+            form: 'Login',
         }
     }
 
@@ -77,8 +77,13 @@ class SignInSide extends React.Component{
             headers: {
                 'Content-Type': 'application/json'
             }
-        }).then(response => response.json()).then(result => {
-              if(result.user !== null) {
+        }).then(response => {
+            if(response.status === 400){
+                window.location.reload();
+            }
+            response.json()
+        }).then(result => {
+              if(result !== null) {
                   window.location.reload();
               }
         }).catch(err => { console.log(err); })
@@ -101,6 +106,7 @@ class SignInSide extends React.Component{
                 <Grid item xs={12} sm={8} md={5} component={Paper} elecation={6} square>
                     <div className={classes.paper}>
                         {this.state.form === 'Login' ? <LoginForm submit={this.login} register={this.signUp}  /> : <SignUp submit={this.register} login={this.signIn} /> }
+                        {/*{window.location.href === 'http://localhost:8080/login' ? <LoginForm submit={this.login} register={this.signUp} /> : <SignUp submit={this.register} login={this.signIn} />}*/}
                     </div>
                 </Grid>
             </Grid>

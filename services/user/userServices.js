@@ -18,30 +18,12 @@ module.exports = {
         }).catch(e => reject(e))
     }),
     getUser: (userInfo) => new Promise((resolve, reject) => {
-        const { username, email } = userInfo;
-        if (username && !email) {
-            console.log('only username');
+        const { username } = userInfo;
             return db.select('*')
                 .from('users')
                 .where('username', '=', username)
                 .then(user => user ? resolve(user[0]) : reject({ error: "no user found" }))
                 .catch(e => reject(e));
-        } else if (email && !username) {
-            console.log('only email');
-            return db.select('*')
-                .from('users')
-                .where('email', '=', email)
-                .then(user => user ? resolve(user[0]) : reject({ error: "no user found" }))
-                .catch(e => reject(e))
-        } else if (email && username) {
-            console.log('both fields');
-            return db.select('*')
-                .from('users')
-                .where('username', '=', username)
-                .andWhere('email', '=', email)
-                .then(user => user ? resolve(user[0]) : reject({ error: "no user found" }))
-                .catch(e => reject(e))
-        }
     }),
     getAllUsers: () => new Promise((resolve, reject) => {
         db.select('*')
