@@ -1,7 +1,7 @@
 const tableController = require("./controllers").table;
 const orderController = require("./controllers").order;
 const userController = require("./controllers").users;
-const payroll = require('./controllers').payroll;
+const payrollController = require('./controllers').payroll;
 
 const path = require("path");
 
@@ -38,7 +38,7 @@ module.exports = router => {
   router.post("/api/u/checkToken", userController.checkAuth);
 
   // route handling for payroll
-  router.post("/api/p", userController.create);
+  router.post("/api/p", payrollController.create);
 
   router.get("*", (req, res) => {
     res.sendFile(path.join(__dirname, "/client/dist", "index.html"));

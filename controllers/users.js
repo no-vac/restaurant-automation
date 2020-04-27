@@ -55,7 +55,7 @@ module.exports = {
             })
     },
     perRole(req, res) {
-        const { role } = req.body;
+        const { role } = req.params;
 
         return userServices
             .getUserPerRole(role)
