@@ -23,7 +23,7 @@ module.exports = {
                 return reject(e);
             })
     }),
-    listOrdersWithTable: (id, tableId) => new Promise((resolve, reject) => {
+    listOrdersWithTable: (tableId) => new Promise((resolve, reject) => {
         db.table('orders')
             .innerJoin('tables', tableId, '=', 'tables.id')
             .then(data => {
@@ -38,7 +38,7 @@ module.exports = {
             .from('orders')
             .where('id', '=', id)
             .then((data) => {
-                if(data[0] !== undefined || data[0] !== null) {
+                if (data[0] !== undefined || data[0] !== null) {
                     return db.select('id')
                         .from('orders')
                         .where('id', '=', id)
@@ -46,7 +46,7 @@ module.exports = {
                         .then(order => resolve({ order, msg: 'order deleted' }))
                         .catch(e => reject(e));
                 }
-                return reject({msg: 'something went wrong'});
+                return reject({ msg: 'something went wrong' });
             })
     }),
     updateOrder: (id, item, comments, price, status) => new Promise((resolve, reject) => {
