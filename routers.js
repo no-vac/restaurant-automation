@@ -16,7 +16,7 @@ module.exports = router => {
     .get(tableController.list)
     .put(tableController.update)
     .delete(tableController.destroy);
-  router.get("/api/t/:id", tableController.table);
+  router.get("/api/t/perTable", tableController.table);
 
   // route handling for order
   router.route('/api/o/')
@@ -24,7 +24,7 @@ module.exports = router => {
     .get(orderController.list)
     .put(orderController.update)
     .delete(orderController.destroy);
-  router.get("/api/o/:id", orderController.listPerId);
+  router.get("/api/o/getOrder", orderController.listPerId);
 
   // route handling for user
   router.route('/api/u')
@@ -32,9 +32,10 @@ module.exports = router => {
     .get(userController.list)
     .put(userController.updateUser)
     .delete(userController.destroy);
-  router.get("/api/u/:username", userController.getUserById);
+  router.get("/api/u/:username", userController.getUser);
   router.get("/api/u/perRole", userController.perRole);
   router.post("/api/u/login", userController.login);
+  router.post("/api/u/checkToken", userController.checkAuth);
 
   // route handling for payroll
   router.post("/api/p", payrollController.create);
