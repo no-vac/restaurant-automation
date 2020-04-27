@@ -8,19 +8,31 @@ module.exports = {
     create(req, res) {
         const userinfo = { username, password, role, phoneNumber, email } = req.body;
         //console.log(userinfo);
-
-        return userServices
-            .createUser(userinfo)
+        userServices
+            .getUser(userinfo)
             .then(user => {
-                console.log(user + ' ' + 'from here');
-                return res.status(200).json({
-                    user
-                });
+                if(user){
+                    return res.status(400).json({
+                        msg: 'Username already in use'
+                    });
+                }
+                return userServices
+                    .createUser(userinfo)
+                    .then(user => {
+                        console.log(user + ' ' + 'from here');
+                        return res.status(200).json({
+                            user
+                        });
+                    })
+                    .catch(e => res.status(400).json({ msg: e }))
+
             })
-            .catch(e => res.status(400).json({ msg: e }))
+            .catch(e => {
+                return res.status(400).json({ error: e })
+            });
     },
     getUser(req, res) {
-        const userinfo = { username } = req.params;
+        const userinfo = { username, email  } = req.body;
 
         return userServices
             .getUser(userinfo)
@@ -65,13 +77,11 @@ module.exports = {
             .catch(e => res.status(500).json(e))
     },
     login(req, res) {
-        const { username, password } = req.body;
+        const userInfo = { username, password } = req.body;
 
         userServices
-            .getUser(username)
+            .getUser(userInfo)
             .then(user => {
-                // return res.send(user);
-                //compare password
                 if (bcrypt.compareSync(password, user.password)) {
                     const data = auth.createJWT(user.id, user.username, user.email, user.role);
                     return res.status(200).json({
