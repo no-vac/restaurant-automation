@@ -1,12 +1,16 @@
 const userServices = require('../services/user/userServices');
 const auth = require('../auth');
 const bcrypt = require("bcryptjs");
+const { SECURE_KEY_JWT } = process.env;
+let jwt = require('jsonwebtoken');
 
 module.exports = {
     create(req, res) {
-        const { username, password, role, phoneNumber, email } = req.body;
+        const userinfo = { username, password, role, phoneNumber, email } = req.body;
+        //console.log(userinfo);
+
         return userServices
-            .createUser(username, password, role, phoneNumber, email)
+            .createUser(userinfo)
             .then(user => {
                 console.log(user + ' ' + 'from here');
                 return res.status(200).json({
@@ -16,10 +20,10 @@ module.exports = {
             .catch(e => res.status(400).json({ msg: e }))
     },
     getUser(req, res) {
-        const { username } = req.body;
+        const userinfo = { username } = req.params;
 
         return userServices
-            .getUser(username)
+            .getUser(userinfo)
             .then(user => {
                 return res.status(200).json(user)
             })
@@ -34,21 +38,24 @@ module.exports = {
             .catch(e => res.status(400).json(e))
     },
     updateUser(req, res) {
-        const { id, username, password, email, role, phoneNumber } = req.body;
+        const userinfo = { id, username, password, email, role, phoneNumber } = req.body;
+        console.log("controller info", userinfo);
         return userServices
-            .updateUser(id, username, password, email, role, phoneNumber)
+            .updateUser(userinfo)
             .then(() => {
                 return res.status(200).json({
                     msg: 'user updated',
                 })
             })
-            .catch(e => res.status(400).json({
-                msg: 'you dont fucked up dawg',
-                e
-            }))
+            .catch(e => {
+                return res.status(400).json({
+                    msg: 'you dont fucked up dawg',
+                    e
+                })
+            })
     },
     perRole(req, res) {
-        const { role } = req.body;
+        const { role } = req.params;
 
         return userServices
             .getUserPerRole(role)
@@ -66,9 +73,9 @@ module.exports = {
                 // return res.send(user);
                 //compare password
                 if (bcrypt.compareSync(password, user.password)) {
-                    const data = auth.createJWT(user.id);
+                    const data = auth.createJWT(user.id, user.username, user.email, user.role);
                     return res.status(200).json({
-                        Token: data,
+                        Token: 'Bearer ' + data,
                         user: {
                             username: user.username,
                             role: user.role,
@@ -87,6 +94,31 @@ module.exports = {
                     e
                 })
             })
+    },
+    checkAuth(req, res) {
+        let { token } = req.body;
+
+        if (token.startsWith('Bearer ')) {
+            token = token.slice(7, token.length);
+        }
+
+        if (token) {
+            jwt.verify(token, SECURE_KEY_JWT, (err, decoded) => {
+                if (err || Date.now() >= decoded.exp * 1000) {
+                    return res.status(400).json({
+                        success: false,
+                        message: 'Token is not valid'
+                    });
+                } else {
+                    return res.status(200).json(decoded);
+                }
+            })
+        } else {
+            return res.json({
+                success: false,
+                message: 'Auth token is not supplied'
+            });
+        }
     },
     destroy(req, res) {
         const { id, username } = req.body;

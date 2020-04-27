@@ -19,8 +19,8 @@ module.exports = {
             })
             .catch(e => res.status(400).json(e))
     },
-    table(req, res){
-        const { id } = req.body;
+    table(req, res) {
+        const { id } = req.params;
 
         return tableServices
             .getTableById(id)
@@ -31,8 +31,8 @@ module.exports = {
                 return res.status(400).json(e)
             })
     },
-    update(req, res){
-        const {id, waiterId, orderId, status, total} = req.body;
+    update(req, res) {
+        const { id, waiterId, orderId, status, total } = req.body;
 
         return tableServices
             .updateTable(id, waiterId, orderId, status, total)
