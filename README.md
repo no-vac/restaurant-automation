@@ -37,3 +37,5 @@ DBpassword=admin
 DBdatabase=Restaurant
 DBdialect=postgres
 ```
+
+For the menu we would use this https://www.rastrellis.com/party-banquet-menus/banquet-menu/main-entree-descriptions/
