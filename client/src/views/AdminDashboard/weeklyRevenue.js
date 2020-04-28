@@ -1,5 +1,4 @@
-//This will be the sales analysis for admin dashboard- please change name as needed. I don't want to mess up anything!
-
+//This will be the weekly revenue table! Needs to be added to the dashboard
 
 import React from 'react';
 import { useTheme } from '@material-ui/core/styles';
@@ -12,15 +11,13 @@ function createData(time, amount) {
 }
 
 const data = [
-    createData('00:00', undefined),
-    createData('03:00', undefined),
-    createData('06:00', undefined),
-    createData('09:00', 1000),
-    createData('12:00', 1500),
-    createData('15:00', 2000),
-    createData('18:00', 4400),
-    createData('21:00', 6000),
-    createData('24:00', undefined),
+    createData('Monday', 4000),
+    createData('Tuesda', 5000),
+    createData('Wednesday', 3000),
+    createData('Thursday', 6000),
+    createData('Friday', 8000),
+    createData('Saturday', 10000),
+    createData('Sunday ', 11400),
 ];
 
 export default function Chart() {
@@ -44,7 +41,7 @@ export default function Chart() {
                           position="bottom"
                           style={{textAnchor: 'middle', fill: theme.palette.text.primary}}
                       >
-                          Time (am to pm)
+
                       </Label>
                     <YAxis stroke={theme.palette.text.secondary}>
                         <Label
@@ -52,7 +49,7 @@ export default function Chart() {
                             position="left"
                             style={{textAnchor: 'middle', fill: theme.palette.text.primary}}
                         >
-                            Sales ($)
+                            Revenue($)
                         </Label>
                     </YAxis>
                     <Line type="monotone" dataKey="amount" stroke={theme.palette.primary.main} dot={false}/>
