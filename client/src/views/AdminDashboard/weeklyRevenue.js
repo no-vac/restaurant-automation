@@ -36,13 +36,7 @@ export default function Chart() {
                         left: 24,
                     }}
                 >
-                    <XAxis dataKey="time" stroke={theme.palette.text.secondary}/>  <Label
-                          // angle={180}
-                          position="bottom"
-                          style={{textAnchor: 'middle', fill: theme.palette.text.primary}}
-                      >
-
-                      </Label>
+                    <XAxis dataKey="time" stroke={theme.palette.text.secondary}/> 
                     <YAxis stroke={theme.palette.text.secondary}>
                         <Label
                             angle={270}
