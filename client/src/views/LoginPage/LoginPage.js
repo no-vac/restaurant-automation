@@ -100,7 +100,7 @@ class SignInSide extends React.Component{
     render(){
         const { classes } = this.props;
         return(
-            <Grid container component="main" className={classes.root}>
+            <>
                 <CssBaseline />
                 <Grid item xs={false} sm={4} md={7} className={classes.image} />
                 <Grid item xs={12} sm={8} md={5} component={Paper} elecation={6} square>
@@ -109,7 +109,7 @@ class SignInSide extends React.Component{
                         {/*{window.location.href === 'http://localhost:8080/login' ? <LoginForm submit={this.login} register={this.signUp} /> : <SignUp submit={this.register} login={this.signIn} />}*/}
                     </div>
                 </Grid>
-            </Grid>
+            </>
         );
     }
 }
