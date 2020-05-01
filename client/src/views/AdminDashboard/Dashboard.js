@@ -7,9 +7,14 @@ import Container from '@material-ui/core/Container';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import Chart from './Chart';
-import Orders from './Orders';
 import TopBar from "../../components/TopBar";
 import Copyright from "../../components/copyRight";
+import PayrollTable from './payrollTable';
+import PopularItems from './popularItems';
+import WeeklyRevenue from './weeklyRevenue';
+import InventoryTable from '../Inventory/inventoryTable';
+
+const drawerWidth = 240;
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -44,6 +49,7 @@ export default function Dashboard() {
 
     return (
         <div className={classes.root}>
+            <TopBar/>
             <CssBaseline />
             {/*<TopBar />*/}
 
@@ -57,11 +63,21 @@ export default function Dashboard() {
                                 <Chart />
                             </Paper>
                         </Grid>
-                        {/* Recent Orders */}
-                        <Grid item xs={12}>
-                            <Paper className={classes.paper}>
-                                <Orders />
+                        <Grid item xs={12} md={12} lg={12}>
+                            <Paper className={fixedHeightPaper}>
+                                <WeeklyRevenue />
                             </Paper>
+                        </Grid>
+
+                        <Grid item xs={12} md={6} lg={8}>
+                            <PayrollTable />
+                        </Grid>
+                        {/* Recent Orders */}
+                        <Grid item xs={12} md={6} lg={4}>
+                            <PopularItems />
+                        </Grid>
+                        <Grid item xs={12} md={6} lg={12}>
+                            <InventoryTable />
                         </Grid>
                     </Grid>
                     <Box pt={4}>

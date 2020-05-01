@@ -6,6 +6,7 @@ import Grid from '@material-ui/core/Grid';
 import LoginPage from "../views/LoginPage/LoginPage";
 import Dashboard from "../views/AdminDashboard/Dashboard";
 import MenuItems from '../views/Menu/MenuItems';
+import EmployeeProfiles from '../views/EmployeeProfiles/employeeProfiles';
 import TopBar from "../components/TopBar";
 
 const mockStore = configureMockStore();
@@ -41,17 +42,18 @@ class Main extends Component{
         }
     }
 
-    render() {
 
+
+    render() {
         return (
             <Grid container component="main" style={{ height: '100vh' }}>
                 <Provider store={store}>
                     <Router>
-                        <TopBar/>
                         <Switch>
                             <Route exact path="/" component={Dashboard} />
                             <Route exact path="/login" component={LoginPage} />
                             <Route exact path="/menu" component={MenuItems} />
+                            <Route exact path="/employeeProfiles" component={EmployeeProfiles}/>
                         </Switch>
                     </Router>
                 </Provider>

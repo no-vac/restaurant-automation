@@ -18,6 +18,10 @@ class mainListItems extends React.Component {
             this.props.history.push('/menu');
         };
 
+        const employeeProfiles = () => {
+            this.props.history.push('/employeeProfiles')
+        };
+
         return (
             <div>
                 <ListItem button>
@@ -27,10 +31,7 @@ class mainListItems extends React.Component {
                     <ListItemText primary="Payroll" />
                 </ListItem>
                 <ListItem button>
-                    <ListItemIcon>
-                        <PeopleIcon />
-                    </ListItemIcon>
-                    <ListItemText primary="Employees" />
+                    <Button fullWidth onClick={employeeProfiles}><PeopleIcon />&nbsp; Employees</Button>
                 </ListItem>
                 <ListItem button>
                     <ListItemIcon>
