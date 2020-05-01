@@ -7,7 +7,6 @@ import LoginPage from "../views/LoginPage/LoginPage";
 import Dashboard from "../views/AdminDashboard/Dashboard";
 import MenuItems from '../views/Menu/MenuItems';
 import EmployeeProfiles from '../views/EmployeeProfiles/employeeProfiles';
-import TopBar from "../components/TopBar";
 
 const mockStore = configureMockStore();
 const store = mockStore({});
@@ -34,15 +33,13 @@ class Main extends Component{
                         localStorage.removeItem('jwtToken');
                         this.props.history.push('/login');
                     }
-                    console.log(result);
+                    console.log("token: " + token);
                 })
                 .catch(e => console.log(e))
         } else {
             this.props.history.push('/login');
         }
     }
-
-
 
     render() {
         return (

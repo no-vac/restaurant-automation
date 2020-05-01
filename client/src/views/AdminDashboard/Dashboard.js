@@ -19,6 +19,7 @@ const drawerWidth = 240;
 const useStyles = makeStyles((theme) => ({
     root: {
         display: 'flex',
+        width: '100%'
     },
     appBarSpacer: theme.mixins.toolbar,
     content: {
@@ -51,7 +52,6 @@ export default function Dashboard() {
         <div className={classes.root}>
             <TopBar/>
             <CssBaseline />
-            {/*<TopBar />*/}
 
             <main className={classes.content}>
                 <div className={classes.appBarSpacer} />
