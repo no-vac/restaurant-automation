@@ -27,7 +27,7 @@ module.exports = router => {
   router.get("/api/o/getOrder", orderController.listPerId);
 
   // route handling for user
-  router.route('/api/u')
+  router.route('/api/u/')
     .post(userController.create)
     .get(userController.list)
     .put(userController.updateUser)
