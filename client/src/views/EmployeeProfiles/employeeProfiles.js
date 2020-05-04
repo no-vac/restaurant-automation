@@ -57,7 +57,8 @@ class MaterialTableDemo extends React.Component {
         fetch('http://127.0.0.1:5000/api/u/', {
             method: 'GET',
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'Authorization': localStorage.getItem('jwtToken')
             }
         }).then(response => response.json()).then(result => {
             this.setState({data: result})

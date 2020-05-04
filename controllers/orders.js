@@ -4,14 +4,15 @@ module.exports = {
     create(req, res) {
         const { item, comments, price, status, tableId } = req.body;
 
-        return orderServices
-            .createOrder(item, comments, price, status, tableId)
-            .then(order => {
-                return res.status(200).json(order)
-            })
-            .catch(e => {
-                return res.status(400).json(e)
-            })
+        console.log(item)
+        // return orderServices
+        //     .createOrder(item, comments, price, status, tableId)
+        //     .then(order => {
+        //         return res.status(200).json(order)
+        //     })
+        //     .catch(e => {
+        //         return res.status(400).json(e)
+        //     })
     },
     list(req, res) {
         return orderServices

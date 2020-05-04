@@ -31,38 +31,25 @@ module.exports = {
                 return res.status(400).json({ error: e })
             });
     },
-    getUser(req, res) {
-        const { token } = req.body;
-
-        if(token) {
-            return res.json({tokenGiven: token});
-        }
-
+    getCurrentUser(req, res) {
         return res.json({ msg: 'no token' });
     },
     checkAuth(req, res) {
-        let { token } = req.body;
-
-        if (token) {
-            token = token.slice(7, token.length);
+        let token;
+        if(req.headers.authorization && req.headers.authorization.startsWith('Bearer ')){
+            token = req.headers.authorization.split(' ')[1];
         }
 
-        if (token) {
-            jwt.verify(token, SECURE_KEY_JWT, (err, decoded) => {
-                if (err || Date.now() >= decoded.exp * 1000) {
-                    return res.status(400).json({
-                        success: false,
-                        message: 'Token is not valid'
-                    });
-                } else {
-                    return res.status(200).json(decoded);
-                }
-            })
-        } else {
-            return res.json({
-                success: false,
-                message: 'Auth token is not supplied'
-            });
+        if(!token) {
+            return next(Error('Not authed'));
+        }
+
+        if(token.startsWith('Bearer ')) {
+            token = token.slice(7, token.length);
+            const decoded = auth.verifyJWT(token);
+
+
+            return res.json({tokenGiven: token, decodedToken: decoded});
         }
     },
     list(req, res) {
