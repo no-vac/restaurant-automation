@@ -7,7 +7,7 @@ let jwt = require('jsonwebtoken');
 module.exports = {
     create(req, res) {
         const userinfo = { username, password, role, phoneNumber, email } = req.body;
-        //console.log(userinfo);
+        console.log(userinfo);
         userServices
             .getUser(userinfo)
             .then(user => {
