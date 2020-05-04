@@ -14,8 +14,6 @@ import PopularItems from './popularItems';
 import WeeklyRevenue from './weeklyRevenue';
 import InventoryTable from '../Inventory/inventoryTable';
 
-const drawerWidth = 240;
-
 const useStyles = makeStyles((theme) => ({
     root: {
         display: 'flex',

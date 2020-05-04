@@ -32,9 +32,8 @@ module.exports = router => {
   router.route('/api/u/')
     .post(userController.create)
     .get(protected, authorize('admin'), userController.list)
-    .put(userController.updateUser)
-    .delete(userController.destroy);
-  router.get("/api/u/perRole", userController.perRole);
+    .put(protected, authorize('admin'), userController.updateUser)
+    .delete(protected, authorize('admin'), userController.destroy);
   router.post("/api/u/login", userController.login);
 
   // route handling for menu

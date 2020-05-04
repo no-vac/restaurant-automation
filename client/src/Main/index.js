@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Switch, Route, BrowserRouter as Router, withRouter } from 'react-router-dom';
+import { Switch, Route, BrowserRouter as Router } from 'react-router-dom';
 import { Provider} from "react-redux";
 import configureMockStore from "redux-mock-store";
 import Grid from '@material-ui/core/Grid';
@@ -13,28 +13,21 @@ const mockStore = configureMockStore();
 const store = mockStore({});
 
 class Main extends Component{
-    constructor(props) {
-        super(props);
-    }
-
     componentWillMount() {
         if (localStorage.getItem('jwtToken')) {
             const token = localStorage.getItem('jwtToken');
-            fetch('http://127.0.0.1:5000/api/u/checkToken', {
-                method: 'POST',
-                body: JSON.stringify({
-                    token
-                }),
+            fetch('http://127.0.0.1:5000/api/u', {
+                method: 'GET',
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+                    'Authorization': localStorage.getItem('jwtToken'),
                 }
-            }).then(response => response.json())
+            }).then(response => response.json() )
                 .then(result => {
                     if(result.success === false){
                         localStorage.removeItem('jwtToken');
                         this.props.history.push('/login');
                     }
-                    console.log("token: " + token);
                 })
                 .catch(e => console.log(e))
         } else {

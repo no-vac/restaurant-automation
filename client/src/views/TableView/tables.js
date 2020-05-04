@@ -9,10 +9,9 @@ import Paper from "@material-ui/core/Paper";
 import Button from "@material-ui/core/Button";
 import {
   createMuiTheme,
-  withStyles,
   ThemeProvider
 } from "@material-ui/core/styles";
-import { green, yellow, red } from "@material-ui/core/colors";
+import { green, yellow } from "@material-ui/core/colors";
 
 const useStyles = makeStyles({
   table: {

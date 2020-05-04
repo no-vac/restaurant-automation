@@ -3,10 +3,6 @@ import Button from "@material-ui/core/Button";
 import { withRouter } from 'react-router-dom'
 
 class LogoutBtn extends React.Component{
-    constructor(props) {
-        super(props);
-    }
-
     logout = () => {
         localStorage.removeItem('jwtToken');
         this.props.history.push('/login');
