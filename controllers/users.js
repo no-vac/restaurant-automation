@@ -32,14 +32,38 @@ module.exports = {
             });
     },
     getUser(req, res) {
-        const userinfo = { username, email  } = req.body;
+        const { token } = req.body;
 
-        return userServices
-            .getUser(userinfo)
-            .then(user => {
-                return res.status(200).json(user)
+        if(token) {
+            return res.json({tokenGiven: token});
+        }
+
+        return res.json({ msg: 'no token' });
+    },
+    checkAuth(req, res) {
+        let { token } = req.body;
+
+        if (token) {
+            token = token.slice(7, token.length);
+        }
+
+        if (token) {
+            jwt.verify(token, SECURE_KEY_JWT, (err, decoded) => {
+                if (err || Date.now() >= decoded.exp * 1000) {
+                    return res.status(400).json({
+                        success: false,
+                        message: 'Token is not valid'
+                    });
+                } else {
+                    return res.status(200).json(decoded);
+                }
             })
-            .catch(e => res.status(400).json(e))
+        } else {
+            return res.json({
+                success: false,
+                message: 'Auth token is not supplied'
+            });
+        }
     },
     list(req, res) {
         return userServices
@@ -104,31 +128,6 @@ module.exports = {
                     e
                 })
             })
-    },
-    checkAuth(req, res) {
-        let { token } = req.body;
-
-        if (token.startsWith('Bearer ')) {
-            token = token.slice(7, token.length);
-        }
-
-        if (token) {
-            jwt.verify(token, SECURE_KEY_JWT, (err, decoded) => {
-                if (err || Date.now() >= decoded.exp * 1000) {
-                    return res.status(400).json({
-                        success: false,
-                        message: 'Token is not valid'
-                    });
-                } else {
-                    return res.status(200).json(decoded);
-                }
-            })
-        } else {
-            return res.json({
-                success: false,
-                message: 'Auth token is not supplied'
-            });
-        }
     },
     destroy(req, res) {
         const { id, username } = req.body;

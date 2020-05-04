@@ -5,7 +5,7 @@ import AppBar from "@material-ui/core/AppBar";
 import React from "react";
 import Button from "@material-ui/core/Button";
 import Grid from "@material-ui/core/Grid";
-import {withRouter} from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
 import MonetizationOnIcon from "@material-ui/icons/MonetizationOn";
 import PeopleIcon from "@material-ui/icons/People";
 import FastfoodIcon from "@material-ui/icons/Fastfood";
@@ -24,6 +24,10 @@ class TopBar extends React.Component {
 
         const employeeProfiles = () => {
             this.props.history.push('/employeeProfiles')
+        };
+
+        const tablePage = () => {
+            this.props.history.push('/tables')
         };
 
         return (
@@ -48,10 +52,10 @@ class TopBar extends React.Component {
                             <Button color="inherit"><MonetizationOnIcon/> &nbsp; Payroll</Button>
                         </Grid>
                         <Grid item style={{marginLeft: '1em'}}>
-                            <Button color="inherit" onClick={menuPage}><FastfoodIcon/> &nbsp;Menu</Button>
+                            <Button color="inherit" onClick={menuPage}><FastfoodIcon/> &nbsp; Menu</Button>
                         </Grid>
                         <Grid item style={{marginLeft: '1em'}}>
-                            <Button color="inherit"><TabletIcon/> &nbsp; Tables</Button>
+                            <Button color="inherit" onClick={tablePage}><TabletIcon/> &nbsp; Tables</Button>
                         </Grid>
                     </Grid>
                     <LogoutBtn/>

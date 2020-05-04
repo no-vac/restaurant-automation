@@ -7,6 +7,7 @@ import LoginPage from "../views/LoginPage/LoginPage";
 import Dashboard from "../views/AdminDashboard/Dashboard";
 import MenuItems from '../views/Menu/MenuItems';
 import EmployeeProfiles from '../views/EmployeeProfiles/employeeProfiles';
+import Tables from '../views/TableView/tables';
 
 const mockStore = configureMockStore();
 const store = mockStore({});
@@ -51,6 +52,7 @@ class Main extends Component{
                             <Route exact path="/login" component={LoginPage} />
                             <Route exact path="/menu" component={MenuItems} />
                             <Route exact path="/employeeProfiles" component={EmployeeProfiles}/>
+                            <Route exact path="/tables" component={Tables} />
                         </Switch>
                     </Router>
                 </Provider>
