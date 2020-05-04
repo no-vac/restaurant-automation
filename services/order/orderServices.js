@@ -1,7 +1,8 @@
 const db = require("../../config/db");
 
 module.exports = {
-    createOrder: (item, comments, price, status, tableId) => new Promise((resolve, reject) => {
+    createOrder: (orderinfo) => new Promise((resolve, reject) => {
+        const { item, comments, price, status, tableId } = orderinfo;
         db.insert({
             item,
             comments,
@@ -49,16 +50,18 @@ module.exports = {
                 return reject({ msg: 'something went wrong' });
             })
     }),
-    updateOrder: (id, item, comments, price, status) => new Promise((resolve, reject) => {
+    updateOrder: (orderinfo) => new Promise((resolve, reject) => {
+        const { id, item, comments, status } = orderinfo;
+
+        const payload = {};
+        if (item) payload.item = item;
+        if (status) payload.status = status;
+        if (comments) payload.comments = comments;
+
         db.select('*')
             .from('orders')
             .where('id', '=', id)
-            .update({
-                item,
-                comments,
-                price,
-                status
-            })
+            .update(payload)
             .then((data) => {
                 return resolve(data);
             })

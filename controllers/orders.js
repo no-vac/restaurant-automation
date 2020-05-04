@@ -2,10 +2,21 @@ const orderServices = require('../services/order/orderServices');
 
 module.exports = {
     create(req, res) {
-        const { item, comments, price, status, tableId } = req.body;
+        const { item, comments, tableId } = req.body;
+
+        //search item in menu table and get item info
+        const price = 2.5;
+        const orderinfo = {
+            item,
+            comments,
+            price,
+            status: "Cool",
+            tableId
+        }
+        console.log(orderinfo);
 
         return orderServices
-            .createOrder(item, comments, price, status, tableId)
+            .createOrder(orderinfo)
             .then(order => {
                 return res.status(200).json(order)
             })
@@ -53,10 +64,10 @@ module.exports = {
             })
     },
     update(req, res) {
-        const { id, tem, comments, price, status } = req.body;
+        const orderinfo = { id, item, comments, price, status } = req.body;
 
         return orderServices
-            .updateOrder(id, tem, comments, price, status)
+            .updateOrder(orderinfo)
             .then(() => {
                 return res.status(200).json({ msg: 'order updated' })
             })

@@ -2,6 +2,7 @@ const tableController = require("./controllers").table;
 const orderController = require("./controllers").order;
 const userController = require("./controllers").users;
 //const payrollController = require('./controllers').payroll;
+const wrap = require("./middleware/asyncWrapper");
 
 const path = require("path");
 
