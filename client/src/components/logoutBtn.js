@@ -3,6 +3,9 @@ import Button from "@material-ui/core/Button";
 import { withRouter } from 'react-router-dom'
 
 class LogoutBtn extends React.Component{
+    constructor(props) {
+        super(props);
+    }
 
     logout = () => {
         localStorage.removeItem('jwtToken');
@@ -12,10 +15,10 @@ class LogoutBtn extends React.Component{
     render() {
         return(
             <Button
-                variant="contained"
+                color="inherit"
                 onClick={this.logout}
             >
-                Sign Out
+                Logout
             </Button>
         )
     }
