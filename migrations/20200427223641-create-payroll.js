@@ -17,22 +17,11 @@ module.exports = {
       clockOutTime: {
         type: Sequelize.DATE
       },
-      wage: {
-        type: Sequelize.DECIMAL
-      },
       hoursWorked: {
         type: Sequelize.DECIMAL
       },
       totalWage: {
         type: Sequelize.DECIMAL
-      },
-      createdAt: {
-        allowNull: false,
-        type: Sequelize.DATE
-      },
-      updatedAt: {
-        allowNull: false,
-        type: Sequelize.DATE
       }
     });
   },

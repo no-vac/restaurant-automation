@@ -7,7 +7,9 @@ let jwt = require('jsonwebtoken');
 module.exports = {
     create(req, res) {
         const userinfo = { username, password, role, phoneNumber, email } = req.body;
+
         console.log(userinfo);
+
         userServices
             .getUser(userinfo)
             .then(user => {
@@ -19,35 +21,22 @@ module.exports = {
                 return userServices
                     .createUser(userinfo)
                     .then(user => {
-                        console.log(user + ' ' + 'from here');
                         return res.status(200).json({
                             user
                         });
                     })
-                    .catch(e => res.status(400).json({ msg: e }))
+                    .catch(e => res.status(400).json({ error: e }))
 
             })
             .catch(e => {
                 return res.status(400).json({ error: e })
             });
     },
-    checkAuth(req, res) {
-        let token;
-        if(req.headers.authorization && req.headers.authorization.startsWith('Bearer ')){
-            token = req.headers.authorization.split(' ')[1];
+    getCurrent(req, res) {
+        if (!req.user) {
+            return res.status(400).json({ error: "no user" })
         }
-
-        if(!token) {
-            return next(Error('Not authed'));
-        }
-
-        if(token.startsWith('Bearer ')) {
-            token = token.slice(7, token.length);
-            const decoded = auth.verifyJWT(token);
-
-
-            return res.json({tokenGiven: token, decodedToken: decoded});
-        }
+        return res.status(200).json(req.user);
     },
     list(req, res) {
         return userServices
