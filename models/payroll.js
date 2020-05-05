@@ -1,4 +1,3 @@
-  
 'use strict';
 module.exports = (sequelize, DataTypes) => {
   const payroll = sequelize.define('payroll', {
@@ -9,8 +8,8 @@ module.exports = (sequelize, DataTypes) => {
     hoursWorked: DataTypes.DECIMAL,
     totalWage: DataTypes.DECIMAL,
   }, {});
-  payroll.associate = function(models) {
-    // associate can  be defined here
+  payroll.associate = function (models) {
+    // associate
   };
   return payroll;
 };

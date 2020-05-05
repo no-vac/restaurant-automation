@@ -60,7 +60,6 @@ class SignInSide extends React.Component{
                 'Content-Type': 'application/json'
             }
         }).then(response => response.json()).then(result => {
-            console.log(result);
             if(result.Token){
                 localStorage.setItem('jwtToken', result.Token);
                 this.props.history.push('/')
@@ -79,13 +78,15 @@ class SignInSide extends React.Component{
             }
         }).then(response => {
             if(response.status === 400){
-                window.location.reload();
+                //window.location.reload();
+                console.log(response.body);
             }
             response.json()
         }).then(result => {
               if(result !== null) {
-                  window.location.reload();
+                  //window.location.reload();
               }
+              console.log(result);
         }).catch(err => { console.log(err); })
     };
 
@@ -100,16 +101,15 @@ class SignInSide extends React.Component{
     render(){
         const { classes } = this.props;
         return(
-            <Grid container component="main" className={classes.root}>
+            <>
                 <CssBaseline />
                 <Grid item xs={false} sm={4} md={7} className={classes.image} />
                 <Grid item xs={12} sm={8} md={5} component={Paper} elecation={6} square>
                     <div className={classes.paper}>
                         {this.state.form === 'Login' ? <LoginForm submit={this.login} register={this.signUp}  /> : <SignUp submit={this.register} login={this.signIn} /> }
-                        {/*{window.location.href === 'http://localhost:8080/login' ? <LoginForm submit={this.login} register={this.signUp} /> : <SignUp submit={this.register} login={this.signIn} />}*/}
                     </div>
                 </Grid>
-            </Grid>
+            </>
         );
     }
 }

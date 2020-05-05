@@ -1,34 +1,33 @@
 import React, { Component } from "react";
-import { Switch, Route, BrowserRouter as Router, withRouter } from 'react-router-dom';
+import { Switch, Route, BrowserRouter as Router } from 'react-router-dom';
+import { Provider} from "react-redux";
+import configureMockStore from "redux-mock-store";
+import Grid from '@material-ui/core/Grid';
 import LoginPage from "../views/LoginPage/LoginPage";
 import Dashboard from "../views/AdminDashboard/Dashboard";
-import { Provider } from "react-redux";
-import configureMockStore from "redux-mock-store";
+import EmployeeProfiles from '../views/EmployeeProfiles/employeeProfiles';
+import Tables from '../views/TableView/tables';
+import Menu from '../views/MenuPage/menu';
 
 const mockStore = configureMockStore();
 const store = mockStore({});
 
-
 class Main extends Component{
-
     componentWillMount() {
         if (localStorage.getItem('jwtToken')) {
             const token = localStorage.getItem('jwtToken');
-            fetch('http://127.0.0.1:5000/api/u/checkToken', {
-                method: 'POST',
-                body: JSON.stringify({
-                    token
-                }),
+            fetch('http://127.0.0.1:5000/api/u', {
+                method: 'GET',
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+                    'Authorization': token,
                 }
-            }).then(response => response.json())
+            }).then(response => response.json() )
                 .then(result => {
                     if(result.success === false){
                         localStorage.removeItem('jwtToken');
                         this.props.history.push('/login');
                     }
-                    console.log(result);
                 })
                 .catch(e => console.log(e))
         } else {
@@ -38,18 +37,22 @@ class Main extends Component{
 
     render() {
         return (
-            <div>
+            <Grid container component="main" style={{ height: '100vh' }}>
                 <Provider store={store}>
                     <Router>
                         <Switch>
                             <Route exact path="/" component={Dashboard} />
                             <Route exact path="/login" component={LoginPage} />
+                            <Route exact path="/menu" component={Menu} />
+                            <Route exact path="/employeeProfiles" component={EmployeeProfiles}/>
+                            <Route exact path="/tables" component={Tables} />
                         </Switch>
                     </Router>
                 </Provider>
-            </div>
+            </Grid>
         );
     }
 }
-export default withRouter(Main);
+
+export default Main;
 
