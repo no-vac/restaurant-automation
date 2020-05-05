@@ -31,9 +31,6 @@ module.exports = {
                 return res.status(400).json({ error: e })
             });
     },
-    getCurrentUser(req, res) {
-        return res.json({ msg: 'no token' });
-    },
     checkAuth(req, res) {
         let token;
         if(req.headers.authorization && req.headers.authorization.startsWith('Bearer ')){

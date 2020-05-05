@@ -60,7 +60,6 @@ class SignInSide extends React.Component{
                 'Content-Type': 'application/json'
             }
         }).then(response => response.json()).then(result => {
-            console.log(result);
             if(result.Token){
                 localStorage.setItem('jwtToken', result.Token);
                 this.props.history.push('/')

@@ -5,9 +5,9 @@ import configureMockStore from "redux-mock-store";
 import Grid from '@material-ui/core/Grid';
 import LoginPage from "../views/LoginPage/LoginPage";
 import Dashboard from "../views/AdminDashboard/Dashboard";
-import MenuItems from '../views/Menu/MenuItems';
 import EmployeeProfiles from '../views/EmployeeProfiles/employeeProfiles';
 import Tables from '../views/TableView/tables';
+import Menu from '../views/MenuPage/menu';
 
 const mockStore = configureMockStore();
 const store = mockStore({});
@@ -20,7 +20,7 @@ class Main extends Component{
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': localStorage.getItem('jwtToken'),
+                    'Authorization': token,
                 }
             }).then(response => response.json() )
                 .then(result => {
@@ -43,7 +43,7 @@ class Main extends Component{
                         <Switch>
                             <Route exact path="/" component={Dashboard} />
                             <Route exact path="/login" component={LoginPage} />
-                            <Route exact path="/menu" component={MenuItems} />
+                            <Route exact path="/menu" component={Menu} />
                             <Route exact path="/employeeProfiles" component={EmployeeProfiles}/>
                             <Route exact path="/tables" component={Tables} />
                         </Switch>

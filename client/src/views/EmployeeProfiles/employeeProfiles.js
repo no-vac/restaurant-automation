@@ -1,221 +1,172 @@
-import React, {forwardRef, useEffect} from 'react';
-import MaterialTable from 'material-table';
-import AddBox from '@material-ui/icons/AddBox';
-import ArrowDownward from '@material-ui/icons/ArrowDownward';
-import Check from '@material-ui/icons/Check';
-import ChevronLeft from '@material-ui/icons/ChevronLeft';
-import ChevronRight from '@material-ui/icons/ChevronRight';
-import Clear from '@material-ui/icons/Clear';
-import DeleteOutline from '@material-ui/icons/DeleteOutline';
-import Edit from '@material-ui/icons/Edit';
-import FilterList from '@material-ui/icons/FilterList';
-import FirstPage from '@material-ui/icons/FirstPage';
-import LastPage from '@material-ui/icons/LastPage';
-import Remove from '@material-ui/icons/Remove';
-import SaveAlt from '@material-ui/icons/SaveAlt';
-import Search from '@material-ui/icons/Search';
-import ViewColumn from '@material-ui/icons/ViewColumn';
+import React, {useEffect} from 'react';
+import {makeStyles} from '@material-ui/core/styles';
+import Paper from '@material-ui/core/Paper';
+import Table from '@material-ui/core/Table';
+import TableBody from '@material-ui/core/TableBody';
+import TableCell from '@material-ui/core/TableCell';
+import TableContainer from '@material-ui/core/TableContainer';
+import TableHead from '@material-ui/core/TableHead';
+import TablePagination from '@material-ui/core/TablePagination';
+import TableRow from '@material-ui/core/TableRow';
+import Button from "@material-ui/core/Button";
 import TopBar from "../../components/TopBar";
+import FormControl from '@material-ui/core/FormControl';
+import TextField from '@material-ui/core/TextField';
+import AlertDialog from './addEmployee';
 
-const TableIcons = {
-    Add: forwardRef((props, ref) => <AddBox {...props} ref={ref}/>),
-    Check: forwardRef((props, ref) => <Check {...props} ref={ref}/>),
-    Clear: forwardRef((props, ref) => <Clear {...props} ref={ref}/>),
-    Delete: forwardRef((props, ref) => <DeleteOutline {...props} ref={ref}/>),
-    DetailPanel: forwardRef((props, ref) => <ChevronRight {...props} ref={ref}/>),
-    Edit: forwardRef((props, ref) => <Edit {...props} ref={ref}/>),
-    Export: forwardRef((props, ref) => <SaveAlt {...props} ref={ref}/>),
-    Filter: forwardRef((props, ref) => <FilterList {...props} ref={ref}/>),
-    FirstPage: forwardRef((props, ref) => <FirstPage {...props} ref={ref}/>),
-    LastPage: forwardRef((props, ref) => <LastPage {...props} ref={ref}/>),
-    NextPage: forwardRef((props, ref) => <ChevronRight {...props} ref={ref}/>),
-    PreviousPage: forwardRef((props, ref) => <ChevronLeft {...props} ref={ref}/>),
-    ResetSearch: forwardRef((props, ref) => <Clear {...props} ref={ref}/>),
-    Search: forwardRef((props, ref) => <Search {...props} ref={ref}/>),
-    SortArrow: forwardRef((props, ref) => <ArrowDownward {...props} ref={ref}/>),
-    ThirdStateCheck: forwardRef((props, ref) => <Remove {...props} ref={ref}/>),
-    ViewColumn: forwardRef((props, ref) => <ViewColumn {...props} ref={ref}/>)
-};
+const columns = [
+    {id: 'username', label: 'Username', align: 'left'},
+    {id: 'email', label: 'Email', align: 'left'},
+    {id: 'role', label: 'Role', align: 'left'},
+];
 
+const useStyles = makeStyles({
+    root: {
+        width: '100%',
+        margin: '4em 30em'
+    },
+    container: {
+        maxHeight: 1000,
+    },
+    btn: {
+        margin: '0 1em'
+    },
+    align: {
+        textAlign: 'center'
+    },
+});
 
-export default function MaterialTableDemo() {
+export default function StickyHeadTable() {
     const URI = 'http://127.0.0.1:5000';
+    const classes = useStyles();
     const [count, setCount] = React.useState(0);
+    const [page, setPage] = React.useState(0);
+    const [rowsPerPage, setRowsPerPage] = React.useState(25);
     const [state, setState] = React.useState({
-        columns: [
-            {title: 'Employee ID', field: 'id', type: 'numeric'},
-            {title: 'Username', field: 'username'},
-            {title: 'Email', field: 'email'},
-            {title: 'Role', field: 'role'},
-
-        ],
-        data: [],
-    });
+        rows: [],
+        edit: false
+    })
 
     useEffect(() => {
         setCount(0);
-        fetch(URI+'/api/u/', {
+        fetch(URI + '/api/u/', {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': localStorage.getItem('jwtToken')
             }
         }).then(response => response.json()).then(result => {
-            setState(prevState => {
-                const data = [prevState.data];
-                data.push(result);
-                console.log(data[1]);
-                return {...prevState, data};
-            })
+            setState({...state, rows: result});
         }).catch(e => console.log(e))
     }, [count])
+
+    const handleChangePage = (event, newPage) => {
+        setPage(newPage);
+    };
+
+    const handleChangeRowsPerPage = (event) => {
+        setRowsPerPage(+event.target.value);
+        setPage(0);
+    };
+
+    const editable = (id) => {
+        // setState((prevState => {
+        //     rows: prevState.rows.map((x, key) => (key === id ? {...x, edit: !x. edit } : x))
+        // }))
+        setState({...state, edit: true});
+    }
+
+    const cancelEditable = () => {
+        setState({...state, edit: false})
+    }
+
+    const deleteUser = (id, username) => {
+        console.log(id + " " + username);
+        fetch(URI+'/api/u/', {
+            method: 'DELETE',
+            body: JSON.stringify({
+                id, username
+            }),
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': localStorage.getItem('jwtToken')
+            }
+        }).then(response => response.json()).then(result => {
+            if(result) {
+                window.location.reload();
+            }
+        }).catch(error => console.log(error))
+    }
 
     return (
         <>
             <TopBar/>
-            <MaterialTable
-                style={{width: '100%', margin: '4em 1em'}}
-                title="Employee Profiles"
-                icons={TableIcons}
-                columns={state.columns}
-                data={state.data[1]}
-                editable={{
-                    onRowAdd: (newData) =>
-                        new Promise((resolve) => {
-                            resolve();
-                            fetch(URI+'/api/u/', {
-                                method: 'POST',
-                                body: JSON.stringify(newData),
-                                headers: {
-                                    'Content-Type': 'application/json',
-                                    'Authorization': localStorage.getItem('jwtToken')
-                                }
-                            }).then(response => response.json()).then(result => {
-                                console.log(newData);
-
-
-                                // setState(prevState => {
-                                //     const data = [prevState.data];
-                                //     data.push(result);
-                                //     console.log(data);
-                                //     return {...prevState, data};
-                                // })
-                            }).catch(e => console.log(e))
-                        }),
-                    onRowUpdate: (newData, oldData) =>
-                        new Promise((resolve) => {
-                            setTimeout(() => {
-                                resolve();
-                                if (oldData) {
-                                    setState((prevState) => {
-                                        const data = [...prevState.data];
-                                        data[data.indexOf(oldData)] = newData;
-                                        return {...prevState, data};
-                                    });
-                                }
-                            }, 600);
-                        }),
-                    onRowDelete: (oldData) =>
-                        new Promise((resolve) => {
-                            setTimeout(() => {
-                                resolve();
-                                setState((prevState) => {
-                                    const data = [...prevState.data];
-                                    data.splice(data.indexOf(oldData), 1);
-                                    return {...prevState, data};
-                                });
-                            }, 600);
-                        }),
-                }}
-            />
+            <Paper className={classes.root}>
+                <TableContainer className={classes.container}>
+                    <Table stickyHeader aria-label="sticky table">
+                        <TableHead>
+                            <TableRow>
+                                {columns.map((column) => (
+                                    <TableCell
+                                        key={column.id}
+                                        align={column.align}
+                                    >
+                                        <strong>{column.label}</strong>
+                                    </TableCell>
+                                ))}
+                                <TableCell></TableCell>
+                            </TableRow>
+                        </TableHead>
+                        <TableBody>
+                            {state.rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
+                                return (
+                                    <TableRow hover role="checkbox" tabIndex={-1} key={row.code}>
+                                        {columns.map((column) => {
+                                            const value = row[column.id];
+                                            return (
+                                                <>
+                                                    {state.edit ?
+                                                        <TableCell key={row.id} align={column.align}>
+                                                            <FormControl style={{width: '100%'}}>
+                                                                <TextField id={row.username} label={column.id} value={value} />
+                                                            </FormControl>
+                                                        </TableCell>
+                                                        :
+                                                        <TableCell key={row.id} align={column.align}>
+                                                            {value}
+                                                        </TableCell>
+                                                    }
+                                                </>
+                                            );
+                                        })}
+                                        <TableCell className={classes.align}>
+                                            {state.edit ?
+                                                <Button variant="contained" color="primary" className={classes.btn} onClick={cancelEditable}>Cancel</Button>
+                                                :
+                                                <Button variant="contained" color="primary" className={classes.btn} onClick={() => editable(row.id)}>Edit</Button>
+                                            }
+                                            <Button variant="contained" color="secondary" className={classes.btn} onClick={() => deleteUser(row.id, row.username)}>Delete</Button>
+                                        </TableCell>
+                                    </TableRow>
+                                );
+                            })}
+                            <TableRow>
+                                <AlertDialog />
+                            </TableRow>
+                        </TableBody>
+                    </Table>
+                </TableContainer>
+                <TablePagination
+                    rowsPerPageOptions={[10, 25, 100]}
+                    component="div"
+                    count={state.rows.length}
+                    rowsPerPage={rowsPerPage}
+                    page={page}
+                    onChangePage={handleChangePage}
+                    onChangeRowsPerPage={handleChangeRowsPerPage}
+                />
+            </Paper>
         </>
+
     );
 }
-
-
-// class MaterialTableDemo extends React.Component {
-//     constructor(props) {
-//         super(props);
-//         this.state = {
-//             columns: [
-//                 {title: 'Employee ID', field: 'id', type: 'numeric'},
-//                 {title: 'Username', field: 'username'},
-//                 {title: 'Email', field: 'email'},
-//                 {title: 'Role', field: 'role'},
-//             ],
-//             data: [],
-//             open: false,
-//         }
-//     };
-//
-//     componentWillMount() {
-//         fetch('http://127.0.0.1:5000/api/u/', {
-//             method: 'GET',
-//             headers: {
-//                 'Content-Type': 'application/json',
-//                 'Authorization': localStorage.getItem('jwtToken')
-//             }
-//         }).then(response => response.json()).then(result => {
-//             this.setState({data: result})
-//         }).catch(e => console.log(e))
-//     };
-//
-//     addNewUser = (userInfo) => {
-//         fetch('http://127.0.0.1:5000/api/u/', {
-//                 method: 'POST',
-//                 body: JSON.stringify({userInfo}),
-//                 headers: {
-//                     'Content-Type': 'application/json',
-//                     'Authorization': localStorage.getItem('jwtToken'),
-//                 }
-//             }
-//         );
-//     };
-//
-//
-//     render() {
-//         return (
-//             <>
-//                 <TopBar/>
-//                 <MaterialTable
-//                     style={{width: '100%', margin: '4em 1em'}}
-//                     icons={TableIcons}
-//                     title="Employee Profiles"
-//                     columns={this.state.columns}
-//                     data={this.state.data}
-//                     editable={{
-//                         onRowAdd: (newData) => {
-//                             this.addNewUser(newData);
-//                         },
-//                         onRowUpdate: (newData, oldData) =>
-//                             new Promise((resolve) => {
-//                                 setTimeout(() => {
-//                                     resolve();
-//                                     if (oldData) {
-//                                         this.setState((prevState) => {
-//                                             const data = [...prevState.data];
-//                                             data[data.indexOf(oldData)] = newData;
-//                                             return {...prevState, data};
-//                                         });
-//                                     }
-//                                 }, 600);
-//                             }),
-//                         onRowDelete: (oldData) =>
-//                             new Promise((resolve) => {
-//                                 setTimeout(() => {
-//                                     resolve();
-//                                     this.setState((prevState) => {
-//                                         const data = [...prevState.data];
-//                                         data.splice(data.indexOf(oldData), 1);
-//                                         return {...prevState, data};
-//                                     });
-//                                 }, 600);
-//                             }),
-//                     }}
-//                 />
-//             </>
-//         );
-//     }
-// }
-//
-// export default MaterialTableDemo;

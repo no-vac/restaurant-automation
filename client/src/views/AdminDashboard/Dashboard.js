@@ -67,15 +67,8 @@ export default function Dashboard() {
                             </Paper>
                         </Grid>
 
-                        <Grid item xs={12} md={6} lg={8}>
+                        <Grid item xs={12} md={12} lg={12}>
                             <PayrollTable />
-                        </Grid>
-                        {/* Recent Orders */}
-                        <Grid item xs={12} md={6} lg={4}>
-                            <PopularItems />
-                        </Grid>
-                        <Grid item xs={12} md={6} lg={12}>
-                            <InventoryTable />
                         </Grid>
                     </Grid>
                     <Box pt={4}>

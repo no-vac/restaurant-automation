@@ -30,7 +30,7 @@ module.exports = router => {
 
   // route handling for user
   router.route('/api/u/')
-    .post(userController.create)
+    .post(protected, authorize('admin'), userController.create)
     .get(protected, authorize('admin'), userController.list)
     .put(protected, authorize('admin'), userController.updateUser)
     .delete(protected, authorize('admin'), userController.destroy);
