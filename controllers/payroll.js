@@ -18,10 +18,10 @@ module.exports = (sequelize, DataTypes) => {
 
 const payrollServices = require('../services/payroll/payrollServices');
 module.exports = {
-    create(req, res) {//creating constants 
-        const { userId, wage, totalWage, clockInTime, clockOutTime, hoursWorked } = req.body;
-        return payrollServices//creating tables for our contants with parameters for script
-            .createPayroll(userId, wage, totalWage, clockInTime, clockOutTime, hoursWorked)
+    create(req, res) { //creating constants 
+        const payrollInfo = { userId, wage, totalWage, clockInTime, clockOutTime, hoursWorked } = req.body;
+        return payrollServices //creating tables for our contants with parameters for script
+            .createPayroll(payrollInfo)
             .then(payroll => {
                 return res.status(200).json(payroll)
             })
@@ -34,7 +34,9 @@ module.exports = {
             .then(payroll => {
                 return res.status(200).json(payroll)
             })
-            .catch(e => res.status(400).json(e))
+            .catch(error => {
+                return res.status(400).json({ error: error.message });
+            })
     },
 
     payroll(req, res) {
@@ -43,23 +45,23 @@ module.exports = {
         return payrollServices
             .getPayrollById(id)
             .then(payroll => {
-                return res.status(200).json(table)
+                return res.status(200).json(payroll)
             })
-            .catch(e => {
-                return res.status(400).json(e)
+            .catch(error => {
+                return res.status(400).json({ error: error.message });
             })
     },
 
     update(req, res) {
-        const { userId, wage, totalWage, clockInTime, clockOutTime, hoursWorked,id } = req.body;
+        const payrollInfo = { userId, wage, totalWage, clockInTime, clockOutTime, hoursWorked, id } = req.body;
 
         return payrollServices
-            .updatePayroll(userId, wage, totalWage, clockInTime, clockOutTime, hoursWorked,id)
+            .updatePayroll(payrollInfo)
             .then(() => {
                 return res.status(200).json({ table, msg: 'payroll has been updated' });
             })
-            .catch(e => {
-                return res.status(400).json({msg: 'Whoops, something went wrong'});
+            .catch(error => {
+                return res.status(400).json({ error: error.message });
             })
     },
 
@@ -69,10 +71,10 @@ module.exports = {
         return payrollServices
             .deletePayroll(id)
             .then(() => {
-                return res.status(200).json({  msg: 'payroll has been deleted' })
+                return res.status(200).json({ msg: 'payroll has been deleted' })
             })
-            .catch(e => {
-                return res.status(400).json(e);
+            .catch(error => {
+                return res.status(400).json({ error: error.message });
             })
     },
 };
