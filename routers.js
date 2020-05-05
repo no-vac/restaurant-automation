@@ -1,14 +1,18 @@
 const tableController = require("./controllers").table;
 const orderController = require("./controllers").order;
 const userController = require("./controllers").users;
-const payrollController = require('./controllers').payroll;
+//const payrollController = require('./controllers').payroll;
+const wrap = require("./middleware/asyncWrapper");
 
 const path = require("path");
 
 module.exports = router => {
-  router.get("/api/", (req, res) => {
-    res.status(200).json("API ROUTE");
-  });
+  router.get(
+    "/api/",
+    wrap(async (req, res) => {
+      res.status(200).json("API ROUTE");
+    })
+  );
 
   // route handling for table
   router.route('/api/t/')
@@ -24,7 +28,7 @@ module.exports = router => {
     .get(orderController.list)
     .put(orderController.update)
     .delete(orderController.destroy);
-  router.get("/api/o/getOrder", orderController.listPerId);
+  router.get("/api/o/:tableId", orderController.listPerTableId);
 
   // route handling for user
   router.route('/api/u')
@@ -38,7 +42,7 @@ module.exports = router => {
   router.post("/api/u/checkToken", userController.checkAuth);
 
   // route handling for payroll
-  router.post("/api/p", payrollController.create);
+  //router.post("/api/p", payrollController.create);
 
   router.get("*", (req, res) => {
     res.sendFile(path.join(__dirname, "/client/dist", "index.html"));

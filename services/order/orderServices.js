@@ -1,7 +1,8 @@
 const db = require("../../config/db");
 
 module.exports = {
-    createOrder: (item, comments, price, status, tableId) => new Promise((resolve, reject) => {
+    createOrder: (orderinfo) => new Promise((resolve, reject) => {
+        const { item, comments, price, status, tableId } = orderinfo;
         db.insert({
             item,
             comments,
@@ -14,7 +15,8 @@ module.exports = {
     }),
     listOrders: () => new Promise((resolve, reject) => {
         db.table('orders')
-            .innerJoin('tables', 'tableId', '=', 'tables.id')
+            //no tables in db yet, do we need that?
+            // .innerJoin('tables', 'tableId', '=', 'tables.id')
             .then(data => {
                 console.log(data);
                 return resolve(data);
@@ -24,9 +26,13 @@ module.exports = {
             })
     }),
     listOrdersWithTable: (tableId) => new Promise((resolve, reject) => {
-        db.table('orders')
-            .innerJoin('tables', tableId, '=', 'tables.id')
+        // db.table('orders')
+        //     .innerJoin('tables', tableId, '=', 'tables.id')
+        db.select("*").from("orders").where("tableId", "=", tableId)
             .then(data => {
+                if (data.length == 0) {
+                    return reject(new Error(`no orders for table ${tableId}`));
+                }
                 return resolve(data);
             })
             .catch(e => {
@@ -49,16 +55,17 @@ module.exports = {
                 return reject({ msg: 'something went wrong' });
             })
     }),
-    updateOrder: (id, item, comments, price, status) => new Promise((resolve, reject) => {
+    updateOrder: (orderinfo) => new Promise((resolve, reject) => {
+        const { id, comments, status } = orderinfo;
+
+        const payload = {};
+        if (status) payload.status = status;
+        if (comments) payload.comments = comments;
+
         db.select('*')
             .from('orders')
             .where('id', '=', id)
-            .update({
-                item,
-                comments,
-                price,
-                status
-            })
+            .update(payload)
             .then((data) => {
                 return resolve(data);
             })

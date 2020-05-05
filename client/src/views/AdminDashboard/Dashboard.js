@@ -21,6 +21,7 @@ import Tabs from './Tabs';
 import Orders from './Orders';
 import LogoutBtn from "../../components/logoutBtn";
 import Copyright from "../../components/copyRight";
+import DenseTable from '../Payroll/Main';
 
 const drawerWidth = 240;
 
@@ -162,6 +163,9 @@ export default function Dashboard() {
                             <Paper className={fixedHeightPaper}>
                                 <Chart />
                             </Paper>
+                        </Grid>
+                        <Grid item xs={12} md={8} lg={9}>
+                            <DenseTable />
                         </Grid>
                         {/* Recent Deposits */}
                         <Grid item xs={12} md={4} lg={3}>
