@@ -11,7 +11,7 @@ module.exports = {
         userServices
             .getUser(userinfo)
             .then(user => {
-                if(user){
+                if (user) {
                     return res.status(400).json({
                         msg: 'Username already in use'
                     });

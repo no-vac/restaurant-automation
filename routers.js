@@ -4,13 +4,17 @@ const userController = require("./controllers").users;
 const menuController = require("./controllers").menu;
 const { protected, authorize } = require('./auth');
 //const payrollController = require('./controllers').payroll;
+const wrap = require("./middleware/asyncWrapper");
 
 const path = require("path");
 
 module.exports = router => {
-  router.get("/api/", (req, res) => {
-    res.status(200).json("API ROUTE");
-  });
+  router.get(
+    "/api/",
+    wrap(async (req, res) => {
+      res.status(200).json("API ROUTE");
+    })
+  );
 
   // route handling for table
   router.route('/api/t/')
@@ -26,7 +30,7 @@ module.exports = router => {
     .get(orderController.list)
     .put(orderController.update)
     .delete(orderController.destroy);
-  router.get("/api/o/getOrder", orderController.listPerId);
+  router.get("/api/o/:tableId", orderController.listPerTableId);
 
   // route handling for user
   router.route('/api/u/')

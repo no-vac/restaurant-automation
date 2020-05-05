@@ -19,6 +19,13 @@ function startServer(server) {
 
     console.log(`Server is live on port ${PORT}`);
   });
+
+  //handle unhandled rejections
+  process.on("unhandledRejection", (err, promise) => {
+    console.log(`Error: ${err.message}`);
+    //close server and exit process
+    server.close(() => process.exit(1));
+  });
 }
 
 async function init() {
@@ -31,7 +38,7 @@ async function init() {
   app.use(passport.initialize());
   app.use(passport.session());
   app.use(cors());
-  app.use(function(req, res, next){
+  app.use(function (req, res, next) {
     res.header("Access-Control-Allow-Origin", "*"); // update to match the domain you will make the request from
     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
     next();
@@ -49,13 +56,6 @@ async function init() {
 
   router(app);
   startServer(app);
-
-  //handle unhandled rejections
-  // process.on("unhandledRejection", (err, promise) => {
-  //   console.log(`Error: ${err.message}`);
-  //   //close server and exit process
-  //   server.close(() => process.exit(1));
-  // });
 }
 
 init();
