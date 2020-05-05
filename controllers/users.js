@@ -7,7 +7,7 @@ let jwt = require('jsonwebtoken');
 module.exports = {
     create(req, res) {
         const userinfo = { username, password, role, phoneNumber, email } = req.body;
-        //console.log(userinfo);
+        console.log(userinfo);
         userServices
             .getUser(userinfo)
             .then(user => {
@@ -31,15 +31,23 @@ module.exports = {
                 return res.status(400).json({ error: e })
             });
     },
-    getUser(req, res) {
-        const userinfo = { username, email } = req.body;
+    checkAuth(req, res) {
+        let token;
+        if(req.headers.authorization && req.headers.authorization.startsWith('Bearer ')){
+            token = req.headers.authorization.split(' ')[1];
+        }
 
-        return userServices
-            .getUser(userinfo)
-            .then(user => {
-                return res.status(200).json(user)
-            })
-            .catch(e => res.status(400).json(e))
+        if(!token) {
+            return next(Error('Not authed'));
+        }
+
+        if(token.startsWith('Bearer ')) {
+            token = token.slice(7, token.length);
+            const decoded = auth.verifyJWT(token);
+
+
+            return res.json({tokenGiven: token, decodedToken: decoded});
+        }
     },
     list(req, res) {
         return userServices
@@ -104,31 +112,6 @@ module.exports = {
                     e
                 })
             })
-    },
-    checkAuth(req, res) {
-        let { token } = req.body;
-
-        if (token.startsWith('Bearer ')) {
-            token = token.slice(7, token.length);
-        }
-
-        if (token) {
-            jwt.verify(token, SECURE_KEY_JWT, (err, decoded) => {
-                if (err || Date.now() >= decoded.exp * 1000) {
-                    return res.status(400).json({
-                        success: false,
-                        message: 'Token is not valid'
-                    });
-                } else {
-                    return res.status(200).json(decoded);
-                }
-            })
-        } else {
-            return res.json({
-                success: false,
-                message: 'Auth token is not supplied'
-            });
-        }
     },
     destroy(req, res) {
         const { id, username } = req.body;

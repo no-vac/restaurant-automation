@@ -1,6 +1,8 @@
 const tableController = require("./controllers").table;
 const orderController = require("./controllers").order;
 const userController = require("./controllers").users;
+const menuController = require("./controllers").menu;
+const { protected, authorize } = require('./auth');
 //const payrollController = require('./controllers').payroll;
 const wrap = require("./middleware/asyncWrapper");
 
@@ -31,15 +33,17 @@ module.exports = router => {
   router.get("/api/o/:tableId", orderController.listPerTableId);
 
   // route handling for user
-  router.route('/api/u')
-    .post(userController.create)
-    .get(userController.list)
-    .put(userController.updateUser)
-    .delete(userController.destroy);
-  router.get("/api/u/:username", userController.getUser);
-  router.get("/api/u/perRole", userController.perRole);
+  router.route('/api/u/')
+    .post(protected, authorize('admin'), userController.create)
+    .get(protected, authorize('admin'), userController.list)
+    .put(protected, authorize('admin'), userController.updateUser)
+    .delete(protected, authorize('admin'), userController.destroy);
   router.post("/api/u/login", userController.login);
-  router.post("/api/u/checkToken", userController.checkAuth);
+
+  // route handling for menu
+  router.route('/api/m/')
+      .post(menuController.create)
+      .get(menuController.list);
 
   // route handling for payroll
   //router.post("/api/p", payrollController.create);

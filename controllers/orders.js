@@ -13,7 +13,6 @@ module.exports = {
             status: "Cool",
             tableId
         }
-
         return orderServices
             .createOrder(orderinfo)
             .then(order => {
