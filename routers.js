@@ -28,7 +28,7 @@ module.exports = router => {
     .get(orderController.list)
     .put(orderController.update)
     .delete(orderController.destroy);
-  router.get("/api/o/getOrder", orderController.listPerId);
+  router.get("/api/o/:tableId", orderController.listPerTableId);
 
   // route handling for user
   router.route('/api/u')

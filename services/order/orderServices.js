@@ -15,7 +15,8 @@ module.exports = {
     }),
     listOrders: () => new Promise((resolve, reject) => {
         db.table('orders')
-            .innerJoin('tables', 'tableId', '=', 'tables.id')
+            //no tables in db yet, do we need that?
+            // .innerJoin('tables', 'tableId', '=', 'tables.id')
             .then(data => {
                 console.log(data);
                 return resolve(data);
@@ -25,9 +26,13 @@ module.exports = {
             })
     }),
     listOrdersWithTable: (tableId) => new Promise((resolve, reject) => {
-        db.table('orders')
-            .innerJoin('tables', tableId, '=', 'tables.id')
+        // db.table('orders')
+        //     .innerJoin('tables', tableId, '=', 'tables.id')
+        db.select("*").from("orders").where("tableId", "=", tableId)
             .then(data => {
+                if (data.length == 0) {
+                    return reject(new Error(`no orders for table ${tableId}`));
+                }
                 return resolve(data);
             })
             .catch(e => {
@@ -51,10 +56,9 @@ module.exports = {
             })
     }),
     updateOrder: (orderinfo) => new Promise((resolve, reject) => {
-        const { id, item, comments, status } = orderinfo;
+        const { id, comments, status } = orderinfo;
 
         const payload = {};
-        if (item) payload.item = item;
         if (status) payload.status = status;
         if (comments) payload.comments = comments;
 
