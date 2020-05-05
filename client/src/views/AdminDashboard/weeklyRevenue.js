@@ -12,7 +12,7 @@ function createData(time, amount) {
 
 const data = [
     createData('Monday', 4000),
-    createData('Tuesda', 5000),
+    createData('Tuesday', 5000),
     createData('Wednesday', 3000),
     createData('Thursday', 6000),
     createData('Friday', 8000),
@@ -36,7 +36,7 @@ export default function Chart() {
                         left: 24,
                     }}
                 >
-                    <XAxis dataKey="time" stroke={theme.palette.text.secondary}/> 
+                    <XAxis dataKey="time" stroke={theme.palette.text.secondary}/>
                     <YAxis stroke={theme.palette.text.secondary}>
                         <Label
                             angle={270}
