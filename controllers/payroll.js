@@ -15,6 +15,7 @@ module.exports = (sequelize, DataTypes) => {
   return payroll;
 };
 */
+const userServices = require("../services/user/userServices");
 
 const payrollServices = require('../services/payroll/payrollServices');
 module.exports = {
@@ -28,9 +29,45 @@ module.exports = {
             .catch(e => res.status(400).json(e))
     },
 
+    clockIn(req, res) {
+        const userInfo = {
+            userId: req.user.id,
+            clockInTime: new Date(Date.now()),
+        };
+        payrollServices.create(userInfo).then(data => {
+            return res.status(200).json(data);
+        }).catch(error => {
+            console.warn(error);
+            return res.status(400).json({ error: error.message });
+        })
+    },
+    clockOut(req, res) {
+        payrollServices.get(req.body.id).then(payroll => {
+            const userInfo = {
+                id: req.body.id,
+                clockOutTime: new Date(Date.now()),
+            }
+            //get hours worked
+            const d1 = new Date(payroll[0].clockInTime);
+            const d2 = userInfo.clockOutTime;
+            userInfo.hoursWorked = Math.round((d2 - d1) / (1000 * 60 * 60));
+            userInfo.totalWage = userInfo.hoursWorked * 2.5;
+
+            payrollServices.update(userInfo).then(data => {
+                return res.status(200).json(data);
+            }).catch(error => {
+                console.warn(error);
+                return res.status(400).json({ error: error.message });
+            })
+        }).catch(error => {
+            console.warn(error);
+            return res.status(400).json({ error: error.message });
+        });
+
+    },
     list(req, res) {
         return payrollServices
-            .getPayroll()
+            .list(req.params.userId)
             .then(payroll => {
                 return res.status(200).json(payroll)
             })
@@ -38,7 +75,11 @@ module.exports = {
                 return res.status(400).json({ error: error.message });
             })
     },
-
+    listAll(req, res) {
+        payrollServices.listAll().then(list => {
+            return res.status(200).json(list);
+        })
+    },
     payroll(req, res) {
         const { id } = req.params;
 
@@ -53,10 +94,13 @@ module.exports = {
     },
 
     update(req, res) {
-        const payrollInfo = { userId, wage, totalWage, clockInTime, clockOutTime, hoursWorked, id } = req.body;
-
-        return payrollServices
-            .updatePayroll(payrollInfo)
+        const { userId, totalWage, clockInTime, clockOutTime } = req.body;
+        const payrollInfo = {
+            clockInTime: clockInTime || undefined,
+            clockOutTime: clockOutTime || undefined,
+        }
+        payrollServices
+            .update(payrollInfo)
             .then(() => {
                 return res.status(200).json({ table, msg: 'payroll has been updated' });
             })
@@ -69,7 +113,7 @@ module.exports = {
         const { id } = req.body;
 
         return payrollServices
-            .deletePayroll(id)
+            .delete(id)
             .then(() => {
                 return res.status(200).json({ msg: 'payroll has been deleted' })
             })

@@ -4,7 +4,6 @@ module.exports = (sequelize, DataTypes) => {
     userId: DataTypes.INTEGER,
     clockInTime: DataTypes.DATE,
     clockOutTime: DataTypes.DATE,
-    wage: DataTypes.DECIMAL,
     hoursWorked: DataTypes.DECIMAL,
     totalWage: DataTypes.DECIMAL,
   }, {});
