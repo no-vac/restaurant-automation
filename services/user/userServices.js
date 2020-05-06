@@ -37,23 +37,21 @@ module.exports = {
         if (password) {
             const hash = bcrypt.hashSync(password, 10);
         }
-        const payload = {};
-        if (username) payload.username = username;
-        if (password) payload.password = password;
-        if (email) payload.email = email;
-        if (role) payload.role = role;
-        if (phoneNumber) payload.phoneNumber = phoneNumber;
-        console.log("payload", payload);
 
+        const payload = {};
+        if (username) { payload.username = username; }
+        if (password) { payload.password = password; }
+        if (email) { payload.email = email; }
+        if (role) { payload.role = role; }
+        if (phoneNumber) { payload.phoneNumber = phoneNumber; }
+        console.log("payload", payload);
 
         db.select('*')
             .from('users')
-            .where('username', '=', username)
+            .where('id', '=', id)
             .update(payload)
             .then(result => resolve(result))
             .catch(e => reject({ msg: 'from services', e }))
-
-
     }),
     getUserPerRole: (role) => new Promise((resolve, reject) => {
         db.select('username', 'email', 'phoneNumber')

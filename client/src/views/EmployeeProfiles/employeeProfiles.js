@@ -18,12 +18,14 @@ const columns = [
     {id: 'username', label: 'Username', align: 'left'},
     {id: 'email', label: 'Email', align: 'left'},
     {id: 'role', label: 'Role', align: 'left'},
+    {id: 'phoneNumber', label: 'Phone Number', align: 'left'},
+
 ];
 
 const useStyles = makeStyles({
     root: {
         width: '100%',
-        margin: '4em 30em'
+        margin: '4em 4em'
     },
     container: {
         maxHeight: 1000,
@@ -34,6 +36,9 @@ const useStyles = makeStyles({
     align: {
         textAlign: 'center'
     },
+    btnUpdate: {
+        backgroundColor: 'green'
+    }
 });
 
 export default function StickyHeadTable() {
@@ -44,18 +49,19 @@ export default function StickyHeadTable() {
     const [rowsPerPage, setRowsPerPage] = React.useState(25);
     const [state, setState] = React.useState({
         rows: [],
-        edit: false
+        edit: null
     })
 
     useEffect(() => {
         setCount(0);
-        fetch(URI + '/api/u/', {
+        fetch(URI + '/api/u/all', {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': localStorage.getItem('jwtToken')
             }
         }).then(response => response.json()).then(result => {
+            console.log(result);
             setState({...state, rows: result});
         }).catch(e => console.log(e))
     }, [count])
@@ -70,10 +76,7 @@ export default function StickyHeadTable() {
     };
 
     const editable = (id) => {
-        // setState((prevState => {
-        //     rows: prevState.rows.map((x, key) => (key === id ? {...x, edit: !x. edit } : x))
-        // }))
-        setState({...state, edit: true});
+        setState({...state, edit: id});
     }
 
     const cancelEditable = () => {
@@ -96,6 +99,48 @@ export default function StickyHeadTable() {
                 window.location.reload();
             }
         }).catch(error => console.log(error))
+    }
+
+    const updateUser = ( id, username, email, role, phoneNumber) => {
+        const userinfo = { id, username, email, role, phoneNumber };
+        console.log(userinfo);
+        fetch(URI+'/api/u/', {
+            method: 'PUT',
+            body: JSON.stringify({
+                userinfo
+            }),
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': localStorage.getItem('jwtToken')
+            }
+        }).then(response => response.json()).then(result => {
+            if(result) {
+                window.location.reload();
+            }
+        }).catch(error => console.log(error))
+    }
+
+    const updateValue = (id, columnId, e) => {
+        let tempRow = null;
+        state.rows.map(row => {
+            if(row.id === id) {
+                tempRow = row;
+                tempRow[columnId] = e.target.value;
+            }
+        })
+
+        let newRows = [];
+        state.rows.map(row => {
+            if(row.id === id) {
+                newRows.push(tempRow);
+            } else {
+                newRows.push(row);
+            }
+        })
+
+        setState({
+            ...state, rows: newRows
+        })
     }
 
     return (
@@ -125,27 +170,32 @@ export default function StickyHeadTable() {
                                             const value = row[column.id];
                                             return (
                                                 <>
-                                                    {state.edit ?
+                                                    {state.edit === row.id ?
                                                         <TableCell key={row.id} align={column.align}>
                                                             <FormControl style={{width: '100%'}}>
-                                                                <TextField id={row.username} label={column.id} value={value} />
+                                                                <TextField id={row.username} label={column.id} value={value} onChange={ (e) => updateValue(row.id, column.id, e) } />
                                                             </FormControl>
                                                         </TableCell>
                                                         :
                                                         <TableCell key={row.id} align={column.align}>
-                                                            {value}
+                                                                    {value}
                                                         </TableCell>
                                                     }
                                                 </>
                                             );
                                         })}
                                         <TableCell className={classes.align}>
-                                            {state.edit ?
-                                                <Button variant="contained" color="primary" className={classes.btn} onClick={cancelEditable}>Cancel</Button>
+                                            {state.edit === row.id ?
+                                                <>
+                                                    <Button variant="contained" color="primary" className={classes.btnUpdate} onClick={() => updateUser(row.id, row.username, row.email, row.role, row.phoneNumber) }>Update</Button>
+                                                    <Button variant="contained" color="secondary" className={classes.btn} onClick={cancelEditable}>Cancel</Button>
+                                                </>
                                                 :
-                                                <Button variant="contained" color="primary" className={classes.btn} onClick={() => editable(row.id)}>Edit</Button>
+                                                <>
+                                                    <Button variant="contained" color="primary" className={classes.btn} onClick={() => editable(row.id)}>Edit</Button>
+                                                    <Button variant="contained" color="secondary" className={classes.btn} onClick={() => deleteUser(row.id, row.username)}>Delete</Button>
+                                                </>
                                             }
-                                            <Button variant="contained" color="secondary" className={classes.btn} onClick={() => deleteUser(row.id, row.username)}>Delete</Button>
                                         </TableCell>
                                     </TableRow>
                                 );
