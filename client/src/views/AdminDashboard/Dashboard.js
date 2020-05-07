@@ -9,7 +9,7 @@ import Paper from '@material-ui/core/Paper';
 import Chart from './Chart';
 import TopBar from "../../components/TopBar";
 import Copyright from "../../components/copyRight";
-import PayrollTable from './payrollTable';
+import PayrollTable from '../Payroll/payrollTable';
 import PopularItems from './popularItems';
 import WeeklyRevenue from './weeklyRevenue';
 import InventoryTable from '../Inventory/inventoryTable';
