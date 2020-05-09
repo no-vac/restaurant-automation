@@ -8,34 +8,26 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      timeIn: {
+      clockInTime: {
         type: Sequelize.DATE,
         allowNull: false
       },
-      timeOut: {
+      clockOutTime: {
         type: Sequelize.DATE,
+        allowNull: true
+      },
+      hoursWorked: {
+        type: Sequelize.DECIMAL,
+        allowNull: true
+      },
+      totalWage: {
+        type: Sequelize.DECIMAL,
         allowNull: true
       },
       userId: {
         type: Sequelize.INTEGER,
         allowNull: false
       },
-      hourlyRate: {
-        type: Sequelize.DECIMAL,
-        allowNull: false
-      },
-      payPeriodAmount: {
-        type: Sequelize.DECIMAL,
-        allowNull: true
-      },
-      createdAt: {
-        allowNull: false,
-        type: Sequelize.DATE
-      },
-      updatedAt: {
-        allowNull: false,
-        type: Sequelize.DATE
-      }
     });
   },
   down: (queryInterface, Sequelize) => {

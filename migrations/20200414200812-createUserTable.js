@@ -20,6 +20,10 @@ module.exports = {
         field: 'password',
         type: Sequelize.STRING
       },
+      wage: {
+        field: 'wage',
+        type: Seuqquelize.DECIMAL
+      },
       email: {
         field: 'email',
         type: Sequelize.STRING
