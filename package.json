@@ -10,7 +10,9 @@
     "install-client": "cd client & npm install",
     "client": "cd client & npm run serve",
     "build": "cd client & npm run build",
-    "heroku-postbuild": "cd client && npm install && npm run build"
+    "heroku-postbuild": "cd client && npm install && npm run build",
+    "cleardb": "node ./tests/cleardb",
+    "seed": "sequelize db:seed:all"
   },
   "repository": {
     "type": "git",

@@ -4,8 +4,8 @@ module.exports = (sequelize, DataTypes) => {
     userId: DataTypes.INTEGER,
     clockInTime: DataTypes.DATE,
     clockOutTime: DataTypes.DATE,
-    hoursWorked: DataTypes.DECIMAL,
-    totalWage: DataTypes.DECIMAL,
+    hoursWorked: DataTypes.REAL,
+    totalWage: DataTypes.REAL,
   }, {});
   payroll.associate = function (models) {
     // associate

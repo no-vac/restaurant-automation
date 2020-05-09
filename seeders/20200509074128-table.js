@@ -8,8 +8,9 @@ module.exports = {
         total: 50,
         waiterId: 4,
         orderId: 1,
-        status: "serving"
-      }, {
+        status: 'serving'
+      },
+      {
         id: 2,
         total: 120.50,
         waiterId: 5,

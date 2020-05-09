@@ -17,11 +17,11 @@ module.exports = {
         allowNull: true
       },
       hoursWorked: {
-        type: Sequelize.DECIMAL,
+        type: Sequelize.REAL,
         allowNull: true
       },
       totalWage: {
-        type: Sequelize.DECIMAL,
+        type: Sequelize.REAL,
         allowNull: true
       },
       userId: {

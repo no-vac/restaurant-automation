@@ -9,7 +9,7 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       total: {
-        type: Sequelize.DECIMAL
+        type: Sequelize.REAL
       },
       waiterId: {
         type: Sequelize.INTEGER

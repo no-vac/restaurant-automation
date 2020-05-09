@@ -19,7 +19,7 @@ module.exports = (sequelize, DataTypes) => {
     },
     wage: {
       field: 'wage',
-      type: DataTypes.DECIMAL
+      type: DataTypes.REAL
     },
     role: {
       field: 'role',

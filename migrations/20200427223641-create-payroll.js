@@ -18,10 +18,10 @@ module.exports = {
         type: Sequelize.DATE
       },
       hoursWorked: {
-        type: Sequelize.DECIMAL
+        type: Sequelize.REAL
       },
       totalWage: {
-        type: Sequelize.DECIMAL
+        type: Sequelize.REAL
       }
     });
   },
