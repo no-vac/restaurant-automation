@@ -9,13 +9,13 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       item: {
-        type: Sequelize.STRING
+        type: Sequelize.INTEGER
       },
       comments: {
         type: Sequelize.STRING
       },
       price: {
-        type: Sequelize.DECIMAL
+        type: Sequelize.REAL
       },
       status: {
         type: Sequelize.STRING

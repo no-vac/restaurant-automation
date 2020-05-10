@@ -6,6 +6,7 @@ module.exports = {
       id: {
         allowNull: false,
         autoIncrement: true,
+        primaryKey: true,
         type: Sequelize.INTEGER
       },
       username: {
@@ -19,6 +20,10 @@ module.exports = {
       password: {
         field: 'password',
         type: Sequelize.STRING
+      },
+      wage: {
+        field: 'wage',
+        type: Seuqquelize.REAL
       },
       email: {
         field: 'email',

@@ -9,7 +9,7 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       total: {
-        type: Sequelize.DECIMAL
+        type: Sequelize.REAL
       },
       waiterId: {
         type: Sequelize.INTEGER
@@ -19,14 +19,6 @@ module.exports = {
       },
       status: {
         type: Sequelize.STRING
-      },
-      createdAt: {
-        allowNull: false,
-        type: Sequelize.DATE
-      },
-      updatedAt: {
-        allowNull: false,
-        type: Sequelize.DATE
       }
     });
   },
