@@ -47,7 +47,14 @@ module.exports = {
             .catch(e => res.status(400).json(e))
     },
     updateUser(req, res) {
-        const userinfo = { id, username, email, role, phoneNumber } = req.body;
+        const { id, username, email, role, phoneNumber } = req.body;
+        const userinfo = {
+            id,
+            username,
+            email,
+            role,
+            phoneNumber
+        }
         console.log("controller info", userinfo);
         return userServices
             .updateUser(userinfo)

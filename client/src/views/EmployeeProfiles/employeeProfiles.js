@@ -106,16 +106,14 @@ export default function StickyHeadTable() {
         console.log(userinfo);
         fetch(REACT_APP_API_URL+'/api/u/', {
             method: 'PUT',
-            body: JSON.stringify({
-                userinfo
-            }),
+            body: JSON.stringify(userinfo),
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': localStorage.getItem('jwtToken')
             }
         }).then(response => response.json()).then(result => {
             if(result) {
-                //window.location.reload();
+                window.location.reload();
             }
         }).catch(error => console.log(error))
     }

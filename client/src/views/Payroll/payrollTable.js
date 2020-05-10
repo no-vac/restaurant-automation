@@ -15,7 +15,6 @@ import TextField from '@material-ui/core/TextField';
 //import AlertDialog from './addEmployee';
 
 const columns = [
-    {id: 'id', label: 'Payroll Id', align: 'left'},
     {id: 'userId', label: 'User Id', align: 'left'},
     {id: 'clockInTime', label: 'Clock In Time', align: 'left'},
     {id: 'clockOutTime', label: 'Clock Out Time', align: 'left'},
@@ -85,7 +84,7 @@ export default function StickyHeadTable() {
         setState({...state, edit: false})
     }
 
-    const deleteUser = (id, username) => {
+    const deleteRecord = (id, username) => {
         console.log(id + " " + username);
         fetch(URI+'/api/u/', {
             method: 'DELETE',
@@ -103,7 +102,7 @@ export default function StickyHeadTable() {
         }).catch(error => console.log(error))
     }
 
-    const updateUser = ( id, username, email, role, phoneNumber) => {
+    const updateRecord = ( id, username, email, role, phoneNumber) => {
         const userinfo = { id, username, email, role, phoneNumber };
         console.log(userinfo);
         fetch(URI+'/api/p/', {
@@ -145,6 +144,20 @@ export default function StickyHeadTable() {
         })
     }
 
+    const getUsername = (userId) => {
+        console.log("user id" + userId);
+        fetch(URI+'/api/u/', {
+            method: 'DELETE',
+            body: JSON.stringify({ userId }),
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': localStorage.getItem('jwtToken')
+            }
+        }).then(response => response.json()).then(result => {
+
+        }).catch(error => console.log(error))
+    }
+
     return (
         <>
             <TopBar/>
@@ -170,6 +183,7 @@ export default function StickyHeadTable() {
                                     <TableRow hover role="checkbox" tabIndex={-1} key={row.code}>
                                         {columns.map((column) => {
                                             const value = row[column.id];
+                                            //const username = ;
                                             return (
                                                 <>
                                                     {state.edit === row.id ?
@@ -180,7 +194,16 @@ export default function StickyHeadTable() {
                                                         </TableCell>
                                                         :
                                                         <TableCell key={row.id} align={column.align}>
-                                                            {value}
+                                                            {column.id === 'userId' ?
+                                                                <>
+                                                                    {value}
+                                                                </>
+                                                            :
+                                                                <>
+                                                                    {value}
+                                                                </>
+                                                            }
+
                                                         </TableCell>
                                                     }
                                                 </>
@@ -189,13 +212,13 @@ export default function StickyHeadTable() {
                                         <TableCell className={classes.align}>
                                             {state.edit === row.id ?
                                                 <>
-                                                    <Button variant="contained" color="primary" className={classes.btnUpdate} onClick={() => updateUser(row.id, row.username, row.email, row.role, row.phoneNumber) }>Update</Button>
+                                                    <Button variant="contained" color="primary" className={classes.btnUpdate}>Update</Button>
                                                     <Button variant="contained" color="secondary" className={classes.btn} onClick={cancelEditable}>Cancel</Button>
                                                 </>
                                                 :
                                                 <>
                                                     <Button variant="contained" color="primary" className={classes.btn} onClick={() => editable(row.id)}>Edit</Button>
-                                                    <Button variant="contained" color="secondary" className={classes.btn} onClick={() => deleteUser(row.id, row.username)}>Delete</Button>
+                                                    <Button variant="contained" color="secondary" className={classes.btn}>Delete</Button>
                                                 </>
                                             }
                                         </TableCell>
