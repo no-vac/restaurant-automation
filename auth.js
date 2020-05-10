@@ -4,7 +4,7 @@ const userServices = require('./services/user/userServices');
 const { SECURE_KEY_JWT } = process.env;
 
 exports.createJWT = (id, username, email, role) => {
-    const userToken = jwt.sign({ id, username, email, role }, SECURE_KEY_JWT, { expiresIn: '1hr' });
+    const userToken = jwt.sign({ id, username, email, role }, SECURE_KEY_JWT, { expiresIn: '24hr' });
     return userToken;
 };
 

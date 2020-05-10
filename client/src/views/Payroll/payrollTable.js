@@ -12,14 +12,15 @@ import Button from "@material-ui/core/Button";
 import TopBar from "../../components/TopBar";
 import FormControl from '@material-ui/core/FormControl';
 import TextField from '@material-ui/core/TextField';
-import AlertDialog from './addEmployee';
-const { REACT_APP_API_URL } = process.env;
+//import AlertDialog from './addEmployee';
 
 const columns = [
-    {id: 'username', label: 'Username', align: 'left'},
-    {id: 'email', label: 'Email', align: 'left'},
-    {id: 'role', label: 'Role', align: 'left'},
-    {id: 'phoneNumber', label: 'Phone Number', align: 'left'},
+    {id: 'id', label: 'Payroll Id', align: 'left'},
+    {id: 'userId', label: 'User Id', align: 'left'},
+    {id: 'clockInTime', label: 'Clock In Time', align: 'left'},
+    {id: 'clockOutTime', label: 'Clock Out Time', align: 'left'},
+    {id: 'hoursWorked', label: 'Total Hours Worked', align: 'left'},
+    {id: 'totalWage', label: 'Total Pay', align: 'left'},
 
 ];
 
@@ -43,6 +44,7 @@ const useStyles = makeStyles({
 });
 
 export default function StickyHeadTable() {
+    const URI = 'http://127.0.0.1:5000';
     const classes = useStyles();
     const [count, setCount] = React.useState(0);
     const [page, setPage] = React.useState(0);
@@ -54,7 +56,7 @@ export default function StickyHeadTable() {
 
     useEffect(() => {
         setCount(0);
-        fetch(REACT_APP_API_URL + '/api/u/all', {
+        fetch(URI + '/api/p/', {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -85,7 +87,7 @@ export default function StickyHeadTable() {
 
     const deleteUser = (id, username) => {
         console.log(id + " " + username);
-        fetch(REACT_APP_API_URL+'/api/u/', {
+        fetch(URI+'/api/u/', {
             method: 'DELETE',
             body: JSON.stringify({
                 id, username
@@ -104,7 +106,7 @@ export default function StickyHeadTable() {
     const updateUser = ( id, username, email, role, phoneNumber) => {
         const userinfo = { id, username, email, role, phoneNumber };
         console.log(userinfo);
-        fetch(REACT_APP_API_URL+'/api/u/', {
+        fetch(URI+'/api/p/', {
             method: 'PUT',
             body: JSON.stringify({
                 userinfo
@@ -115,7 +117,7 @@ export default function StickyHeadTable() {
             }
         }).then(response => response.json()).then(result => {
             if(result) {
-                //window.location.reload();
+                window.location.reload();
             }
         }).catch(error => console.log(error))
     }
@@ -178,7 +180,7 @@ export default function StickyHeadTable() {
                                                         </TableCell>
                                                         :
                                                         <TableCell key={row.id} align={column.align}>
-                                                                    {value}
+                                                            {value}
                                                         </TableCell>
                                                     }
                                                 </>
@@ -201,7 +203,7 @@ export default function StickyHeadTable() {
                                 );
                             })}
                             <TableRow>
-                                <AlertDialog />
+                                {/*<AlertDialog />*/}
                             </TableRow>
                         </TableBody>
                     </Table>

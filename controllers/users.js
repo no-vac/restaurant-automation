@@ -47,7 +47,7 @@ module.exports = {
             .catch(e => res.status(400).json(e))
     },
     updateUser(req, res) {
-        const userinfo = { id, username, password, email, role, phoneNumber } = req.body;
+        const userinfo = { id, username, email, role, phoneNumber } = req.body;
         console.log("controller info", userinfo);
         return userServices
             .updateUser(userinfo)
@@ -62,16 +62,6 @@ module.exports = {
                     e
                 })
             })
-    },
-    perRole(req, res) {
-        const { role } = req.params;
-
-        return userServices
-            .getUserPerRole(role)
-            .then(users => {
-                return res.status(200).json(users)
-            })
-            .catch(e => res.status(500).json(e))
     },
     login(req, res) {
         const userInfo = { username, password } = req.body;

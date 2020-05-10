@@ -20,10 +20,10 @@ module.exports = {
     getTableById: (tableId) => new Promise((resolve, reject) => {
         db.select('*')
             .from('tables')
-            .where('id', '=', tableId)
+            .where('tables.id', '=', tableId)
+            .innerJoin('orders', 'tables.id', 'orders.tableId')
             .then(data => {
-                console.log(data[0]);
-                return resolve(data[0]);
+                return resolve(data);
             })
             .catch(e => reject(e))
     }),

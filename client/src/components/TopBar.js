@@ -30,6 +30,10 @@ class TopBar extends React.Component {
             this.props.history.push('/tables')
         };
 
+        const payroll = () => {
+            this.props.history.push('/payroll');
+        }
+
         return (
             <AppBar position="absolute" style={{boxShadow: 'none'}}>
                 <Toolbar>
@@ -49,7 +53,7 @@ class TopBar extends React.Component {
                             <Button color="inherit" onClick={employeeProfiles}><PeopleIcon/> &nbsp; Employees</Button>
                         </Grid>
                         <Grid item style={{marginLeft: '1em'}}>
-                            <Button color="inherit"><MonetizationOnIcon/> &nbsp; Payroll</Button>
+                            <Button color="inherit" onClick={payroll}><MonetizationOnIcon/> &nbsp; Payroll</Button>
                         </Grid>
                         <Grid item style={{marginLeft: '1em'}}>
                             <Button color="inherit" onClick={menuPage}><FastfoodIcon/> &nbsp; Menu</Button>
