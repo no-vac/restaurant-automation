@@ -8,6 +8,9 @@ import Dashboard from "../views/AdminDashboard/Dashboard";
 import EmployeeProfiles from '../views/EmployeeProfiles/employeeProfiles';
 import Tables from '../views/TableView/tables';
 import Menu from '../views/MenuPage/menu';
+import Payroll from '../views/Payroll/payrollTable';
+import Queue from '../views/OrderQueue/queue';
+
 
 const mockStore = configureMockStore();
 const store = mockStore({});
@@ -22,7 +25,7 @@ class Main extends Component{
                     'Content-Type': 'application/json',
                     'Authorization': token,
                 }
-            }).then(response => response.json() )
+            }).then(response => response.json())
                 .then(result => {
                     if(result.success === false){
                         localStorage.removeItem('jwtToken');
@@ -46,6 +49,9 @@ class Main extends Component{
                             <Route exact path="/menu" component={Menu} />
                             <Route exact path="/employeeProfiles" component={EmployeeProfiles}/>
                             <Route exact path="/tables" component={Tables} />
+                            <Route exact path="/payroll" component={Payroll} />
+                            <Route exact path="/queue" component={Queue} />
+                            <Route exact path={`/tables/:tableId`} component={Menu} />
                         </Switch>
                     </Router>
                 </Provider>

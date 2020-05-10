@@ -23,7 +23,6 @@ module.exports = {
             .where('tables.id', '=', tableId)
             .innerJoin('orders', 'tables.id', 'orders.tableId')
             .then(data => {
-                console.log(data);
                 return resolve(data);
             })
             .catch(e => reject(e))

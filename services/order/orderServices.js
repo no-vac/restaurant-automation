@@ -55,21 +55,20 @@ module.exports = {
                 return reject({ msg: 'something went wrong' });
             })
     }),
-    updateOrder: (orderinfo) => new Promise((resolve, reject) => {
-        const { id, comments, status } = orderinfo;
+    updateOrder: (orderInfo) => new Promise((resolve, reject) => {
+        const { id, item, comments, price, status, tableId } = orderInfo;
 
-        const payload = {};
-        if (status) payload.status = status;
-        if (comments) payload.comments = comments;
+        console.log('updated order in services: ', orderInfo);
 
         db.select('*')
             .from('orders')
             .where('id', '=', id)
-            .update(payload)
+            .update(orderInfo)
             .then((data) => {
                 return resolve(data);
             })
             .catch(e => {
+                console.log(e)
                 reject(e);
             })
     })

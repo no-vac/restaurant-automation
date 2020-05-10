@@ -2,8 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { Router } from 'react-router-dom';
 import Main from './Main/index';
-import { createBrowserHistory } from 'history';
-const history = createBrowserHistory();
+import history from "./history";
 
 ReactDOM.render(
     <Router history={history}>

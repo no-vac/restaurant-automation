@@ -33,14 +33,10 @@ module.exports = {
     }),
     updateUser: (userinfo) => new Promise((resolve, reject) => {
         console.log("service info", userinfo);
-        const { id, username, password, email, role, phoneNumber } = userinfo;
-        if (password) {
-            const hash = bcrypt.hashSync(password, 10);
-        }
+        const { id, username, email, role, phoneNumber } = userinfo;
 
         const payload = {};
         if (username) { payload.username = username; }
-        if (password) { payload.password = password; }
         if (email) { payload.email = email; }
         if (role) { payload.role = role; }
         if (phoneNumber) { payload.phoneNumber = phoneNumber; }

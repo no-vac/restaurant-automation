@@ -59,10 +59,19 @@ module.exports = {
             })
     },
     update(req, res) {
-        const orderinfo = { id, comments, status } = req.body;
-
+        const { id, item, comments, price, status, tableId } = req.body;
+        console.log("status: " + status);
+        const orderInfo = {
+            id,
+            item,
+            comments,
+            price,
+            status,
+            tableId
+        }
+        console.log('updated order', orderInfo);
         return orderServices
-            .updateOrder(orderinfo)
+            .updateOrder(orderInfo)
             .then(() => {
                 return res.status(200).json({ msg: 'order updated' })
             })

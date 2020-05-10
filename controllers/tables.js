@@ -21,11 +21,18 @@ module.exports = {
     },
     table(req, res) {
         const { id } = req.params;
-
         return tableServices
             .getTableById(id)
             .then(table => {
-                return res.status(200).json(table)
+                let total = 0;
+                table.map((order) => {
+                    total += +(order.price) ;
+                    total = Math.round(total * 100)/100;
+                })
+                return res.status(200).json({
+                    tableOrders: table,
+                    tableTotal: total,
+                })
             })
             .catch(e => {
                 return res.status(400).json(e)

@@ -13,6 +13,7 @@ import TopBar from "../../components/TopBar";
 import FormControl from '@material-ui/core/FormControl';
 import TextField from '@material-ui/core/TextField';
 import AlertDialog from './addEmployee';
+const { REACT_APP_API_URL } = process.env;
 
 const columns = [
     {id: 'username', label: 'Username', align: 'left'},
@@ -42,7 +43,6 @@ const useStyles = makeStyles({
 });
 
 export default function StickyHeadTable() {
-    const URI = 'http://127.0.0.1:5000';
     const classes = useStyles();
     const [count, setCount] = React.useState(0);
     const [page, setPage] = React.useState(0);
@@ -54,7 +54,7 @@ export default function StickyHeadTable() {
 
     useEffect(() => {
         setCount(0);
-        fetch(URI + '/api/u/all', {
+        fetch(REACT_APP_API_URL + '/api/u/all', {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -85,7 +85,7 @@ export default function StickyHeadTable() {
 
     const deleteUser = (id, username) => {
         console.log(id + " " + username);
-        fetch(URI+'/api/u/', {
+        fetch(REACT_APP_API_URL+'/api/u/', {
             method: 'DELETE',
             body: JSON.stringify({
                 id, username
@@ -104,7 +104,7 @@ export default function StickyHeadTable() {
     const updateUser = ( id, username, email, role, phoneNumber) => {
         const userinfo = { id, username, email, role, phoneNumber };
         console.log(userinfo);
-        fetch(URI+'/api/u/', {
+        fetch(REACT_APP_API_URL+'/api/u/', {
             method: 'PUT',
             body: JSON.stringify({
                 userinfo
@@ -115,7 +115,7 @@ export default function StickyHeadTable() {
             }
         }).then(response => response.json()).then(result => {
             if(result) {
-                window.location.reload();
+                //window.location.reload();
             }
         }).catch(error => console.log(error))
     }
