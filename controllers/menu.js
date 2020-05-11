@@ -13,7 +13,7 @@ module.exports = {
             })
             .catch(e => {
                 return res.status(400).json({
-                    msg: 'hmm i think you fucked up',
+                    msg: 'error',
                     error: e
                 })
             })
@@ -28,7 +28,7 @@ module.exports = {
             })
             .catch(e => {
                 return res.status(400).json({
-                    msg: 'hmm i dont think this shit is right',
+                    msg: 'error',
                     error: e
                 })
             })

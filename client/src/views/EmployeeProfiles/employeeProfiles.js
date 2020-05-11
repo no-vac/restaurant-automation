@@ -20,6 +20,8 @@ const columns = [
     {id: 'email', label: 'Email', align: 'left'},
     {id: 'role', label: 'Role', align: 'left'},
     {id: 'phoneNumber', label: 'Phone Number', align: 'left'},
+    {id: 'wage', label: 'Wage', align: 'left'},
+
 
 ];
 
@@ -46,7 +48,7 @@ export default function StickyHeadTable() {
     const classes = useStyles();
     const [count, setCount] = React.useState(0);
     const [page, setPage] = React.useState(0);
-    const [rowsPerPage, setRowsPerPage] = React.useState(25);
+    const [rowsPerPage, setRowsPerPage] = React.useState(10);
     const [state, setState] = React.useState({
         rows: [],
         edit: null
@@ -101,8 +103,8 @@ export default function StickyHeadTable() {
         }).catch(error => console.log(error))
     }
 
-    const updateUser = ( id, username, email, role, phoneNumber) => {
-        const userinfo = { id, username, email, role, phoneNumber };
+    const updateUser = ( id, username, email, role, phoneNumber, wage) => {
+        const userinfo = { id, username, email, role, phoneNumber, wage };
         console.log(userinfo);
         fetch(REACT_APP_API_URL+'/api/u/', {
             method: 'PUT',
@@ -176,7 +178,16 @@ export default function StickyHeadTable() {
                                                         </TableCell>
                                                         :
                                                         <TableCell key={row.id} align={column.align}>
+                                                            {column.id === 'wage' ?
+                                                                <>
+                                                                    {'$' + value}
+                                                                </>
+                                                                :
+                                                                <>
                                                                     {value}
+                                                                </>
+                                                            }
+
                                                         </TableCell>
                                                     }
                                                 </>
@@ -185,7 +196,7 @@ export default function StickyHeadTable() {
                                         <TableCell className={classes.align}>
                                             {state.edit === row.id ?
                                                 <>
-                                                    <Button variant="contained" color="primary" className={classes.btnUpdate} onClick={() => updateUser(row.id, row.username, row.email, row.role, row.phoneNumber) }>Update</Button>
+                                                    <Button variant="contained" color="primary" className={classes.btnUpdate} onClick={() => updateUser(row.id, row.username, row.email, row.role, row.phoneNumber, row.wage) }>Update</Button>
                                                     <Button variant="contained" color="secondary" className={classes.btn} onClick={cancelEditable}>Cancel</Button>
                                                 </>
                                                 :

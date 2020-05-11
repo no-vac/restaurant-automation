@@ -3,7 +3,6 @@ import {makeStyles} from "@material-ui/core/styles";
 import Stepper from "@material-ui/core/Stepper";
 import Step from "@material-ui/core/Step";
 import StepLabel from "@material-ui/core/StepLabel";
-import StepContent from "@material-ui/core/StepContent";
 import Button from "@material-ui/core/Button";
 import Paper from "@material-ui/core/Paper";
 import Typography from "@material-ui/core/Typography";
@@ -14,7 +13,6 @@ import Soups from "./soups";
 import Desserts from "./desserts";
 import Cart from "./cart";
 import Grid from "@material-ui/core/Grid";
-import TableContainer from "@material-ui/core/TableContainer";
 import Table from "@material-ui/core/Table";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
@@ -22,9 +20,10 @@ import TableCell from "@material-ui/core/TableCell";
 import TableBody from "@material-ui/core/TableBody";
 import FormControl from "@material-ui/core/FormControl";
 import TextField from "@material-ui/core/TextField";
-import AlertDialog from "../EmployeeProfiles/addEmployee";
 import TablePagination from "@material-ui/core/TablePagination";
-const { REACT_APP_API_URL } = process.env;
+import LastPage from './LastPage';
+
+const {REACT_APP_API_URL} = process.env;
 
 const useStyles = makeStyles(theme => ({
     appBar: {
@@ -32,6 +31,8 @@ const useStyles = makeStyles(theme => ({
     },
     layout: {
         width: "auto",
+        marginTop: '1.5em',
+        marginBottom: '1.5em',
         marginLeft: theme.spacing(2),
         marginRight: theme.spacing(2),
         [theme.breakpoints.up(600 + theme.spacing(2) * 2)]: {
@@ -73,30 +74,9 @@ const steps = [
     "Beverages",
     "Appetizers",
     "Soups & Salads",
-    "Entrées",
+    "Entrees",
     "Desserts",
-    "Complete Order"
 ];
-
-
-function getStepContent(step) {
-    switch (step) {
-        case 0:
-            return <Drinks/>;
-        case 1:
-            return <Appetizers/>;
-        case 2:
-            return <Soups/>;
-        case 3:
-            return <Entrees/>;
-        case 4:
-            return <Desserts/>;
-        case 5:
-            return <Cart/>;
-        default:
-            return "Unknown step";
-    }
-}
 
 export default function Checkout(props) {
     const classes = useStyles();
@@ -108,7 +88,7 @@ export default function Checkout(props) {
         tableOrder: [],
         tableTotal: 0,
         edit: null,
-        tableId: null
+        tableId: props.match.params.tableId,
     });
 
     const columns = [
@@ -120,6 +100,25 @@ export default function Checkout(props) {
     ];
 
 
+    const getStepContent = (step) => {
+        switch (step) {
+            case 0:
+                return <Drinks tableId={state.tableId}/>;
+            case 1:
+                return <Appetizers tableId={state.tableId}/>;
+            case 2:
+                return <Soups tableId={state.tableId}/>;
+            case 3:
+                return <Entrees tableId={state.tableId}/>;
+            case 4:
+                return <Desserts tableId={state.tableId}/>;
+            case 5:
+                return <Cart tableId={state.tableId}/>;
+            default:
+                return "Unknown step";
+        }
+    }
+
     useEffect(() => {
         setCount(0);
         const tableId = props.match.params.tableId;
@@ -129,9 +128,23 @@ export default function Checkout(props) {
                 'Content-Type': 'application/json',
                 'Authorization': localStorage.getItem('jwtToken')
             }
-        }).then(response => response.json()).then(result => {
-            console.log('react: ', result);
-            setState({...state, tableOrder: result.tableOrders, tableTotal: result.tableTotal, tableId});
+        }).then(response => response.json()).then(table => {
+            console.log(table);
+            fetch(REACT_APP_API_URL + '/api/m/', {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': localStorage.getItem('jwtToken')
+                }
+            }).then(response => response.json()).then(allItems => {
+                //console.log(allItems.items);
+                table.tableOrders.map((tableOrder) => {
+                    const order = allItems.items.filter(order => order.id === tableOrder.item);
+                    tableOrder.item = order[0].item;
+                    tableOrder.price = order[0].price;
+                })
+                setState({...state, tableOrder: table.tableOrders, tableTotal: table.tableTotal, tableId});
+            }).catch(e => console.log(e));
         }).catch(e => console.log(e))
     }, [count])
 
@@ -142,6 +155,10 @@ export default function Checkout(props) {
     const handleBack = () => {
         setActiveStep(activeStep - 1);
     };
+
+    const checkout = () => {
+        setActiveStep(5);
+    }
 
     const handleChangePage = (event, newPage) => {
         setPage(newPage);
@@ -163,7 +180,7 @@ export default function Checkout(props) {
     const updateValue = (id, columnId, e) => {
         let tempRow = null;
         state.tableOrder.map(order => {
-            if(order.id === id) {
+            if (order.id === id) {
                 tempRow = order;
                 tempRow[columnId] = e.target.value;
             }
@@ -171,7 +188,7 @@ export default function Checkout(props) {
 
         let newRows = [];
         state.tableOrder.map(order => {
-            if(order.id === id) {
+            if (order.id === id) {
                 newRows.push(tempRow);
             } else {
                 newRows.push(order);
@@ -183,11 +200,11 @@ export default function Checkout(props) {
         })
     };
 
-    const updateOrder = (id, item, comments, price, status) => {
+    const updateOrder = (id, comments, price, status) => {
         const tableId = props.match.params.tableId;
-        const orderInfo = { id, item, comments, price, status, tableId };
+        const orderInfo = {id, comments, price, status, tableId};
         console.log(orderInfo);
-        fetch(REACT_APP_API_URL+'/api/o/', {
+        fetch(REACT_APP_API_URL + '/api/o/', {
             method: 'PUT',
             body: JSON.stringify(orderInfo),
             headers: {
@@ -195,7 +212,7 @@ export default function Checkout(props) {
                 'Authorization': localStorage.getItem('jwtToken')
             }
         }).then(response => response.json()).then(result => {
-            if(result) {
+            if (result) {
                 window.location.reload();
             }
         }).catch(error => console.log(error))
@@ -203,7 +220,7 @@ export default function Checkout(props) {
 
     const deleteOrder = (id) => {
         console.log(id);
-        fetch(REACT_APP_API_URL+'/api/o/', {
+        fetch(REACT_APP_API_URL + '/api/o/', {
             method: 'DELETE',
             body: JSON.stringify({id}),
             headers: {
@@ -211,7 +228,7 @@ export default function Checkout(props) {
                 'Authorization': localStorage.getItem('jwtToken')
             }
         }).then(response => response.json()).then(result => {
-            if(result) {
+            if (result) {
                 window.location.reload();
             }
         }).catch(error => console.log(error))
@@ -247,14 +264,16 @@ export default function Checkout(props) {
                             >
                                 Back
                             </Button>
-                            <Button
-                                variant="contained"
-                                color="primary"
-                                onClick={handleNext}
-                                className={classes.button}
-                            >
-                                {activeStep === steps.length - 1 ? "Pay Bill" : "Next"}
-                            </Button>
+                            {activeStep === steps.length - 1 ? '' :
+                                <Button
+                                    variant="contained"
+                                    color="primary"
+                                    onClick={handleNext}
+                                    className={classes.button}
+                                >
+                                    Next
+                                </Button>
+                            }
                         </div>
                     </div>
                 </div>
@@ -268,25 +287,26 @@ export default function Checkout(props) {
                         :
                         ''
                     }
-                        <Grid item style={{width: '100%'}}>
-                            <Paper className={classes.root} style={{ margin: '2em 0' }}>
-                                <Table stickyHeader aria-label="sticky table">
-                                    <TableHead>
-                                        <TableRow>
-                                            {columns.map((column) => (
-                                                <TableCell
-                                                    key={column.id}
-                                                    align={column.align}
-                                                >
-                                                    <strong>{column.label}</strong>
-                                                </TableCell>
-                                            ))}
-                                            <TableCell></TableCell>
-                                        </TableRow>
-                                    </TableHead>
-                                    <TableBody>
-                                        {state.tableOrder.length > 0 ? state.tableOrder.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((order) => {
-                                            return(
+                    <Grid item style={{width: '100%'}}>
+                        <Paper className={classes.root} style={{margin: '2em 0'}}>
+                            <Table stickyHeader aria-label="sticky table">
+                                <TableHead>
+                                    <TableRow>
+                                        {columns.map((column) => (
+                                            <TableCell
+                                                key={column.id}
+                                                align={column.align}
+                                            >
+                                                <strong>{column.label}</strong>
+                                            </TableCell>
+                                        ))}
+                                        <TableCell></TableCell>
+                                        <TableCell></TableCell>
+                                    </TableRow>
+                                </TableHead>
+                                <TableBody>
+                                    {state.tableOrder.length > 0 ? state.tableOrder.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((order) => {
+                                            return (
                                                 <TableRow hover role="checkbox" tabIndex={-1} key={order.id}>
                                                     {columns.map((column) => {
                                                         const value = order[column.id];
@@ -295,14 +315,22 @@ export default function Checkout(props) {
                                                                 {state.edit === order.id ?
                                                                     <TableCell key={order.id} align={column.align}>
                                                                         <FormControl style={{width: '100%'}}>
-                                                                            <TextField id={order.username} label={column.id} value={value} onChange={ (e) => updateValue(order.id, column.id, e) } />
+                                                                            {column.id === 'price' || column.id === 'item' ?
+                                                                                <TextField disabled id={order.username}
+                                                                                           label={column.id} value={value}
+                                                                                           onChange={(e) => updateValue(order.id, column.id, e)}/>
+                                                                                :
+                                                                                <TextField id={order.username}
+                                                                                           label={column.id} value={value}
+                                                                                           onChange={(e) => updateValue(order.id, column.id, e)}/>
+                                                                            }
                                                                         </FormControl>
                                                                     </TableCell>
                                                                     :
                                                                     <TableCell key={order.id} align={column.align}>
                                                                         {column.id === 'price' ?
                                                                             <>
-                                                                                {`$`+value}
+                                                                                {`$` + value}
                                                                             </>
                                                                             :
                                                                             <>
@@ -314,16 +342,25 @@ export default function Checkout(props) {
                                                             </>
                                                         )
                                                     })}
+                                                    <TableCell></TableCell>
                                                     <TableCell className={classes.align} align="center">
                                                         {state.edit === order.id ?
                                                             <>
-                                                                <Button variant="contained" color="primary" className={classes.btnUpdate} onClick={() => updateOrder(order.id, order.item, order.comments, order.price, order.status) }>Update</Button>
-                                                                <Button variant="contained" color="secondary" className={classes.btn} onClick={cancelEditable}>Cancel</Button>
+                                                                <Button variant="contained" color="primary"
+                                                                        className={classes.btnUpdate}
+                                                                        onClick={() => updateOrder(order.id, order.comments, order.price, order.status)}>Update</Button>
+                                                                <Button variant="contained" color="secondary"
+                                                                        className={classes.btn}
+                                                                        onClick={cancelEditable}>Cancel</Button>
                                                             </>
                                                             :
                                                             <>
-                                                                <Button variant="contained" color="primary" className={classes.btn} onClick={() => editable(order.id)}>Edit</Button>
-                                                                <Button variant="contained" color="secondary" className={classes.btn} onClick={() => deleteOrder(order.id)}>Delete</Button>
+                                                                <Button variant="contained" color="primary"
+                                                                        className={classes.btn}
+                                                                        onClick={() => editable(order.id)}>Edit</Button>
+                                                                <Button variant="contained" color="secondary"
+                                                                        className={classes.btn}
+                                                                        onClick={() => deleteOrder(order.id)}>Delete</Button>
                                                             </>
                                                         }
                                                     </TableCell>
@@ -332,34 +369,45 @@ export default function Checkout(props) {
                                         })
                                         :
 
-                                            <TableRow style={{ textAlign: 'center' }}>
-                                                <Typography style={{ margin: '.5em' }}><strong>There are no orders for table #{state.tableId}</strong></Typography>
-                                            </TableRow>
-                                        }
-
-                                        <TableRow style={{width: '100%'}}>
-                                            <TableCell></TableCell>
-                                            <TableCell></TableCell>
-                                            <TableCell></TableCell>
-                                            <TableCell></TableCell>
-                                            <TableCell align="left">
-                                                <Typography style={{ margin: '0 .25em' }}><strong>Total:</strong> ${state.tableTotal}</Typography>
-                                            </TableCell>
-
+                                        <TableRow style={{textAlign: 'center'}}>
+                                            <Typography style={{margin: '.5em'}}><strong>There are no orders for table
+                                                #{state.tableId}</strong></Typography>
                                         </TableRow>
-                                    </TableBody>
-                                </Table>
-                                <TablePagination
-                                    rowsPerPageOptions={[5, 10, 15]}
-                                    component="div"
-                                    count={state.tableOrder.length}
-                                    rowsPerPage={rowsPerPage}
-                                    page={page}
-                                    onChangePage={handleChangePage}
-                                    onChangeRowsPerPage={handleChangeRowsPerPage}
-                                />
-                            </Paper>
-                        </Grid>
+                                    }
+
+                                    <TableRow style={{width: '100%'}}>
+                                        <TableCell></TableCell>
+                                        <TableCell></TableCell>
+                                        <TableCell></TableCell>
+                                        <TableCell></TableCell>
+                                        <TableCell></TableCell>
+                                        <TableCell>
+                                            <Grid container alignItems='center' spacing={3}>
+                                                <Grid item md={6} style={{textAlign: 'right'}}>
+                                                    <LastPage />
+                                                </Grid>
+                                                <Grid item md={6}>
+                                                    <Typography
+                                                        style={{margin: '0 .25em'}}><strong>Total:</strong> ${state.tableTotal}
+                                                    </Typography>
+                                                </Grid>
+                                            </Grid>
+
+                                        </TableCell>
+                                    </TableRow>
+                                </TableBody>
+                            </Table>
+                            <TablePagination
+                                rowsPerPageOptions={[5, 10, 15]}
+                                component="div"
+                                count={state.tableOrder.length}
+                                rowsPerPage={rowsPerPage}
+                                page={page}
+                                onChangePage={handleChangePage}
+                                onChangeRowsPerPage={handleChangeRowsPerPage}
+                            />
+                        </Paper>
+                    </Grid>
                 </Grid>
             </main>
         </Fragment>

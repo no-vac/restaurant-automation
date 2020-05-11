@@ -1,26 +1,32 @@
 const orderServices = require('../services/order/orderServices');
+const menuServices = require('../services/menu/menuServices');
 
 module.exports = {
     create(req, res) {
         const { item, comments, tableId } = req.body;
 
-        //search item in menu table and get item info
-        const price = 2.5;
-        const orderinfo = {
-            item,
-            comments,
-            price,
-            status: "Cool",
-            tableId
-        }
-        return orderServices
-            .createOrder(orderinfo)
-            .then(order => {
-                return res.status(200).json(order)
-            })
-            .catch(error => {
-                return res.status(400).json({ error: error.message });
-            })
+        menuServices
+            .getItems()
+            .then(items => {
+                const menuItem = items.filter(items => items.id === item);
+                const orderinfo = {
+                    item,
+                    comments,
+                    price: menuItem[0].price,
+                    status: "Pending",
+                    tableId
+                }
+
+                //search item in menu table and get item info
+                return orderServices
+                    .createOrder(orderinfo)
+                    .then(order => {
+                        return res.status(200).json(order)
+                    })
+                    .catch(error => {
+                        return res.status(400).json({ error: error.message });
+                    })
+            }).catch(e => console.log(e));
     },
     list(req, res) {
         return orderServices
@@ -59,11 +65,10 @@ module.exports = {
             })
     },
     update(req, res) {
-        const { id, item, comments, price, status, tableId } = req.body;
+        const { id, comments, price, status, tableId } = req.body;
         console.log("status: " + status);
         const orderInfo = {
             id,
-            item,
             comments,
             price,
             status,

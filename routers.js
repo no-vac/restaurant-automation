@@ -51,6 +51,7 @@ module.exports = router => {
         .get(protected, authorize("admin"), payrollController.listAll)
         .post(protected, payrollController.clockIn)
         .put(protected, payrollController.clockOut)
+        .delete(protected, authorize('admin'), payrollController.destroy)
     router.get("/api/p/:userId", protected, authorize("admin"), payrollController.list);
 
     router.get("*", (req, res) => {

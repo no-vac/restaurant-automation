@@ -1,4 +1,5 @@
 const tableServices = require('../services/table/tableServices');
+const menuServices = require('../services/menu/menuServices');
 
 module.exports = {
     create(req, res) {
@@ -24,15 +25,21 @@ module.exports = {
         return tableServices
             .getTableById(id)
             .then(table => {
-                let total = 0;
-                table.map((order) => {
-                    total += +(order.price) ;
-                    total = Math.round(total * 100)/100;
-                })
-                return res.status(200).json({
-                    tableOrders: table,
-                    tableTotal: total,
-                })
+                menuServices
+                    .getItems()
+                    .then(menu => {
+                        let total = 0;
+                        table.map((order) => {
+                            const items = menu.filter(item => item.id === order.item);
+                            total += +(items[0].price) ;
+                            total = Math.round(total * 100)/100;
+                        });
+                        return res.status(200).json({
+                            tableOrders: table,
+                            tableTotal: total,
+                        })
+
+                    }).catch(e => console.log(e))
             })
             .catch(e => {
                 return res.status(400).json(e)

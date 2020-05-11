@@ -12,7 +12,11 @@ module.exports = (sequelize, DataTypes) => {
     price: {
       type: DataTypes.INTEGER,
       allowNull: false
-    }
+    },
+    category: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
   }, {});
   menu.associate = function(models) {
     // associations can be defined here

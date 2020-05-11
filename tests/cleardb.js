@@ -2,7 +2,7 @@ require("../config/config");
 const db = require("../config/db");
 try {
     (async () => {
-        return await db.raw("truncate table users, payrolls, menus, orders, tables").then(res => {
+        return await db.raw("truncate table users, payrolls, menus, orders, tables cascade").then(res => {
             console.log(res);
         })
     })()

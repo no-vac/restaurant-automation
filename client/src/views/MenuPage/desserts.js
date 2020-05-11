@@ -1,110 +1,102 @@
-import React from "react";
-import { makeStyles } from "@material-ui/core/styles";
+import React, {useEffect} from "react";
+import {makeStyles} from "@material-ui/core/styles";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
 import TableContainer from "@material-ui/core/TableContainer";
-import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import Paper from "@material-ui/core/Paper";
-import { Button } from "@material-ui/core";
+import {Button} from "@material-ui/core";
 import carrot from "../../images/carrot.jpg";
 import red from "../../images/red.png";
 import chocolate from "../../images/chocolate.jpg";
 import iceCream from "../../images/iceCream.jpg";
 import apple from "../../images/apple.png";
-import InputLabel from "@material-ui/core/InputLabel";
-import MenuItem from "@material-ui/core/MenuItem";
-import FormControl from "@material-ui/core/FormControl";
-import Select from "@material-ui/core/Select";
+
+const {REACT_APP_API_URL} = process.env;
 
 const useStyles = makeStyles({
-  table: {
-    minWidth: 500
-  }
+    table: {
+        minWidth: 500
+    }
 });
 
-const quantity = (
-  <FormControl variant="outlined">
-    <InputLabel>Qty</InputLabel>
-    <Select style={{ height: 35 }} defaultValue={1} id="qty" label="Qty">
-      <MenuItem value={1}>1</MenuItem>
-      <MenuItem value={2}>2</MenuItem>
-      <MenuItem value={3}>3</MenuItem>
-      <MenuItem value={4}>4</MenuItem>
-      <MenuItem value={5}>5</MenuItem>
-    </Select>
-  </FormControl>
-);
+export default function SimpleTable(props) {
+    const classes = useStyles();
+    const [count, setCount] = React.useState(0);
+    const [state, setState] = React.useState({
+        rows: []
+    });
 
-const add = (
-  <Button variant="outlined" color="primary">
-    Add
-  </Button>
-);
+    const itemPhoto = (item) => {
+        switch (item) {
+            case 'Chocolate Cake':
+                return <img src={chocolate} alt="chocolate" width="80px" height="60px"/>;
+            case 'Red Velvet Cake':
+                return <img src={red} alt="red" width="70px" height="60px"/>;
+            case 'Carrot Cake':
+                return <img src={carrot} alt="carrot" width="80px" height="60px"/>;
+            case 'Apple Pie':
+                return <img src={apple} alt="apple" width="70px" height="50px"/>;
+            case 'Ice Cream':
+                return <img src={iceCream} alt="iceCream" width="60px" height="70px"/>;
+            default:
+                return "No photo provided";
+        }
+    }
 
-function createData(image, item, price, quantity, add) {
-  return { image, item, price, quantity, add };
-}
+    useEffect(() => {
+        setCount(0);
+        fetch(REACT_APP_API_URL + '/api/m/', {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': localStorage.getItem('jwtToken')
+            }
+        }).then(response => response.json()).then(menuItems => {
+            menuItems.items.map((item) => {
+                const items = menuItems.items.filter(items => items.category === 'desserts');
+                console.log(items)
+                setState({rows: items});
+            })
+            //console.log('menu', menuItems.items);
+        }).catch(e => console.log(e))
+    }, [count])
 
-const rows = [
-  createData(
-    <img src={chocolate} alt="chocolate" width="80px" height="60px" />,
-    "Chocolate Cake",
-    "$4.99",
-    quantity,
-    add
-  ),
-  createData(
-    <img src={red} alt="red" width="70px" height="60px" />,
-    "Red Velvet Cake",
-    "$4.99",
-    quantity,
-    add
-  ),
-  createData(
-    <img src={carrot} alt="carrot" width="80px" height="60px" />,
-    "Carrot Cake",
-    "$4.50",
-    quantity,
-    add
-  ),
-  createData(
-    <img src={apple} alt="apple" width="70px" height="50px" />,
-    "Apple Pie",
-    "$5.50",
-    quantity,
-    add
-  ),
-  createData(
-    <img src={iceCream} alt="iceCream" width="60px" height="70px" />,
-    "Ice Cream",
-    "$4.69",
-    quantity,
-    add
-  )
-];
+    const addOrder = (item) => {
+        const orderInfo = {item, tableId: props.tableId};
+        fetch(REACT_APP_API_URL + '/api/o/', {
+            method: 'POST',
+            body: JSON.stringify(orderInfo),
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': localStorage.getItem('jwtToken')
+            }
+        }).then(response => response.json()).then(newOrder => {
+            if(newOrder) {
+                window.location.reload();
+            }
+        }).catch(e => console.log(e))
+    }
 
-export default function SimpleTable() {
-  const classes = useStyles();
-
-  return (
-    <TableContainer component={Paper}>
-      <Table className={classes.table} aria-label="simple table">
-        <TableBody>
-          {rows.map(row => (
-            <TableRow key={row.image}>
-              <TableCell align="center">{row.image}</TableCell>
-              <TableCell align="center">{row.item}</TableCell>
-              <TableCell align="center">{row.price}</TableCell>
-              <TableCell align="center">{row.quantity}</TableCell>
-              <TableCell align="center" style={{ paddingRight: 20 }}>
-                {row.add}
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </TableContainer>
-  );
+    return (
+        <TableContainer component={Paper}>
+            <Table className={classes.table} aria-label="simple table">
+                <TableBody>
+                    {state.rows.map(row => (
+                        <TableRow key={row.image}>
+                            <TableCell align="center">
+                                {itemPhoto(row.item)}
+                            </TableCell>
+                            <TableCell align="center">{row.item}</TableCell>
+                            <TableCell align="center">{'$' + row.price}</TableCell>
+                            <TableCell align="center" style={{paddingRight: 20}}>
+                                <Button variant="outlined" color="primary" onClick={() => addOrder(row.id)}>Add</Button>
+                            </TableCell>
+                        </TableRow>
+                    ))}
+                </TableBody>
+            </Table>
+        </TableContainer>
+    );
 }

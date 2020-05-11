@@ -23,7 +23,7 @@ module.exports = {
       },
       wage: {
         field: 'wage',
-        type: Seuqquelize.REAL
+        type: Sequelize.REAL
       },
       email: {
         field: 'email',

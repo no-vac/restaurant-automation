@@ -12,15 +12,15 @@ function createData(time, amount) {
 }
 
 const data = [
-    createData('00:00', undefined),
-    createData('03:00', undefined),
-    createData('06:00', undefined),
+    createData('00:00', 900),
+    createData('03:00', 750),
+    createData('06:00', 4000),
     createData('09:00', 1000),
     createData('12:00', 1500),
     createData('15:00', 2000),
     createData('18:00', 4400),
     createData('21:00', 6000),
-    createData('24:00', undefined),
+    createData('24:00', 6500),
 ];
 
 export default function Chart() {
@@ -40,7 +40,7 @@ export default function Chart() {
                     }}
                 >
                     <XAxis dataKey="time" stroke={theme.palette.text.secondary}/>  <Label
-                          // angle={180}
+                          //angle={180}
                           position="bottom"
                           style={{textAnchor: 'middle', fill: theme.palette.text.primary}}
                       >

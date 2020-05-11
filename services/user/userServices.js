@@ -33,13 +33,14 @@ module.exports = {
     }),
     updateUser: (userinfo) => new Promise((resolve, reject) => {
         console.log("service info", userinfo);
-        const { id, username, email, role, phoneNumber } = userinfo;
+        const { id, username, email, role, phoneNumber, wage } = userinfo;
 
         const payload = {};
         if (username) { payload.username = username; }
         if (email) { payload.email = email; }
         if (role) { payload.role = role; }
         if (phoneNumber) { payload.phoneNumber = phoneNumber; }
+        if (wage) { payload.wage = wage}
         console.log("payload", payload);
 
         db.select('*')

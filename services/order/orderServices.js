@@ -10,8 +10,12 @@ module.exports = {
             status,
             tableId
         }).returning('*').into('orders').then(data => {
+            console.log(data[0])
             return resolve(data[0])
-        }).catch(e => reject(e))
+        }).catch(e => {
+            console.log(e),
+            reject(e)
+        })
     }),
     listOrders: () => new Promise((resolve, reject) => {
         db.table('orders')
@@ -56,7 +60,7 @@ module.exports = {
             })
     }),
     updateOrder: (orderInfo) => new Promise((resolve, reject) => {
-        const { id, item, comments, price, status, tableId } = orderInfo;
+        const { id, comments, price, status, tableId } = orderInfo;
 
         console.log('updated order in services: ', orderInfo);
 

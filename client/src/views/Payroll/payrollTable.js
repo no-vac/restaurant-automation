@@ -12,10 +12,10 @@ import Button from "@material-ui/core/Button";
 import TopBar from "../../components/TopBar";
 import FormControl from '@material-ui/core/FormControl';
 import TextField from '@material-ui/core/TextField';
-//import AlertDialog from './addEmployee';
+const { REACT_APP_API_URL } = process.env;
 
 const columns = [
-    {id: 'userId', label: 'User Id', align: 'left'},
+    {id: 'userId', label: 'Username', align: 'left'},
     {id: 'clockInTime', label: 'Clock In Time', align: 'left'},
     {id: 'clockOutTime', label: 'Clock Out Time', align: 'left'},
     {id: 'hoursWorked', label: 'Total Hours Worked', align: 'left'},
@@ -43,11 +43,10 @@ const useStyles = makeStyles({
 });
 
 export default function StickyHeadTable() {
-    const URI = 'http://127.0.0.1:5000';
     const classes = useStyles();
     const [count, setCount] = React.useState(0);
     const [page, setPage] = React.useState(0);
-    const [rowsPerPage, setRowsPerPage] = React.useState(25);
+    const [rowsPerPage, setRowsPerPage] = React.useState(10);
     const [state, setState] = React.useState({
         rows: [],
         edit: null
@@ -55,17 +54,45 @@ export default function StickyHeadTable() {
 
     useEffect(() => {
         setCount(0);
-        fetch(URI + '/api/p/', {
+        fetch(REACT_APP_API_URL + '/api/p/', {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': localStorage.getItem('jwtToken')
             }
-        }).then(response => response.json()).then(result => {
-            console.log(result);
-            setState({...state, rows: result});
+        }).then(response => response.json()).then(payrollRecords => {
+
+            fetch(REACT_APP_API_URL + '/api/u/all', {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': localStorage.getItem('jwtToken')
+                }
+            }).then(response => response.json()).then(allUsers => {
+                payrollRecords.map((payrollRecord) => {
+                    const user = allUsers.filter(user => user.id === payrollRecord.userId);
+                    payrollRecord.clockInTime = formatDate(payrollRecord.clockInTime);
+                    payrollRecord.clockOutTime = formatDate(payrollRecord.clockOutTime);
+                    payrollRecord.userId = user[0].username;
+                });
+                setState({...state, rows: payrollRecords});
+            }).catch(e => console.log(e))
         }).catch(e => console.log(e))
     }, [count])
+
+    const getUsername = (userId) => {
+        console.log("user id" + userId);
+        fetch(REACT_APP_API_URL+'/api/u/', {
+            method: 'DELETE',
+            body: JSON.stringify({ userId }),
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': localStorage.getItem('jwtToken')
+            }
+        }).then(response => response.json()).then(result => {
+
+        }).catch(error => console.log(error))
+    }
 
     const handleChangePage = (event, newPage) => {
         setPage(newPage);
@@ -84,12 +111,11 @@ export default function StickyHeadTable() {
         setState({...state, edit: false})
     }
 
-    const deleteRecord = (id, username) => {
-        console.log(id + " " + username);
-        fetch(URI+'/api/u/', {
+    const deleteRecord = (id) => {
+        fetch(REACT_APP_API_URL+'/api/p/', {
             method: 'DELETE',
             body: JSON.stringify({
-                id, username
+                id
             }),
             headers: {
                 'Content-Type': 'application/json',
@@ -102,24 +128,24 @@ export default function StickyHeadTable() {
         }).catch(error => console.log(error))
     }
 
-    const updateRecord = ( id, username, email, role, phoneNumber) => {
-        const userinfo = { id, username, email, role, phoneNumber };
-        console.log(userinfo);
-        fetch(URI+'/api/p/', {
-            method: 'PUT',
-            body: JSON.stringify({
-                userinfo
-            }),
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': localStorage.getItem('jwtToken')
-            }
-        }).then(response => response.json()).then(result => {
-            if(result) {
-                window.location.reload();
-            }
-        }).catch(error => console.log(error))
-    }
+    // const updateRecord = ( id, username, email, role, phoneNumber) => {
+    //     const userinfo = { id, username, email, role, phoneNumber };
+    //     console.log(userinfo);
+    //     fetch(REACT_APP_API_URL+'/api/p/', {
+    //         method: 'PUT',
+    //         body: JSON.stringify({
+    //             userinfo
+    //         }),
+    //         headers: {
+    //             'Content-Type': 'application/json',
+    //             'Authorization': localStorage.getItem('jwtToken')
+    //         }
+    //     }).then(response => response.json()).then(result => {
+    //         if(result) {
+    //             window.location.reload();
+    //         }
+    //     }).catch(error => console.log(error))
+    // }
 
     const updateValue = (id, columnId, e) => {
         let tempRow = null;
@@ -144,19 +170,24 @@ export default function StickyHeadTable() {
         })
     }
 
-    const getUsername = (userId) => {
-        console.log("user id" + userId);
-        fetch(URI+'/api/u/', {
-            method: 'DELETE',
-            body: JSON.stringify({ userId }),
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': localStorage.getItem('jwtToken')
-            }
-        }).then(response => response.json()).then(result => {
+    const formatDate = dateTime => {
+        const date = dateTime.substring(0, 10);
+        const time = checkTime(dateTime.substring(11, 19));
 
-        }).catch(error => console.log(error))
+        dateTime = date + '  ' + time;
+        return dateTime;
     }
+
+    const checkTime = time => {
+        if(parseInt(time.substring(0, 2)) > 12) {
+            time = parseInt(time) - 12 + 'pm'
+        } else if (parseInt(time.substring(0, 2)) < 12) {
+            time = time + 'am'
+        }
+        return time;
+    }
+
+    console.log(formatDate('2020-05-11T13:00:00.000Z'));
 
     return (
         <>
@@ -183,7 +214,6 @@ export default function StickyHeadTable() {
                                     <TableRow hover role="checkbox" tabIndex={-1} key={row.code}>
                                         {columns.map((column) => {
                                             const value = row[column.id];
-                                            //const username = ;
                                             return (
                                                 <>
                                                     {state.edit === row.id ?
@@ -194,16 +224,7 @@ export default function StickyHeadTable() {
                                                         </TableCell>
                                                         :
                                                         <TableCell key={row.id} align={column.align}>
-                                                            {column.id === 'userId' ?
-                                                                <>
-                                                                    {value}
-                                                                </>
-                                                            :
-                                                                <>
-                                                                    {value}
-                                                                </>
-                                                            }
-
+                                                            {value}
                                                         </TableCell>
                                                     }
                                                 </>
@@ -217,17 +238,13 @@ export default function StickyHeadTable() {
                                                 </>
                                                 :
                                                 <>
-                                                    <Button variant="contained" color="primary" className={classes.btn} onClick={() => editable(row.id)}>Edit</Button>
-                                                    <Button variant="contained" color="secondary" className={classes.btn}>Delete</Button>
+                                                    <Button variant="contained" color="secondary" className={classes.btn} onClick={() => deleteRecord(row.id)}>Delete</Button>
                                                 </>
                                             }
                                         </TableCell>
                                     </TableRow>
                                 );
                             })}
-                            <TableRow>
-                                {/*<AlertDialog />*/}
-                            </TableRow>
                         </TableBody>
                     </Table>
                 </TableContainer>
