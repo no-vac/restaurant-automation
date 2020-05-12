@@ -1,5 +1,5 @@
 const userServices = require('../services/user/userServices');
-const payrollServices = require("../services/payroll/payrollServices");
+const payrollServices = require('../services/payroll/payrollServices');
 const auth = require('../auth');
 const bcrypt = require("bcryptjs");
 const { SECURE_KEY_JWT } = process.env;
@@ -8,9 +8,7 @@ let jwt = require('jsonwebtoken');
 module.exports = {
     create(req, res) {
         const userinfo = { username, password, role, phoneNumber, email } = req.body;
-
         console.log(userinfo);
-
         userServices
             .getUser(userinfo)
             .then(user => {
