@@ -19,11 +19,12 @@ module.exports = {
     }),
     getUser: (userInfo) => new Promise((resolve, reject) => {
         const { username } = userInfo;
-            return db.select('*')
-                .from('users')
-                .where('username', '=', username)
-                .then(user => user ? resolve(user[0]) : reject({ error: "no user found" }))
-                .catch(e => reject(e));
+        console.log("userservice", userInfo);
+        return db.select('*')
+            .from('users')
+            .where('username', '=', username)
+            .then(user => user ? resolve(user[0]) : reject({ error: "no user found" }))
+            .catch(e => reject(e));
     }),
     getAllUsers: () => new Promise((resolve, reject) => {
         db.select('*')
@@ -40,7 +41,7 @@ module.exports = {
         if (email) { payload.email = email; }
         if (role) { payload.role = role; }
         if (phoneNumber) { payload.phoneNumber = phoneNumber; }
-        if (wage) { payload.wage = wage}
+        if (wage) { payload.wage = wage }
         console.log("payload", payload);
 
         db.select('*')

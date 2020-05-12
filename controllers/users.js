@@ -87,13 +87,14 @@ module.exports = {
                     };
                     payrollServices.create(userInfo).then(listing => {
                         payload.user = {
+                            id: user.id,
                             payrollId: listing.id,
                             username: user.username,
                             role: user.role,
                             email: user.email,
                             phoneNumber: user.phoneNumber
                         };
-                        const data = auth.createJWT(user.id, user.username, user.email, user.role);
+                        const data = auth.createJWT(payload.user);
                         payload.Token = 'Bearer ' + data;
 
                         return res.status(200).json(payload)

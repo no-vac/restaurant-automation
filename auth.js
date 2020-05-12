@@ -3,8 +3,8 @@ const userServices = require('./services/user/userServices');
 
 const { SECURE_KEY_JWT } = process.env;
 
-exports.createJWT = (id, username, email, role) => {
-    const userToken = jwt.sign({ id, username, email, role }, SECURE_KEY_JWT, { expiresIn: '24hr' });
+exports.createJWT = (payload) => {
+    const userToken = jwt.sign(payload, SECURE_KEY_JWT, { expiresIn: '24hr' });
     return userToken;
 };
 
@@ -31,13 +31,15 @@ exports.protected = async (req, res, next) => {
 
     try {
         const decoded = jwt.verify(token, SECURE_KEY_JWT);
-        const user = await userServices.getUser(decoded);
+        console.log(decoded.id.username);
+        const user = await userServices.getUser(decoded.id);
         req.user = {
             id: user.id,
             username: user.username,
             role: user.role,
             email: user.email,
-            phoneNumber: user.phoneNumber
+            phoneNumber: user.phoneNumber,
+            payrollId: user.payrollId
         }
         next();
     } catch (e) {
