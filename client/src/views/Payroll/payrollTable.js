@@ -20,7 +20,6 @@ const columns = [
     {id: 'clockOutTime', label: 'Clock Out Time', align: 'left'},
     {id: 'hoursWorked', label: 'Total Hours Worked', align: 'left'},
     {id: 'totalWage', label: 'Total Pay', align: 'left'},
-
 ];
 
 const useStyles = makeStyles({
@@ -80,19 +79,19 @@ export default function StickyHeadTable() {
         }).catch(e => console.log(e))
     }, [count])
 
-    const getUsername = (userId) => {
-        console.log("user id" + userId);
-        fetch(REACT_APP_API_URL+'/api/u/', {
-            method: 'DELETE',
-            body: JSON.stringify({ userId }),
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': localStorage.getItem('jwtToken')
-            }
-        }).then(response => response.json()).then(result => {
-
-        }).catch(error => console.log(error))
-    }
+    // const getUsername = (userId) => {
+    //     console.log("user id" + userId);
+    //     fetch(REACT_APP_API_URL+'/api/u/', {
+    //         method: 'DELETE',
+    //         body: JSON.stringify({ userId }),
+    //         headers: {
+    //             'Content-Type': 'application/json',
+    //             'Authorization': localStorage.getItem('jwtToken')
+    //         }
+    //     }).then(response => response.json()).then(result => {
+    //
+    //     }).catch(error => console.log(error))
+    // }
 
     const handleChangePage = (event, newPage) => {
         setPage(newPage);
@@ -186,8 +185,6 @@ export default function StickyHeadTable() {
         }
         return time;
     }
-
-    console.log(formatDate('2020-05-11T13:00:00.000Z'));
 
     return (
         <>

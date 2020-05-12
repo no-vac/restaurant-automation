@@ -39,7 +39,7 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-
+// Nicole admin dashboard
 
 export default function Dashboard() {
     const classes = useStyles();
@@ -49,7 +49,6 @@ export default function Dashboard() {
         <div className={classes.root}>
             <TopBar/>
             <CssBaseline />
-
             <main className={classes.content}>
                 <div className={classes.appBarSpacer} />
                 <Container maxWidth="lg" className={classes.container}>

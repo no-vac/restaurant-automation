@@ -27,13 +27,13 @@ module.exports = {
             })
             .catch(e => reject(e))
     }),
-    updateTable: (id, waiterId, orderId, status, total) => new Promise((resolve, reject) => {
+    updateTable: (id, waiterId, status, total) => new Promise((resolve, reject) => {
+        console.log('services: ', id, 'status: ', status);
         db.select('*')
             .from('tables')
             .where('id', '=', id)
             .update({
                 waiterId,
-                orderId,
                 status,
                 total
             })

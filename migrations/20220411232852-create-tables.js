@@ -14,9 +14,6 @@ module.exports = {
       waiterId: {
         type: Sequelize.INTEGER
       },
-      orderId: {
-        type: Sequelize.INTEGER
-      },
       status: {
         type: Sequelize.STRING
       }

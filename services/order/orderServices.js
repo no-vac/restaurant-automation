@@ -75,5 +75,20 @@ module.exports = {
                 console.log(e)
                 reject(e);
             })
+    }),
+    deleteOrdersTable: (tableId) => new Promise((resolve, reject) => {
+        db.select('*')
+            .from('orders')
+            .where('tableId', '=', tableId)
+            .then((data) => {
+                if(data[0] !== undefined || data[0] !== null) {
+                    return db.select('*')
+                        .from('orders')
+                        .where('tableId', '=', tableId)
+                        .del()
+                        .then(order => resolve({ order, msg: 'tables\'s order deleted' }))
+                        .catch(e => reject(e));
+                }
+            })
     })
 };

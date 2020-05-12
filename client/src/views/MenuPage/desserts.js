@@ -56,7 +56,6 @@ export default function SimpleTable(props) {
         }).then(response => response.json()).then(menuItems => {
             menuItems.items.map((item) => {
                 const items = menuItems.items.filter(items => items.category === 'desserts');
-                console.log(items)
                 setState({rows: items});
             })
             //console.log('menu', menuItems.items);

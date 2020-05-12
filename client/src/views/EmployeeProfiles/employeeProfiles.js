@@ -21,8 +21,6 @@ const columns = [
     {id: 'role', label: 'Role', align: 'left'},
     {id: 'phoneNumber', label: 'Phone Number', align: 'left'},
     {id: 'wage', label: 'Wage', align: 'left'},
-
-
 ];
 
 const useStyles = makeStyles({
@@ -60,7 +58,7 @@ export default function StickyHeadTable() {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': localStorage.getItem('jwtToken')
+                'Authorization': localStorage.getItem('jwtToken'),
             }
         }).then(response => response.json()).then(result => {
             console.log(result);

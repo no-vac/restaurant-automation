@@ -8,7 +8,7 @@ import Grid from "@material-ui/core/Grid";
 import { withRouter } from 'react-router-dom';
 import MonetizationOnIcon from "@material-ui/icons/MonetizationOn";
 import PeopleIcon from "@material-ui/icons/People";
-import FastfoodIcon from "@material-ui/icons/Fastfood";
+import KitchenIcon from '@material-ui/icons/Kitchen';
 import HomeIcon from '@material-ui/icons/Home';
 import TabletIcon from '@material-ui/icons/Tablet';
 
@@ -18,8 +18,8 @@ class TopBar extends React.Component {
             this.props.history.push('/');
         };
 
-        const menuPage = () => {
-            this.props.history.push('/menu');
+        const kitchen = () => {
+            this.props.history.push('/kitchen');
         };
 
         const employeeProfiles = () => {
@@ -56,7 +56,7 @@ class TopBar extends React.Component {
                             <Button color="inherit" onClick={payroll}><MonetizationOnIcon/> &nbsp; Payroll</Button>
                         </Grid>
                         <Grid item style={{marginLeft: '1em'}}>
-                            <Button color="inherit" onClick={menuPage}><FastfoodIcon/> &nbsp; Menu</Button>
+                            <Button color="inherit" onClick={kitchen}><KitchenIcon/> &nbsp; Kitchen</Button>
                         </Grid>
                         <Grid item style={{marginLeft: '1em'}}>
                             <Button color="inherit" onClick={tablePage}><TabletIcon/> &nbsp; Tables</Button>

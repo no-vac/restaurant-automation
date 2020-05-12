@@ -26,6 +26,11 @@ const useStyles = makeStyles((theme) => ({
         height: '100%',
         width: '100%'
     },
+    served: {
+        backgroundColor: '#ccc731',
+        height: '100%',
+        width: '100%'
+    },
     heading: {
         fontSize: theme.typography.pxToRem(15),
         fontWeight: theme.typography.fontWeightRegular,
@@ -54,18 +59,30 @@ function SimpleTable(props) {
         }).catch(e => console.log(e))
     }, [count])
 
+    const status = (row) => {
+        switch (row.status) {
+            case 'clean':
+                return <Button variant="contained" className={classes.ready} id={row.id} onClick={() => { props.history.push(`/tables/${row.id}`) }} >
+                    Table #{row.id}
+                </Button>;
+            case 'serving':
+                return <Button variant="contained" className={classes.served} id={row.id} onClick={() => { props.history.push(`/tables/${row.id}`) }} >
+                    Table #{row.id}
+                </Button>;
+            case 'dirty':
+                return <Button variant="contained" className={classes.dirty} id={row.id} onClick={() => { props.history.push(`/tables/${row.id}`) }} >
+                    Table #{row.id}
+                </Button>;
+            default:
+                return "";
+        }
+    }
+
     return (
         <Grid container style={{ margin: '0 4em', textAlign: 'center'}} spacing={5}>
             {state.rows.map(row => (
                 <Grid item xs={12} md={3} lg={3} key={row.id}>
-                    <Button
-                        variant="contained"
-                        className={row.status === 'clean' ? classes.ready : classes.dirty}
-                        id="Table1"
-                        onClick={() => { props.history.push(`/tables/${row.id}`) }}
-                    >
-                        Table #{row.id}
-                    </Button>
+                    {status(row)}
                 </Grid>
             ))}
         </Grid>

@@ -31,6 +31,7 @@ module.exports = router => {
         .put(protected, orderController.update)
         .delete(protected, orderController.destroy);
     router.get("/api/o/:tableId", protected, orderController.listPerTableId);
+    router.delete("/api/o/deleteAll", protected, orderController.deleteTableOrders)
 
     // route handling for user
     router.route('/api/u/')

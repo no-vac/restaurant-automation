@@ -10,7 +10,7 @@ import Tables from '../views/TableView/tables';
 import Menu from '../views/MenuPage/menu';
 import Payroll from '../views/Payroll/payrollTable';
 import Queue from '../views/OrderQueue/queue';
-
+import kitchen from "../views/Kitchen/kitchen";
 
 const mockStore = configureMockStore();
 const store = mockStore({});
@@ -52,6 +52,7 @@ class Main extends Component{
                             <Route exact path="/payroll" component={Payroll} />
                             <Route exact path="/queue" component={Queue} />
                             <Route exact path={`/tables/:tableId`} component={Menu} />
+                            <Route exact path="/kitchen" component={kitchen} />
                         </Switch>
                     </Router>
                 </Provider>
@@ -61,4 +62,3 @@ class Main extends Component{
 }
 
 export default Main;
-

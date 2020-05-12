@@ -96,7 +96,6 @@ export default function Checkout(props) {
         {id: 'comments', label: 'Comments', align: 'center'},
         {id: 'status', label: 'Status', align: 'center'},
         {id: 'price', label: 'Item Price', align: 'center'},
-
     ];
 
 
@@ -233,6 +232,22 @@ export default function Checkout(props) {
             }
         }).catch(error => console.log(error))
     }
+
+    const cleanTable = (id, waiterId, orderId, status, total) => {
+        fetch(REACT_APP_API_URL + '/api/t/', {
+            method: 'PUT',
+            body: JSON.stringify({id, waiterId, orderId, status, total}),
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': localStorage.getItem('jwtToken')
+            }
+        }).then(response => {
+            if (response.status === 200) {
+                window.location.reload();
+            }
+        }).catch(e => console.log(e))
+    }
+
 
     return (
         <Fragment>
@@ -384,7 +399,14 @@ export default function Checkout(props) {
                                         <TableCell>
                                             <Grid container alignItems='center' spacing={3}>
                                                 <Grid item md={6} style={{textAlign: 'right'}}>
-                                                    <LastPage />
+                                                    {state.tableTotal > 0
+                                                        ?
+                                                        <LastPage tableId={state.tableId}/>
+                                                        :
+                                                        <Button variant="outlined" color="secondary"
+                                                                onClick={() => cleanTable(state.tableId, state.tableOrder.waiterId, state.tableOrder.id,'clean', state.tableOrder.total)}>Cleaned</Button>
+                                                    }
+
                                                 </Grid>
                                                 <Grid item md={6}>
                                                     <Typography
@@ -392,7 +414,6 @@ export default function Checkout(props) {
                                                     </Typography>
                                                 </Grid>
                                             </Grid>
-
                                         </TableCell>
                                     </TableRow>
                                 </TableBody>

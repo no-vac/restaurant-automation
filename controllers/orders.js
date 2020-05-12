@@ -1,5 +1,6 @@
 const orderServices = require('../services/order/orderServices');
 const menuServices = require('../services/menu/menuServices');
+const tableServices = require('../services/table/tableServices');
 
 module.exports = {
     create(req, res) {
@@ -13,15 +14,32 @@ module.exports = {
                     item,
                     comments,
                     price: menuItem[0].price,
-                    status: "Pending",
+                    status: "pending",
                     tableId
                 }
-
+                console.log(orderinfo);
                 //search item in menu table and get item info
                 return orderServices
                     .createOrder(orderinfo)
                     .then(order => {
-                        return res.status(200).json(order)
+                        const tableStatus = 'serving';
+                        const total = null;
+                        tableServices
+                            .updateTable(
+                                order.tableId ,
+                                order.waiterId,
+                                tableStatus,
+                                total
+                            )
+                            .then(updatedTable => {
+                                return res.status(200).json({
+                                    msg: 'table\'s order deleted, and updated',
+                                    table: updatedTable
+                                })
+                            })
+                            .catch(e => {
+                                return res.status(400).json({ error: e.message })
+                            })
                     })
                     .catch(error => {
                         return res.status(400).json({ error: error.message });
@@ -62,6 +80,37 @@ module.exports = {
             })
             .catch(error => {
                 return res.status(400).json({ error: error.message });
+            })
+    },
+    deleteTableOrders(req, res) {
+        const { id } = req.body
+        console.log('id ', id);
+
+        return orderServices
+            .deleteOrdersTable(id)
+            .then(() => {
+                const waiterId = null;
+                const status = 'dirty';
+                const total = null;
+                tableServices
+                    .updateTable(
+                        id,
+                        waiterId,
+                        status,
+                        total
+                    )
+                    .then(updatedTable => {
+                        return res.status(200).json({
+                            msg: 'table\'s order deleted, and updated',
+                            table: updatedTable
+                        })
+                    })
+                    .catch(e => {
+                        return res.status(400).json({ error: e.message })
+                    })
+            })
+            .catch(e => {
+                return res.status(400).json({ error: e.message })
             })
     },
     update(req, res) {
