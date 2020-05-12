@@ -8,7 +8,6 @@ module.exports = {
             userId,
             clockInTime,
         }).returning('*').into('payrolls').then(data => {
-            console.log(data[0]);
             return resolve(data[0])
         }).catch(e => reject(e))
     }),
