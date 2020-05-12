@@ -403,8 +403,9 @@ export default function Checkout(props) {
                                                         ?
                                                         <LastPage tableId={state.tableId}/>
                                                         :
-                                                        <Button variant="outlined" color="secondary"
-                                                                onClick={() => cleanTable(state.tableId, state.tableOrder.waiterId, state.tableOrder.id,'clean', state.tableOrder.total)}>Cleaned</Button>
+                                                        // <Button variant="outlined" color="secondary"
+                                                        //         onClick={() => cleanTable(state.tableId, state.tableOrder.waiterId, state.tableOrder.id,'clean', state.tableOrder.total)}>Cleaned</Button>
+                                                        ''
                                                     }
 
                                                 </Grid>

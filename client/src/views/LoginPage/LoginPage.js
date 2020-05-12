@@ -62,7 +62,13 @@ class SignInSide extends React.Component{
         }).then(response => response.json()).then(result => {
             if(result.Token){
                 localStorage.setItem('jwtToken', result.Token);
-                this.props.history.push('/')
+                if(result.user.role === 'admin') {
+                    this.props.history.push('/');
+                } else if(result.user.role === 'waiter' || result.user.role === 'host' || result.user.role === 'busboy') {
+                    this.props.history.push('/tables');
+                } else if(result.user.role === 'cook') {
+                    this.props.history.push('/kitchen');
+                }
             }
         }).catch(error => console.log(error))
     };
