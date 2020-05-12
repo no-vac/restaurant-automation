@@ -1,4 +1,5 @@
 const userServices = require('../services/user/userServices');
+const payrollServices = require("../services/payroll/payrollServices");
 const auth = require('../auth');
 const bcrypt = require("bcryptjs");
 const { SECURE_KEY_JWT } = process.env;
@@ -77,16 +78,28 @@ module.exports = {
         userServices
             .getUser(userInfo)
             .then(user => {
+                const payload = {};
                 if (bcrypt.compareSync(password, user.password)) {
-                    const data = auth.createJWT(user.id, user.username, user.email, user.role);
-                    return res.status(200).json({
-                        Token: 'Bearer ' + data,
-                        user: {
+                    //clock in
+                    const userInfo = {
+                        userId: user.id,
+                        clockInTime: new Date(Date.now()),
+                    };
+                    payrollServices.create(userInfo).then(listing => {
+                        payload.user = {
+                            payrollId: listing.id,
                             username: user.username,
                             role: user.role,
                             email: user.email,
                             phoneNumber: user.phoneNumber
-                        }
+                        };
+                        const data = auth.createJWT(user.id, user.username, user.email, user.role);
+                        payload.Token = 'Bearer ' + data;
+
+                        return res.status(200).json(payload)
+                    }).catch(error => {
+                        console.warn(error);
+                        return res.status(400).json({ error: error.message });
                     })
                 } else {
                     return res.status(400).json("wrong password");
